@@ -35,9 +35,12 @@ public class Window {
      * Metodos encargados de anadir elementos al frame de la clase.
      */
     public void addComponents(){
-         this.frame.setLayout(null);
+         this.frame.setLayout(new GridLayout());
          this.gamePane = new GamePane();
          frame.add(gamePane);
+
+
+
          BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
          Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(
                  cursorImg,
