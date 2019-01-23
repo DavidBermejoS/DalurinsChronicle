@@ -1,14 +1,18 @@
 package Screens;
 
+import Sprites.Character;
 import Window.GamePane;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Random;
+
+import Sprites.*;
 
 public class FirstScreen implements IScreen {
 
@@ -16,6 +20,11 @@ public class FirstScreen implements IScreen {
 
     GamePane gamePane;
     Image backgroundImage;
+    ArrayList<Sprite> sprites;
+
+    boolean endLevel;
+    boolean gameOver;
+    double score;
 
 
     public FirstScreen(GamePane gamePane){
@@ -27,11 +36,26 @@ public class FirstScreen implements IScreen {
 
     @Override
     public void startFrame() {
-
+        this.endLevel = false;
+        this.gameOver = false;
+        this.sprites = new ArrayList<Sprite>();
+        addElements();
     }
 
     @Override
     public void addElements() {
+        Character character = new Character();
+        for (int i = 0; i < 10; i++) {
+            Enemy enemy = new Enemy();
+            //TODO realizar la implementacion de los parametros propios de los enemigos.
+        }
+
+        int randomGenerate = new Random().nextInt(5);
+
+        for (int i = 0; i < randomGenerate; i++) {
+            Item item = new Item();
+            //TODO realizar la implementacion de los parametros propios de los items que apareceran
+        }
 
     }
 
@@ -42,9 +66,7 @@ public class FirstScreen implements IScreen {
     @Override
     public void drawScreen(Graphics g) {
         drawBackGround(g);
-        drawSprite();
-
-
+//        drawSprite();
     }
 
     /**
@@ -74,68 +96,79 @@ public class FirstScreen implements IScreen {
         g.drawImage(backgroundImage, 0, 0, null);
     }
 
-
     @Override
-    public void drawSprite() {
-
-    }
-
-    @Override
-    public void drawMenu() {
-
-    }
-
-    @Override
-    public void checkCollisions() {
-
-    }
-
-    @Override
-    public void checkEndLevel() {
-
-    }
-
-    @Override
-    public void moveSprites() {
-
-    }
-
-    @Override
-    public void manageGameFunctions() {
-
-    }
-
-    @Override
-    public void moveMouse(MouseEvent e) {
-
-    }
-
-    @Override
-    public void clickMouse(MouseEvent e) {
-
-    }
-
-    /**
-     * Metodo encargado de gestionar los eventos de teclado,
-     * es decir, que sucede en la pantalla cuando se pulsa
-     * alguna tecla en concreto
-     * @param e
-     */
-    @Override
-    public void keyPressed(KeyEvent e) {
-        if(e.getKeyCode() == KeyEvent.VK_W){
-
+    public void drawSprite(Graphics g) {
+        for (Sprite s : sprites) {
+            g.drawImage(
+                    s.getBuffer(),
+                    s.getPosX(),
+                    s.getPosY(),
+                    s.getWidth(),
+                    s.getHeight(),
+                    s.getColor(),
+                    null
+            );
         }
-        if(e.getKeyCode() == KeyEvent.VK_A){
+    }
 
-        }
-        if(e.getKeyCode() == KeyEvent.VK_S){
+
+        @Override
+        public void drawMenu() {
 
         }
 
-        if(e.getKeyCode() == KeyEvent.VK_D){
+        @Override
+        public void checkCollisions() {
+
+        }
+
+        @Override
+        public void checkEndLevel() {
+
+        }
+
+        @Override
+        public void moveSprites(){
+
+        }
+
+        @Override
+        public void manageGameFunctions(){
+
+        }
+
+        @Override
+        public void moveMouse(MouseEvent e){
+
+        }
+
+        @Override
+        public void clickMouse(MouseEvent e){
+
+        }
+
+        /**
+         * Metodo encargado de gestionar los eventos de teclado,
+         * es decir, que sucede en la pantalla cuando se pulsa
+         * alguna tecla en concreto
+         * @param e
+         */
+        @Override
+        public void keyPressed (KeyEvent e){
+            if (e.getKeyCode() == KeyEvent.VK_W) {
+
+            }
+            if (e.getKeyCode() == KeyEvent.VK_A) {
+
+            }
+            if (e.getKeyCode() == KeyEvent.VK_S) {
+
+            }
+
+            if (e.getKeyCode() == KeyEvent.VK_D) {
+
+            }
 
         }
 
     }
-}

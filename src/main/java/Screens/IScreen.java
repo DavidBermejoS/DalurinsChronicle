@@ -15,7 +15,7 @@ public interface IScreen {
 
     public void drawBackGround(Graphics g);
 
-    public void drawSprite();
+    public void drawSprite(Graphics g);
 
     public void drawMenu();
 
