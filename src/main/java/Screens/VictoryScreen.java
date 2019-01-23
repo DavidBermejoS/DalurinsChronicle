@@ -35,9 +35,10 @@ public class VictoryScreen implements IScreen {
     }
 
     @Override
-    public void drawBackGround() {
+    public void drawBackGround(Graphics g) {
 
     }
+
 
     @Override
     public void drawSprite() {

@@ -13,7 +13,7 @@ public interface IScreen {
 
     public void resizeScreen(Graphics g);
 
-    public void drawBackGround();
+    public void drawBackGround(Graphics g);
 
     public void drawSprite();
 

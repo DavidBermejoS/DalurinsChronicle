@@ -55,10 +55,11 @@ public class GamePane extends JPanel implements Runnable, KeyListener {
     @Override
     protected void paintComponent(Graphics g) {
         //TODO implementar el pintado del elemento Screen en la pantalla
+        this.screen.drawScreen(g);
     }
 
-    //METODOS DE GESTION DEL FLUJO
 
+    //METODOS DE GESTION DEL FLUJO
 
     /**
      * Metodo encargado de gestionar el nivel actual en el juego
@@ -70,6 +71,11 @@ public class GamePane extends JPanel implements Runnable, KeyListener {
             switch (actualLevel) {
                 case 0:
                     this.screen = new StartScreen(this);
+                    endLevel = false;
+                    break;
+
+                case 1:
+                    this.screen = new FirstScreen(this);
                     endLevel = false;
                     break;
 
@@ -115,7 +121,7 @@ public class GamePane extends JPanel implements Runnable, KeyListener {
         while(true){
             try {
                 checkLevel();
-                repaint();
+                this.repaint();
                 Thread.currentThread().sleep(5);
                 Toolkit.getDefaultToolkit().sync();
             } catch (InterruptedException e) {
