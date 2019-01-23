@@ -4,13 +4,13 @@ import javax.swing.*;
 import java.awt.image.BufferedImage;
 
 /**
- * <h2>Clase Character</h2>
+ * <h2>Clase Hero</h2>
  * Clase que define los parametros del personaje.
  * Hereda de la clase Sprite, y es encargada de guardar las estadisticas del personaje
  *
  * @author David Bermejo Simon
  */
-public class Character extends Sprite{
+public class Hero extends Sprite{
     boolean isAlive;
     String user;
     int totalHp;
@@ -28,7 +28,7 @@ public class Character extends Sprite{
     /**
      * Constructor de la clase vacio
      */
-    public Character(){
+    public Hero(){
 
     }
 
@@ -44,7 +44,7 @@ public class Character extends Sprite{
      * @param isAlive
      * @param user
      */
-    public Character(int posX, int posY, int vX, int vY, String id, String[] imageRoutes, boolean isAlive, String user) {
+    public Hero(int posX, int posY, int vX, int vY, String id, String[] imageRoutes, boolean isAlive, String user) {
         super(posX, posY, vX, vY, id, imageRoutes);
         this.isAlive = isAlive;
         this.user = user;
@@ -55,7 +55,7 @@ public class Character extends Sprite{
      * @param isAlive
      * @param user
      */
-    public Character(boolean isAlive, String user) {
+    public Hero(boolean isAlive, String user) {
         this.isAlive = isAlive;
         this.user = user;
     }

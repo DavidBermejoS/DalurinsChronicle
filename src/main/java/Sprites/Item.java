@@ -1,6 +1,6 @@
 package Sprites;
 
-public class Item {
+public class Item extends Sprite {
 
     String name;
     String description;

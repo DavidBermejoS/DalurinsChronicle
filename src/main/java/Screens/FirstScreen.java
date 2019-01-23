@@ -1,6 +1,6 @@
 package Screens;
 
-import Sprites.Character;
+import Sprites.Hero;
 import Window.GamePane;
 
 import javax.imageio.ImageIO;
@@ -44,16 +44,21 @@ public class FirstScreen implements IScreen {
 
     @Override
     public void addElements() {
-        Character character = new Character();
+        Hero hero = new Hero();
+        sprites.add(hero);
         for (int i = 0; i < 10; i++) {
             Enemy enemy = new Enemy();
+            sprites.add(enemy);
             //TODO realizar la implementacion de los parametros propios de los enemigos.
         }
+
 
         int randomGenerate = new Random().nextInt(5);
 
         for (int i = 0; i < randomGenerate; i++) {
             Item item = new Item();
+            sprites.add(item);
+
             //TODO realizar la implementacion de los parametros propios de los items que apareceran
         }
 
