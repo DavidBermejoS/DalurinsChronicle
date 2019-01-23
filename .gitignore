@@ -59,6 +59,7 @@ buildNumber.properties
 .idea/**/gradle.xml
 .idea/**/libraries
 
+
 # CMake
 cmake-build-debug/
 cmake-build-release/
@@ -71,6 +72,8 @@ cmake-build-release/
 
 # IntelliJ
 out/
+.idea/
+*.iml
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
