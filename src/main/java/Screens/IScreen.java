@@ -21,7 +21,7 @@ public interface IScreen {
 
     public void drawMenu();
 
-    public void checkCollisions();
+    public void checkCollisions(Sprite s);
 
     public void checkEndLevel();
 

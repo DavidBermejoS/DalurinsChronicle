@@ -1,7 +1,9 @@
 package Utilities;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.List;
+import java.io.IOException;
 
 /**
  * <h2>Clase ResourcesCollector</h2>
@@ -118,7 +120,7 @@ public class ResourcesCollector {
     }
 
 
-    
+
     /**
      * Metodo encargado de devolver un array de string según el target especificado y la acción que va a realizar
      * devolviendo directamente la ruta en dicho array
@@ -132,68 +134,88 @@ public class ResourcesCollector {
      *                3- accion de muerte
      *                4- accion de andar
      */
-    public String[] getRoutesByDirection(int target, int action, String direction) {
+    public String getRouteByDirection(int target, int action, String direction) {
         getTargetActionDir(target, action);
-        File[] contentDir = dirTargetAction.listFiles();
+        File[] directionDir = dirTargetAction.listFiles();
+        String dirByActionTarget = null;
         int count = 0;
-        for (int i = 0; i < contentDir.length; i++) {
+        for (int i = 0; i < directionDir.length; i++) {
             if (direction.equalsIgnoreCase("N")) {
-                if (contentDir[i].getName().startsWith("walk_3")) {
-                    vectorRoutes[count] = contentDir[i].getAbsolutePath();
+                if (directionDir[i].getName().startsWith("ascend")) {
+                    dirByActionTarget= directionDir[i].getAbsolutePath();
                     count++;
                 }
             }
             if (direction.equalsIgnoreCase("S")) {
-                if (contentDir[i].getName().startsWith("walk_7")) {
-                    vectorRoutes[count] = contentDir[i].getAbsolutePath();
+                if (directionDir[i].getName().startsWith("descend")) {
+                    dirByActionTarget = directionDir[i].getAbsolutePath();
                     count++;
                 }
             }
             if (direction.equalsIgnoreCase("E")) {
-                if (contentDir[i].getName().startsWith("walk_1")) {
-                    vectorRoutes[count] = contentDir[i].getAbsolutePath();
+                if (directionDir[i].getName().startsWith("right")) {
+                    dirByActionTarget = directionDir[i].getAbsolutePath();
                     count++;
                 }
             }
             if (direction.equalsIgnoreCase("W")) {
-                if (contentDir[i].getName().startsWith("walk_5")) {
-                    vectorRoutes[count] = contentDir[i].getAbsolutePath();
+                if (directionDir[i].getName().startsWith("left")) {
+                    dirByActionTarget= directionDir[i].getAbsolutePath();
                     count++;
                 }
             }
 
             if (direction.equalsIgnoreCase("NW") || direction.equalsIgnoreCase("WN")) {
-                if (contentDir[i].getName().startsWith("walk_4")) {
-                    vectorRoutes[count] = contentDir[i].getAbsolutePath();
+                if (directionDir[i].getName().startsWith("upleft")) {
+                    dirByActionTarget = directionDir[i].getAbsolutePath();
                     count++;
                 }
             }
 
             if (direction.equalsIgnoreCase("NE") || direction.equalsIgnoreCase("EN")) {
-                if (contentDir[i].getName().startsWith("walk_2")) {
-                    vectorRoutes[count] = contentDir[i].getAbsolutePath();
+                if (directionDir[i].getName().startsWith("upright")) {
+                    dirByActionTarget = directionDir[i].getAbsolutePath();
                     count++;
                 }
             }
 
             if (direction.equalsIgnoreCase("SW") || direction.equalsIgnoreCase("WS")) {
-                if (contentDir[i].getName().startsWith("walk_6")) {
-                    vectorRoutes[count] = contentDir[i].getAbsolutePath();
+                if (directionDir[i].getName().startsWith("downleft")) {
+                    dirByActionTarget = directionDir[i].getAbsolutePath();
                     count++;
                 }
             }
 
             if (direction.equalsIgnoreCase("SE") || direction.equalsIgnoreCase("ES")) {
-                if (contentDir[i].getName().startsWith("walk_0")) {
-                    vectorRoutes[count] = contentDir[i].getAbsolutePath();
+                if (directionDir[i].getName().startsWith("downright")) {
+                    dirByActionTarget = directionDir[i].getAbsolutePath();
                     count++;
                 }
             }
-            if (count == 10) {
-                return this.vectorRoutes;
+            if(count == 1){
+                return dirByActionTarget;
             }
         }
-        return this.vectorRoutes;
+        return dirByActionTarget;
+    }
+
+
+    public BufferedImage[] getImagesTargetActionDirection(int target, int action, String direction){
+        String dir = getRouteByDirection(target,action,direction);
+        BufferedImage[] bufferedImages = new BufferedImage[10];
+        if(dir != null){
+            File directory = new File(dir);
+            File[] images = directory.listFiles();
+            for (int i = 0; i < bufferedImages.length; i++) {
+                try {
+                    bufferedImages[i]= ImageIO.read(images[i]);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return bufferedImages;
+        }
+        return bufferedImages;
     }
 
 

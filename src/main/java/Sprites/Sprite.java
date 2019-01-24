@@ -1,6 +1,5 @@
 package Sprites;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -33,28 +32,30 @@ public class Sprite {
     int vY;
     Color color;
     BufferedImage buffer;
+    BufferedImage imageSprite;
     String id;
-    String[] imageRoutes;
     File fileImage;
     int countAnimatorPhase;
-    //TODO hacer los tiempos de descanso de las animaciones
-    int countAnimatorPhaseRest;
+
+    BufferedImage[][] walkingImagesLine;
+    BufferedImage[] actualAnimationLine;
+    
 
 
-    public Sprite(int posX, int posY, int vX, int vY, String id, String[] imageRoutes) {
+
+    public Sprite(int posX, int posY, int vX, int vY, String id) {
         countAnimatorPhase = 0;
         this.posX = posX;
         this.posY = posY;
         this.vX = vX;
         this.vY = vY;
         this.id = id;
-        this.imageRoutes = imageRoutes;
     }
 
     public Sprite() {
-
-
+        this.walkingImagesLine = new BufferedImage[8][10];
     }
+
 
     /**
      * Metodo encargado de refrescar el buffer del sprite para las animaciones.
@@ -62,17 +63,16 @@ public class Sprite {
     public void refreshBuffer() {
         buffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics g = buffer.getGraphics();
-        try {
-            //TODO realizar el cambio de ImageIO y realizar la lectura en la instanciacion del sprite.
-            //TODO una vez realizado el cambio señalar el bufferImage segun la imagen que sea
-            BufferedImage imagenSprite = ImageIO.read(fileImage);
-            g.drawImage(imagenSprite, 0, 0,this.width,this.height, null);
+        if(imageSprite!=null){
+            g.drawImage(imageSprite, 0, 0,this.width,this.height, null);
             g.dispose();
-        } catch (IOException ex) {
+        }else{
             g.setColor(color);
             g.fillRect(0, 0, width, height);
             g.dispose();
+
         }
+
     }
 
 
@@ -89,6 +89,45 @@ public class Sprite {
     public boolean checkCollision(Sprite other) {
         return false;
     }
+
+    /**
+     * Metodo encargado de crear un collider cuadrado y determinar si un sprite
+     * colisiona con otro
+     * @param s2 : sprite a comparar
+     * @return check : true si colisionan, false si no.
+     */
+    public boolean squareCollider(Sprite s2){
+        boolean collidesX =false , collidesY = false;
+
+        //calculo de la colision en el eje horizontal
+        if(this.getPosX()<s2.getPosX()){
+            int rightBorder = this.getPosX()+this.getHeight();
+            if(rightBorder>=s2.getPosX()){
+                collidesX=true;
+            }
+        }else{
+            int rightBorder = s2.getPosX()+s2.getWidth();
+            if(rightBorder>= this.getPosX()){
+                collidesX=true;
+            }
+        }
+
+        //calculo de la colision en el eje vertical
+        if(this.getPosY()<s2.getPosY()){
+            int bottomBorder = this.getPosY()+this.getHeight();
+            if(bottomBorder>= s2.getPosY()){
+                collidesY=true;
+            }
+        }else{
+            int bottomBorder = s2.getPosY()+s2.getWidth();
+            if(bottomBorder>=this.getPosY()){
+                collidesY=true;
+            }
+        }
+
+        return collidesX && collidesY;
+    }
+
 
 
 
@@ -174,13 +213,6 @@ public class Sprite {
         this.height = height;
     }
 
-    public String[] getImageRoutes() {
-        return imageRoutes;
-    }
-
-    public void setImageRoutes(String[] imageRoutes) {
-        this.imageRoutes = imageRoutes;
-    }
 
 
 }

@@ -3,6 +3,7 @@ package Sprites;
 import Utilities.ResourcesCollector;
 
 import javax.swing.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 
 /**
@@ -22,11 +23,11 @@ public class Enemy extends Sprite {
     String actualDirection;
     JProgressBar life;
 
-
     /**
      * Constructor de la clase vacio
      */
     public Enemy(){
+        this.walkingImagesLine = new BufferedImage[8][10];
         this.isAlive = true;
         this.moving = false;
         this.lastDirection = "";
@@ -49,7 +50,7 @@ public class Enemy extends Sprite {
      * @param life
      */
     public Enemy(int posX, int posY, int vX, int vY, String id, String[] imageRoutes, boolean isAlive, int totalHp, int atk, int def, JProgressBar life) {
-        super(posX, posY, vX, vY, id, imageRoutes);
+        super(posX, posY, vX, vY, id);
         this.isAlive = isAlive;
         this.totalHp = totalHp;
         this.atk = atk;
@@ -156,20 +157,19 @@ public class Enemy extends Sprite {
      */
     public void setMoveAnimation(String direction) {
         ResourcesCollector resCol = new ResourcesCollector();
-        if (!lastDirection.equalsIgnoreCase(direction) && !direction.equalsIgnoreCase("")) {
-            super.imageRoutes = resCol.getRoutesByDirection(resCol.ENEMY_TARGET, resCol.WALK_ACTION, direction);
-            lastDirection = direction;
+        if (!lastDirection.equalsIgnoreCase(actualDirection) && !actualDirection.equalsIgnoreCase("")) {
+            this.actualAnimationLine = resCol.getImagesTargetActionDirection(ResourcesCollector.ENEMY_TARGET,ResourcesCollector.WALK_ACTION,actualDirection);
+            lastDirection = actualDirection;
         }
-        if (imageRoutes != null) {
+
             countAnimatorPhase++;
             //TODO mejorar el tiempo de carga de imagenes para evitar pestaneo en escena
-            if (countAnimatorPhase == imageRoutes.length-1) {
-                countAnimatorPhase = 0;
+            if(countAnimatorPhase == actualAnimationLine.length-1){
+            countAnimatorPhase = 0;
             }
-            fileImage = new File(imageRoutes[countAnimatorPhase]);
-            this.refreshBuffer();
-//            this.getScaledInstance(width, height, Image.SCALE_SMOOTH)
-        }
+        this.imageSprite = actualAnimationLine[countAnimatorPhase];
+        this.refreshBuffer();
+
     }
 
     //GETTERS Y SETTERS DE LA CLASE
@@ -220,5 +220,22 @@ public class Enemy extends Sprite {
 
     public void setMoving(boolean moving) {
         this.moving = moving;
+    }
+
+
+    public String getLastDirection() {
+        return lastDirection;
+    }
+
+    public void setLastDirection(String lastDirection) {
+        this.lastDirection = lastDirection;
+    }
+
+    public String getActualDirection() {
+        return actualDirection;
+    }
+
+    public void setActualDirection(String actualDirection) {
+        this.actualDirection = actualDirection;
     }
 }

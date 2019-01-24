@@ -3,9 +3,7 @@ package Sprites;
 import Utilities.ResourcesCollector;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 
 /**
  * <h2>Clase Hero</h2>
@@ -31,12 +29,13 @@ public class Hero extends Sprite {
     private String actualDirection;
 
 
-//CONSTRUCTORES DE LA CLASE
-
     /**
      * Constructor de la clase vacio
      */
     public Hero() {
+        this.walkingImagesLine = new BufferedImage[8][10];
+        loadWalkingImages();
+
         lastDirection = "";
         collisioned = false;
         matrixAnimation = new String[10][8];
@@ -58,7 +57,7 @@ public class Hero extends Sprite {
      */
     public Hero(int posX, int posY, int vX, int vY, String id, String[] imageRoutes, boolean isAlive, String user) {
 
-        super(posX, posY, vX, vY, id, imageRoutes);
+        super(posX, posY, vX, vY, id);
         matrixAnimation = new String[10][8];
         routesAnimation = new String[10];
         this.isAlive = isAlive;
@@ -112,9 +111,18 @@ public class Hero extends Sprite {
         }
         return skillReturn;
     }
-
-
     //COLECCION DE METODOS QUE GESTIONAN EL MOVIMIENTO DEL HEROE
+
+    /**
+     * Metodo encargado de englobar los otros metodos que establecen el movimiento del personaje
+     */
+    public void moveCharacter(boolean[] keys) {
+        setMoveDirection(keys);
+        setMoveParameters(keys);
+        setMoveAnimation();
+
+
+    }
 
 
     /**
@@ -179,7 +187,7 @@ public class Hero extends Sprite {
             this.setMoving(false);
             this.vX = 0;
             this.vY = 0;
-        }else{
+        } else {
             this.setMoving(true);
         }
 
@@ -188,27 +196,30 @@ public class Hero extends Sprite {
     /**
      * Metodo encargado de definir el array de imagenes que se deverán utilizar para la animación
      * actual
-     *
-     * @param direction : direccion de las cuales se quieren gestionar las imagenes
      */
-    public void setMoveAnimation(String direction) {
+    public void setMoveAnimation() {
         ResourcesCollector resCol = new ResourcesCollector();
-        if (!lastDirection.equalsIgnoreCase(direction) && !direction.equalsIgnoreCase("")) {
-            super.imageRoutes = resCol.getRoutesByDirection(resCol.HERO_TARGET, resCol.WALK_ACTION, direction);
-            lastDirection = direction;
+        if (!lastDirection.equalsIgnoreCase(actualDirection) && !actualDirection.equalsIgnoreCase("")) {
+            this.actualAnimationLine = resCol.getImagesTargetActionDirection(ResourcesCollector.HERO_TARGET, ResourcesCollector.WALK_ACTION, actualDirection);
+            lastDirection = actualDirection;
         }
-        if (imageRoutes != null) {
-            countAnimatorPhase++;
-            //TODO mejorar el tiempo de carga de imagenes para evitar pestaneo en escena
-            if (countAnimatorPhase == imageRoutes.length-1) {
-                countAnimatorPhase = 0;
-            }
-            fileImage = new File(imageRoutes[countAnimatorPhase]);
-            this.refreshBuffer();
-//            this.getScaledInstance(width, height, Image.SCALE_SMOOTH)
+        countAnimatorPhase++;
+        if (countAnimatorPhase == actualAnimationLine.length - 1) {
+            countAnimatorPhase = 0;
         }
+        this.imageSprite = actualAnimationLine[countAnimatorPhase];
+        this.refreshBuffer();
     }
 
+
+    private void loadWalkingImages() {
+        ResourcesCollector resCol = new ResourcesCollector();
+        for (int i = 0; i < walkingImagesLine.length; i++) {
+            for (int j = 0; j < allDirections.length; j++) {
+                walkingImagesLine[i] = resCol.getImagesTargetActionDirection(resCol.HERO_TARGET, resCol.WALK_ACTION, allDirections[j]);
+            }
+        }
+    }
 
     //GETTERS Y SETTERS
 
@@ -299,5 +310,4 @@ public class Hero extends Sprite {
     public void setActualDirection(String actualDirection) {
         this.actualDirection = actualDirection;
     }
-
 }

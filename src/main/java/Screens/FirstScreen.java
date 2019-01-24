@@ -107,8 +107,8 @@ public class FirstScreen implements IScreen {
         hero.setPosX(0);
         hero.setPosY(0);
         //parametros de dimension
-        hero.setWidth(80);
-        hero.setHeight(140);
+        hero.setWidth(145);
+        hero.setHeight(145);
         //parametros de velocidad
 
         hero.setvX(0);
@@ -137,8 +137,8 @@ public class FirstScreen implements IScreen {
             enemy.setPosX(500);
             enemy.setPosY(400);
             //parametros de dimension
-            enemy.setWidth(80);
-            enemy.setHeight(120);
+            enemy.setWidth(145);
+            enemy.setHeight(145);
             //parametros de velocidad
             enemy.setvX(0);
             enemy.setvY(0);
@@ -271,7 +271,7 @@ public class FirstScreen implements IScreen {
         }
         if (s instanceof Enemy) {
             ((Enemy) s).setMoveDirection(hero);
-            ((Enemy) s).setMoveAnimation("SE");
+            ((Enemy) s).setMoveAnimation(((Enemy) s).getActualDirection());
 
         }
     }
@@ -288,15 +288,33 @@ public class FirstScreen implements IScreen {
         for (Sprite s : sprites) {
             moveSprites(s);
             // checkWallsCollision();
-            // checkAsteroidShooted();
         }
-        //destroySprites();
         //checkEndGame();
     }
-
+    /**
+     * Metodo encargado de comprobar las colisiones con las paredes de la ventana y cambiar la velocidad
+     * en caso de que exista dicha colision
+     *
+     * @param sprite
+     */
     @Override
-    public void checkCollisions() {
+    public void checkCollisions(Sprite sprite) {
+        checkWallCollisions(sprite);
 
+    }
+
+    private void checkWallCollisions(Sprite sprite) {
+            if (sprite.getPosX() <= 0) {
+                sprite.setvX(0);
+            } else if (sprite.getPosX() >= gamePane.getWidth() - sprite.getWidth()) {
+                sprite.setvX(0);
+            }
+
+            if (sprite.getPosY() <= 0) {
+                sprite.setvY(0);
+            } else if (sprite.getPosY() >= gamePane.getHeight() - sprite.getWidth()) {
+                sprite.setvY(0);
+            }
     }
 
     @Override
@@ -356,9 +374,7 @@ public class FirstScreen implements IScreen {
         //TODO de dicha logica del array.
         synchronized (GamePane.class) {
             getKeyLogic(e);
-            hero.setMoveDirection(whatKeyPressed);
-            hero.setMoveParameters(whatKeyPressed);
-            hero.setMoveAnimation(hero.getActualDirection());
+            hero.moveCharacter(whatKeyPressed);
             return false;
         }
     }

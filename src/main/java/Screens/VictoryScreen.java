@@ -51,7 +51,7 @@ public class VictoryScreen implements IScreen {
     }
 
     @Override
-    public void checkCollisions() {
+    public void checkCollisions(Sprite s) {
 
     }
 
