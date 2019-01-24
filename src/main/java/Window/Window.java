@@ -1,10 +1,14 @@
 package Window;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import Window.GamePane;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.nio.Buffer;
 
 
 /**
@@ -40,9 +44,13 @@ public class Window {
          frame.add(gamePane);
 
 
-
-         BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
-         Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(
+        BufferedImage cursorImg = new BufferedImage(32,32,BufferedImage.TYPE_INT_ARGB);
+        try {
+            cursorImg = ImageIO.read(new File("src/main/resources/cursor/cursor_shiny.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(
                  cursorImg,
                  new Point(0, 0),
                  "blank cursor"
