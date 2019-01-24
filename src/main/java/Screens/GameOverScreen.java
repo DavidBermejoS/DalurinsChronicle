@@ -1,5 +1,6 @@
 package Screens;
 
+import Sprites.Sprite;
 import Window.GamePane;
 
 import java.awt.*;
@@ -41,12 +42,11 @@ public class GameOverScreen implements IScreen {
 
     }
 
-
-
     @Override
-    public void drawSprite() {
+    public void drawSprite(Graphics g) {
 
     }
+
 
     @Override
     public void drawMenu() {
@@ -64,9 +64,10 @@ public class GameOverScreen implements IScreen {
     }
 
     @Override
-    public void moveSprites() {
+    public void moveSprites(Sprite s) {
 
     }
+
 
     @Override
     public void manageGameFunctions() {
@@ -86,5 +87,15 @@ public class GameOverScreen implements IScreen {
     @Override
     public void keyPressed(KeyEvent e) {
 
+    }
+
+    @Override
+    public void keyRelessed(KeyEvent e) {
+
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent e) {
+        return false;
     }
 }

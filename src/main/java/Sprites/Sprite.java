@@ -25,9 +25,12 @@ public class Sprite {
     String id;
     String[] imageRoutes;
     File fileImage;
+    int countAnimatorPhase;
+    int countAnimatorPhaseRest;
 
 
     public Sprite(int posX, int posY, int vX, int vY, String id, String[] imageRoutes) {
+        countAnimatorPhase = 0;
         this.posX = posX;
         this.posY = posY;
         this.vX = vX;
@@ -38,12 +41,12 @@ public class Sprite {
 
     public Sprite() {
 
-    }
-
-    public void animateSprite() {
 
     }
 
+    /**
+     * Metodo encargado de refrescar el buffer del sprite para las animaciones.
+     */
     public void refreshBuffer() {
         buffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics g = buffer.getGraphics();
@@ -59,10 +62,15 @@ public class Sprite {
         }
     }
 
-    public BufferedImage getBuffer() {
-        return buffer;
-    }
 
+    /**
+     * Metodo encargado de mover el sprite por la pantalla (metodo generico, otras clases pueden
+     * tener el suyo propio)
+     */
+    public void moveSprite() {
+        this.posX += vX;
+        this.posY += vY;
+    }
 
 
     public boolean checkCollision(Sprite other) {
@@ -133,6 +141,10 @@ public class Sprite {
         this.buffer = buffer;
     }
 
+    public BufferedImage getBuffer() {
+        return buffer;
+    }
+
     public File getFileImage() {
         return fileImage;
     }
@@ -152,4 +164,6 @@ public class Sprite {
     public void setImageRoutes(String[] imageRoutes) {
         this.imageRoutes = imageRoutes;
     }
+
+
 }
