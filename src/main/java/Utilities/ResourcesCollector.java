@@ -158,6 +158,34 @@ public class ResourcesCollector {
                     count++;
                 }
             }
+
+            if (direction.equalsIgnoreCase("NW") || direction.equalsIgnoreCase("WN")) {
+                if (contentDir[i].getName().startsWith("walk_4")) {
+                    vectorRoutes[count] = contentDir[i].getAbsolutePath();
+                    count++;
+                }
+            }
+
+            if (direction.equalsIgnoreCase("NE") || direction.equalsIgnoreCase("EN")) {
+                if (contentDir[i].getName().startsWith("walk_2")) {
+                    vectorRoutes[count] = contentDir[i].getAbsolutePath();
+                    count++;
+                }
+            }
+
+            if (direction.equalsIgnoreCase("SW") || direction.equalsIgnoreCase("WS")) {
+                if (contentDir[i].getName().startsWith("walk_6")) {
+                    vectorRoutes[count] = contentDir[i].getAbsolutePath();
+                    count++;
+                }
+            }
+
+            if (direction.equalsIgnoreCase("SE") || direction.equalsIgnoreCase("ES")) {
+                if (contentDir[i].getName().startsWith("walk_0")) {
+                    vectorRoutes[count] = contentDir[i].getAbsolutePath();
+                    count++;
+                }
+            }
             if (count == 10) {
                 return this.vectorRoutes;
             }

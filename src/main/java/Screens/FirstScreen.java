@@ -43,6 +43,8 @@ public class FirstScreen implements IScreen {
 
     boolean endLevel;
     boolean gameOver;
+    boolean[] whatKeyPressed;
+
     double score;
 
     Hero hero;
@@ -72,6 +74,10 @@ public class FirstScreen implements IScreen {
         this.endLevel = false;
         this.gameOver = false;
         this.sprites = new ArrayList<Sprite>();
+        this.whatKeyPressed = new boolean[4];
+        for (int i = 0; i < whatKeyPressed.length; i++) {
+            whatKeyPressed[i] = false;
+        }
         this.enemies = new Enemy[NUM_ENEMIES];
         this.items = new Item[new Random().nextInt(MAX_NUM_ITEMS)];
         manageGameFunctions();
@@ -177,6 +183,7 @@ public class FirstScreen implements IScreen {
         }
     }
 
+    //COLECCION DE METODOS DE AJUSTES GRÁFICOS Y PINTAR ELEMENTOS EN PANTALLA
 
     /**
      * Metodo implementado por la interfaz IScreen
@@ -248,16 +255,6 @@ public class FirstScreen implements IScreen {
 
     }
 
-    @Override
-    public void checkCollisions() {
-
-    }
-
-    @Override
-    public void checkEndLevel() {
-
-    }
-
     /**
      * Metodo implementado por la interfaz IScreen
      * Metodo encargado de mover los Sprites por la pantalla
@@ -266,7 +263,9 @@ public class FirstScreen implements IScreen {
      */
     @Override
     public void moveSprites(Sprite s) {
-        s.refreshBuffer();
+        if(! (s instanceof Hero)){
+            s.refreshBuffer();
+        }
         if (s instanceof Hero && hero.isMoving()) {
             s.moveSprite();
         }
@@ -275,6 +274,7 @@ public class FirstScreen implements IScreen {
         }
     }
 
+    //COLECCION DE METODOS DE AJUSTES DE LOGICA DEL SISTEMA
 
     /**
      * Metodo implementado por la interfaz IScreen
@@ -293,6 +293,18 @@ public class FirstScreen implements IScreen {
     }
 
     @Override
+    public void checkCollisions() {
+
+    }
+
+    @Override
+    public void checkEndLevel() {
+
+    }
+
+    //EVENTOS DE RATON
+
+    @Override
     public void moveMouse(MouseEvent e) {
 
     }
@@ -304,6 +316,9 @@ public class FirstScreen implements IScreen {
 //        hero.setMoving(true);
 
     }
+
+
+    //EVENTOS DE TECLADO
 
     /**
      * Metodo encargado de gestionar los eventos de teclado,
@@ -322,6 +337,7 @@ public class FirstScreen implements IScreen {
         hero.setMoving(false);
     }
 
+
     /**
      * Metodo que gestiona el movimiento del personaje según la tecla del teclado pulsada.
      * Este metodo establece la velocidad en el vector de movimiento en el plano y establece además
@@ -334,44 +350,53 @@ public class FirstScreen implements IScreen {
      */
     @Override
     public boolean dispatchKeyEvent(KeyEvent e) {
+        //TODO implementar array de booleanos en la clase y dirigir el movimiento según el estado
+        //TODO de dicha logica del array.
         synchronized (GamePane.class) {
-            switch (e.getID()) {
-                case KeyEvent.KEY_PRESSED:
-                    int keyCode = e.getKeyCode();
-                    switch (keyCode) {
-                        case KeyEvent.VK_W:
-                            hero.setMoving(true);
-                            hero.setMoveAnimation("N");
-                            hero.setvX(0);
-                            hero.setvY(-5);
-                            break;
-                        case KeyEvent.VK_S:
-                            hero.setMoving(true);
-                            hero.setMoveAnimation("S");
-                            hero.setvX(0);
-                            hero.setvY(5);
-                            break;
-
-                        case KeyEvent.VK_A:
-                            hero.setMoveAnimation("W");
-                            hero.setvX(-5);
-                            hero.setvY(0);
-                            hero.setMoving(true);
-                            break;
-                        case KeyEvent.VK_D:
-                            hero.setMoving(true);
-                            hero.setMoveAnimation("E");
-                            hero.setvX(5);
-                            hero.setvY(0);
-                            break;
-                    }
-                    break;
-                case KeyEvent.KEY_RELEASED:
-
-                    hero.setMoving(false);
-                    break;
-            }
+            getKeyLogic(e);
+            hero.setMoveDirection(whatKeyPressed);
+            hero.setMoveParameters(whatKeyPressed);
+            hero.setMoveAnimation(hero.getActualDirection());
             return false;
+        }
+    }
+
+    private void getKeyLogic(KeyEvent e) {
+        int keyCode;
+        switch (e.getID()) {
+            case KeyEvent.KEY_PRESSED:
+                keyCode = e.getKeyCode();
+                switch (keyCode) {
+                    case KeyEvent.VK_W:
+                        whatKeyPressed[0] = true;
+                        break;
+                    case KeyEvent.VK_A:
+                        whatKeyPressed[1] = true;
+                        break;
+                    case KeyEvent.VK_S:
+                        whatKeyPressed[2] = true;
+                        break;
+                    case KeyEvent.VK_D:
+                        whatKeyPressed[3] = true;
+                        break;
+                }
+                break;
+            case KeyEvent.KEY_RELEASED:
+                keyCode = e.getKeyCode();
+                switch (keyCode) {
+                    case KeyEvent.VK_W:
+                        whatKeyPressed[0] = false;
+                        break;
+                    case KeyEvent.VK_A:
+                        whatKeyPressed[1] = false;
+                        break;
+                    case KeyEvent.VK_S:
+                        whatKeyPressed[2] = false;
+                        break;
+                    case KeyEvent.VK_D:
+                        whatKeyPressed[3] = false;
+                        break;
+                }
         }
     }
 
