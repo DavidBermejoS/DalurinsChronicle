@@ -1,5 +1,7 @@
 package Screens;
 
+import Sprites.Sprite;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -23,7 +25,7 @@ public interface IScreen {
 
     public void checkEndLevel();
 
-    public void moveSprites();
+    public void moveSprites(Sprite s);
 
     public void manageGameFunctions();
 
@@ -32,6 +34,10 @@ public interface IScreen {
     public void clickMouse(MouseEvent e);
 
     public void keyPressed(KeyEvent e);
+
+    public void keyRelessed(KeyEvent e);
+
+    public boolean dispatchKeyEvent(KeyEvent e);
 
 
 }

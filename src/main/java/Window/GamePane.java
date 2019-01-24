@@ -6,6 +6,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
+
+//TODO realizar la documentacion de los metodos
 
 /**
  * <h2>Clase GamePane</h2>
@@ -18,10 +23,12 @@ import java.awt.event.KeyListener;
  * @author David Bermejo Simon
  *
  */
-public class GamePane extends JPanel implements Runnable, KeyListener {
+public class GamePane extends JPanel implements Runnable, KeyListener, MouseListener {
 
 
     public Menu menu;
+
+    public String userName;
     private boolean endLevel;
     private int actualLevel;
     private IScreen screen;
@@ -33,92 +40,47 @@ public class GamePane extends JPanel implements Runnable, KeyListener {
      * Se inicializan las variables, se hace focus sobre el componente y se inicializan
      * sus listeners. Ademas comienza a ejecutar el run.
      */
-    public GamePane(){
+    public GamePane() {
         this.actualLevel = 0;
         this.score = 0;
         this.endLevel = true;
         this.gameOver = false;
+        this.screen = new FirstScreen(this);
         this.setFocusable(true);
         this.addKeyListener(this);
+        this.addMouseListener(this);
+
         new Thread(this).start();
     }
 
     //METODOS PARA PINTAR LA PANTALLA
+
     /**
      * Metodo encargado de llamar al metodo drawScreen de la pantalla que este cargada
      * según el flujo establecido por el metodo checkLevel
+     *
+     * @param g : componentes graphicos del panel de juego
      * @see #checkLevel()
      * @see IScreen
-     * @param g : componentes graphicos del panel de juego
      */
     @Override
     protected void paintComponent(Graphics g) {
-            this.screen.drawScreen(g);
+        this.screen.drawScreen(g);
 
     }
-
-
-    //METODOS DE GESTION DEL FLUJO
-    /**
-     * Metodo encargado de gestionar el nivel actual en el juego
-     * y cargar la pantalla en función a dicho flujo
-     */
-    private void checkLevel(){
-        if (endLevel && !gameOver) {
-            actualLevel++;
-            switch (actualLevel) {
-                case 0:
-                    this.screen = new StartScreen(this);
-                    endLevel = false;
-                    break;
-
-                case 1:
-                    this.screen = new FirstScreen(this);
-                    endLevel = false;
-                    break;
-
-                    //TODO gestion del flujo para la carga de los distintos niveles
-
-                case 5:
-                    this.screen = new VictoryScreen(this);
-                    endLevel = false;
-                    break;
-            }
-
-        } else if (endLevel && gameOver) {
-            this.screen = new GameOverScreen(this);
-            actualLevel = -1;
-            endLevel = false;
-
-        }
-    }
-
-    //EVENTOS DE RATÓN
-    //TODO rellenar los metodos de eventos y listeners
-    //TODO realizar la documentacion de los metodos
-    public void keyTyped(KeyEvent keyEvent) {
-
-    }
-
-    public void keyPressed(KeyEvent keyEvent) {
-
-    }
-
-    public void keyReleased(KeyEvent keyEvent) {
-
-    }
-
 
 
     //METODO RUN DE EJECUCIÓN DEL HILO
+
     /**
      * Metodo encargado de gestionar la tasa de refresco (render)
      */
     @Override
     public void run() {
-        while(true){
+        while (true) {
             try {
                 repaint();
+                this.screen.manageGameFunctions();
                 checkLevel();
                 Thread.currentThread().sleep(5);
                 Toolkit.getDefaultToolkit().sync();
@@ -129,8 +91,86 @@ public class GamePane extends JPanel implements Runnable, KeyListener {
     }
 
 
+    //METODOS DE GESTION DE FLUJO
+
+    /**
+     * Metodo encargado de gestionar el nivel actual en el juego
+     * y cargar la pantalla en función a dicho flujo
+     */
+    private void checkLevel() {
+        if (endLevel && !gameOver) {
+            actualLevel++;
+            switch (actualLevel) {
+                case 0:
+                    this.screen = new StartScreen(this);
+                    endLevel = false;
+                    break;
+                case 1:
+                    this.screen = new FirstScreen(this);
+                    endLevel = false;
+                    break;
+                //TODO gestion del flujo para la carga de los distintos niveles
+                case 5:
+                    this.screen = new VictoryScreen(this);
+                    endLevel = false;
+                    break;
+            }
+        } else if (endLevel && gameOver) {
+            this.screen = new GameOverScreen(this);
+            actualLevel = -1;
+            endLevel = false;
+
+        }
+    }
+
+
+    //EVENTOS DE TECLADO
+
+    public void keyTyped(KeyEvent keyEvent) {
+
+    }
+
+    public void keyPressed(KeyEvent keyEvent) {
+        this.screen.dispatchKeyEvent(keyEvent);
+    }
+
+    public void keyReleased(KeyEvent keyEvent) {
+        this.screen.keyRelessed(keyEvent);
+    }
+
+    //EVENTOS DE MOUSE
+
+    @Override
+    public void mouseClicked(MouseEvent mouseEvent) {
+        this.screen.clickMouse(mouseEvent);
+    }
+
+    @Override
+    public void mousePressed(MouseEvent mouseEvent) {
+        //NO HACE NADA
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent mouseEvent) {
+        //NO HACE NADA
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent mouseEvent) {
+        //NO HACE NADA
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent mouseEvent) {
+        //NO HACE NADA
+
+    }
+
+
     //GETTERS Y SETTERS DE LA CLASE
-    //TODO realizar la documentacion de los metodos
 
     public boolean isEndLevel() {
         return endLevel;
@@ -163,4 +203,13 @@ public class GamePane extends JPanel implements Runnable, KeyListener {
     public void setScore(double score) {
         this.score = score;
     }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
 }

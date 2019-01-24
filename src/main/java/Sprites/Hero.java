@@ -1,7 +1,10 @@
 package Sprites;
 
+import Utilities.ResourcesCollector;
+
 import javax.swing.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 
 /**
  * <h2>Clase Hero</h2>
@@ -11,6 +14,8 @@ import java.awt.image.BufferedImage;
  * @author David Bermejo Simon
  */
 public class Hero extends Sprite{
+
+
     boolean isAlive;
     String user;
     int totalHp;
@@ -19,8 +24,11 @@ public class Hero extends Sprite{
     JProgressBar life;
     Item[] items;
     Skill [] skills;
-
-
+    String[][]matrixAnimation;
+    String [] routesAnimation;
+    private boolean moving;
+    private boolean collisioned;
+    private String lastDirection;
 
 
 //CONSTRUCTORES DE LA CLASE
@@ -29,7 +37,10 @@ public class Hero extends Sprite{
      * Constructor de la clase vacio
      */
     public Hero(){
-
+        lastDirection = "E";
+        collisioned = false;
+        matrixAnimation = new String[10][8];
+        routesAnimation = new String[10];
     }
 
     /**
@@ -45,7 +56,10 @@ public class Hero extends Sprite{
      * @param user
      */
     public Hero(int posX, int posY, int vX, int vY, String id, String[] imageRoutes, boolean isAlive, String user) {
+
         super(posX, posY, vX, vY, id, imageRoutes);
+        matrixAnimation = new String[10][8];
+        routesAnimation = new String[10];
         this.isAlive = isAlive;
         this.user = user;
     }
@@ -56,6 +70,8 @@ public class Hero extends Sprite{
      * @param user
      */
     public Hero(boolean isAlive, String user) {
+        matrixAnimation = new String[10][8];
+        routesAnimation = new String[10];
         this.isAlive = isAlive;
         this.user = user;
     }
@@ -92,6 +108,36 @@ public class Hero extends Sprite{
         }
         return skillReturn;
     }
+
+    /**
+     * Metodo encargado de definir el array de imagenes que se deverán utilizar para la animación
+     * actual
+     * @param direction
+     */
+    public void setMoveAnimation(String direction){
+        ResourcesCollector resCol = new ResourcesCollector();
+        if(!lastDirection.equalsIgnoreCase(direction)){
+            super.imageRoutes = resCol.getRoutesByDirection(resCol.HERO_TARGET,resCol.WALK_ACTION,direction);
+            lastDirection = direction;
+        }
+        if(imageRoutes!=null){
+            countAnimatorPhase++;
+            if(countAnimatorPhase == imageRoutes.length){
+                countAnimatorPhase = 0;
+            }
+            fileImage = new File(imageRoutes[countAnimatorPhase]);
+        }
+    }
+
+    /**
+     * Metodo para mover la posicion del heroe segun la velocidad
+     */
+    public void moveHero(){
+        this.posX += this.vX;
+        this.posY += this.vY;
+
+    }
+
 
 
 
@@ -167,5 +213,13 @@ public class Hero extends Sprite{
 
     public void setSkills(Skill[] skills) {
         this.skills = skills;
+    }
+
+    public boolean isMoving() {
+        return moving;
+    }
+
+    public void setMoving(boolean moving) {
+        this.moving = moving;
     }
 }

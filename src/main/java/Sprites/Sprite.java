@@ -25,9 +25,11 @@ public class Sprite {
     String id;
     String[] imageRoutes;
     File fileImage;
+     int countAnimatorPhase;
 
 
     public Sprite(int posX, int posY, int vX, int vY, String id, String[] imageRoutes) {
+        countAnimatorPhase = 0;
         this.posX = posX;
         this.posY = posY;
         this.vX = vX;
@@ -38,9 +40,11 @@ public class Sprite {
 
     public Sprite() {
 
+
     }
 
-    public void animateSprite() {
+    public void selectAnimationSprite() {
+
 
     }
 
@@ -61,6 +65,11 @@ public class Sprite {
 
     public BufferedImage getBuffer() {
         return buffer;
+    }
+
+    public void moveSprite(){
+        this.posX+=vX;
+        this.posY+=vY;
     }
 
 
