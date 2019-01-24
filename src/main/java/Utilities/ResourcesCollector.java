@@ -158,7 +158,7 @@ public class ResourcesCollector {
                     count++;
                 }
             }
-            if(count == 10){
+            if (count == 10) {
                 return this.vectorRoutes;
             }
         }

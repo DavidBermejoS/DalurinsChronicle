@@ -15,6 +15,12 @@ import java.util.Random;
 
 import Sprites.*;
 
+/**
+ * <h2>Clase FirstScreen</h2>
+ * Esta clase compone la gestión de gráficos y de sistema de juego que se empleará para el primer nivel / pantalla
+ *
+ * @author David Bermejo Simon
+ */
 public class FirstScreen implements IScreen {
 
     private static final String BACKGROUND_GAME = "floors/floor_grass1.png";
@@ -42,7 +48,6 @@ public class FirstScreen implements IScreen {
     Hero hero;
     Enemy[] enemies;
     Item[] items;
-    private boolean isKeyPressed;
 
 
     public FirstScreen(GamePane gamePane) {
@@ -54,9 +59,16 @@ public class FirstScreen implements IScreen {
     }
 
 
+    /**
+     * Metodo implementado por la interfaz IScreen
+     * Este metodo gestiona la instanciacion de las variables básicas para la ejecución
+     * del juego en esta pantalla. Además realiza la llamada a la funcion manageGameFunctions para que
+     * el sistema comience a funcionar por si mismo
+     *
+     * @see #manageGameFunctions()
+     */
     @Override
     public void startFrame() {
-
         this.endLevel = false;
         this.gameOver = false;
         this.sprites = new ArrayList<Sprite>();
@@ -67,6 +79,11 @@ public class FirstScreen implements IScreen {
 
 
     //COLECCION DE METODOS PARA INSTANCIAR ELEMENTOS EN LA PANTALLA
+
+    /**
+     * Metodo implementado por la interfaz IScreen
+     * Este metodo gestiona la instanciacion de los elementos que se vayan a utilizar durante la partida
+     */
     @Override
     public void addElements() {
         addHero();
@@ -162,6 +179,7 @@ public class FirstScreen implements IScreen {
 
 
     /**
+     * Metodo implementado por la interfaz IScreen
      * Metodo encargado de pintar los componentes en la pantalla
      *
      * @param g
@@ -173,6 +191,7 @@ public class FirstScreen implements IScreen {
     }
 
     /**
+     * Metodo implementado por la interfaz IScreen
      * Metodo encargado de redimensionar la pantalla y los componentes que
      * se situen en su interio
      *
@@ -184,6 +203,7 @@ public class FirstScreen implements IScreen {
     }
 
     /**
+     * Metodo implementado por la interfaz IScreen
      * Metodo encargado de pintar el background del nivel
      *
      * @param g
@@ -201,6 +221,12 @@ public class FirstScreen implements IScreen {
         g.drawImage(backgroundImage, 0, 0, null);
     }
 
+    /**
+     * Metodo implementado por la interfaz IScreen
+     * Metodo encargado de pintar los sprites en la pantalla
+     *
+     * @param g
+     */
     @Override
     public void drawSprite(Graphics g) {
         for (Sprite s : sprites) {
@@ -232,12 +258,17 @@ public class FirstScreen implements IScreen {
 
     }
 
+    /**
+     * Metodo implementado por la interfaz IScreen
+     * Metodo encargado de mover los Sprites por la pantalla
+     *
+     * @param s : instancia de sprite
+     */
     @Override
     public void moveSprites(Sprite s) {
         s.refreshBuffer();
         if (s instanceof Hero && hero.isMoving()) {
             s.moveSprite();
-            s.refreshBuffer();
         }
         if (s instanceof Enemy) {
 
@@ -246,6 +277,7 @@ public class FirstScreen implements IScreen {
 
 
     /**
+     * Metodo implementado por la interfaz IScreen
      * Este metodo se encargará de gestionar todas las funciones del sistema de
      * juego en esta pantalla.
      */
@@ -282,16 +314,24 @@ public class FirstScreen implements IScreen {
      */
     @Override
     public void keyPressed(KeyEvent e) {
-        isKeyPressed = true;
         hero.setMoving(true);
     }
 
     @Override
     public void keyRelessed(KeyEvent e) {
-        isKeyPressed = false;
         hero.setMoving(false);
     }
 
+    /**
+     * Metodo que gestiona el movimiento del personaje según la tecla del teclado pulsada.
+     * Este metodo establece la velocidad en el vector de movimiento en el plano y establece además
+     * que set de sprites se deben utilizar para animar dicho movimiento llamando al metodo setMoveAnimation
+     * y pasandole por parámetro una dirección.
+     *
+     * @param e : evento de teclado
+     * @return
+     * @see Hero
+     */
     @Override
     public boolean dispatchKeyEvent(KeyEvent e) {
         synchronized (GamePane.class) {
@@ -302,21 +342,18 @@ public class FirstScreen implements IScreen {
                         case KeyEvent.VK_W:
                             hero.setMoving(true);
                             hero.setMoveAnimation("N");
-                            hero.selectAnimationSprite();
                             hero.setvX(0);
                             hero.setvY(-5);
                             break;
                         case KeyEvent.VK_S:
                             hero.setMoving(true);
                             hero.setMoveAnimation("S");
-                            hero.selectAnimationSprite();
                             hero.setvX(0);
                             hero.setvY(5);
                             break;
 
                         case KeyEvent.VK_A:
                             hero.setMoveAnimation("W");
-                            hero.selectAnimationSprite();
                             hero.setvX(-5);
                             hero.setvY(0);
                             hero.setMoving(true);
@@ -324,14 +361,13 @@ public class FirstScreen implements IScreen {
                         case KeyEvent.VK_D:
                             hero.setMoving(true);
                             hero.setMoveAnimation("E");
-                            hero.selectAnimationSprite();
                             hero.setvX(5);
                             hero.setvY(0);
                             break;
                     }
                     break;
                 case KeyEvent.KEY_RELEASED:
-                    isKeyPressed = false;
+
                     hero.setMoving(false);
                     break;
             }

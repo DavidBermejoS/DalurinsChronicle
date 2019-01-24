@@ -17,11 +17,11 @@ import java.awt.event.MouseListener;
  * Clase que hereda del componente JPanel y que se encargara de gestionar la entrada de los niveles/pantallas
  * "Screens". Esta clase se encarga además de gestionar el render del juego (tasa de refresco) además de controlar
  * si se ha perdido en el juego y que puntuación se ha obtenido
+ *
+ * @author David Bermejo Simon
+ * @implements Runnable, KeyListener
  * @see JPanel
  * @see IScreen
- * @implements Runnable, KeyListener
- * @author David Bermejo Simon
- *
  */
 public class GamePane extends JPanel implements Runnable, KeyListener, MouseListener {
 

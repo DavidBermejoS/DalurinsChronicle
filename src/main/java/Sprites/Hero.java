@@ -13,7 +13,7 @@ import java.io.File;
  *
  * @author David Bermejo Simon
  */
-public class Hero extends Sprite{
+public class Hero extends Sprite {
 
 
     boolean isAlive;
@@ -23,9 +23,9 @@ public class Hero extends Sprite{
     int def;
     JProgressBar life;
     Item[] items;
-    Skill [] skills;
-    String[][]matrixAnimation;
-    String [] routesAnimation;
+    Skill[] skills;
+    String[][] matrixAnimation;
+    String[] routesAnimation;
     private boolean moving;
     private boolean collisioned;
     private String lastDirection;
@@ -36,7 +36,7 @@ public class Hero extends Sprite{
     /**
      * Constructor de la clase vacio
      */
-    public Hero(){
+    public Hero() {
         lastDirection = "E";
         collisioned = false;
         matrixAnimation = new String[10][8];
@@ -45,7 +45,7 @@ public class Hero extends Sprite{
 
     /**
      * Constructor con los parametros propios de la clase y los de la clase Sprite
-     * @see Sprite
+     *
      * @param posX
      * @param posY
      * @param vX
@@ -54,6 +54,7 @@ public class Hero extends Sprite{
      * @param imageRoutes
      * @param isAlive
      * @param user
+     * @see Sprite
      */
     public Hero(int posX, int posY, int vX, int vY, String id, String[] imageRoutes, boolean isAlive, String user) {
 
@@ -66,6 +67,7 @@ public class Hero extends Sprite{
 
     /**
      * Constructor con los parametros propios de la clase
+     *
      * @param isAlive
      * @param user
      */
@@ -79,13 +81,14 @@ public class Hero extends Sprite{
     /**
      * Metodo encargado de devolver el item
      * cuyo nombre se recibe por parametro
+     *
      * @param name : nombre del item
      * @return
      */
-    public Item getSelectedItem(String name){
+    public Item getSelectedItem(String name) {
         Item itemReturn = null;
         for (int i = 0; i < items.length; i++) {
-            if(items[i].getName().equalsIgnoreCase(name)){
+            if (items[i].getName().equalsIgnoreCase(name)) {
                 itemReturn = items[i];
             }
         }
@@ -96,13 +99,14 @@ public class Hero extends Sprite{
     /**
      * Metodo encargado de devolver el item
      * cuyo nombre se recibe por parametro
+     *
      * @param name : nombre de la habilidad
      * @return
      */
-    public Skill getSelectedSkill(String name){
+    public Skill getSelectedSkill(String name) {
         Skill skillReturn = null;
         for (int i = 0; i < skills.length; i++) {
-            if(skills[i].getName().equalsIgnoreCase(name)){
+            if (skills[i].getName().equalsIgnoreCase(name)) {
                 skillReturn = skills[i];
             }
         }
@@ -112,33 +116,23 @@ public class Hero extends Sprite{
     /**
      * Metodo encargado de definir el array de imagenes que se deverán utilizar para la animación
      * actual
+     *
      * @param direction
      */
-    public void setMoveAnimation(String direction){
+    public void setMoveAnimation(String direction) {
         ResourcesCollector resCol = new ResourcesCollector();
-        if(!lastDirection.equalsIgnoreCase(direction)){
-            super.imageRoutes = resCol.getRoutesByDirection(resCol.HERO_TARGET,resCol.WALK_ACTION,direction);
+        if (!lastDirection.equalsIgnoreCase(direction)) {
+            super.imageRoutes = resCol.getRoutesByDirection(resCol.HERO_TARGET, resCol.WALK_ACTION, direction);
             lastDirection = direction;
         }
-        if(imageRoutes!=null){
+        if (imageRoutes != null) {
             countAnimatorPhase++;
-            if(countAnimatorPhase == imageRoutes.length){
+            if (countAnimatorPhase == imageRoutes.length) {
                 countAnimatorPhase = 0;
             }
             fileImage = new File(imageRoutes[countAnimatorPhase]);
         }
     }
-
-    /**
-     * Metodo para mover la posicion del heroe segun la velocidad
-     */
-    public void moveHero(){
-        this.posX += this.vX;
-        this.posY += this.vY;
-
-    }
-
-
 
 
     //GETTERS Y SETTERS
