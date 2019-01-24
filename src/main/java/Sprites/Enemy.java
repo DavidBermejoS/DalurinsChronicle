@@ -55,6 +55,9 @@ public class Enemy extends Sprite {
         this.life = life;
     }
 
+
+    //GETTERS Y SETTERS DE LA CLASE
+
     public boolean isAlive() {
         return isAlive;
     }

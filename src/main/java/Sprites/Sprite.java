@@ -26,6 +26,7 @@ public class Sprite {
     String[] imageRoutes;
     File fileImage;
     int countAnimatorPhase;
+    //TODO hacer los tiempos de descanso de las animaciones
     int countAnimatorPhaseRest;
 
 
@@ -51,8 +52,10 @@ public class Sprite {
         buffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics g = buffer.getGraphics();
         try {
+            //TODO realizar el cambio de ImageIO y realizar la lectura en la instanciacion del sprite.
+            //TODO una vez realizado el cambio señalar el bufferImage segun la imagen que sea
             BufferedImage imagenSprite = ImageIO.read(fileImage);
-            g.drawImage(imagenSprite.getScaledInstance(width, height, Image.SCALE_SMOOTH), 0, 0, null);
+            g.drawImage(imagenSprite, 0, 0,this.width,this.height, null);
             g.dispose();
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
@@ -76,6 +79,10 @@ public class Sprite {
     public boolean checkCollision(Sprite other) {
         return false;
     }
+
+
+
+    //GETTERS Y SETTERS
 
     public int getPosX() {
         return posX;

@@ -135,7 +135,8 @@ public class GamePane extends JPanel implements Runnable, KeyListener, MouseList
     }
 
     public void keyReleased(KeyEvent keyEvent) {
-        this.screen.keyRelessed(keyEvent);
+        this.screen.dispatchKeyEvent(keyEvent);
+
     }
 
     //EVENTOS DE MOUSE

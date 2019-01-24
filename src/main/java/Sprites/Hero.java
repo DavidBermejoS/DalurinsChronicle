@@ -3,6 +3,7 @@ package Sprites;
 import Utilities.ResourcesCollector;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
@@ -14,6 +15,16 @@ import java.io.File;
  * @author David Bermejo Simon
  */
 public class Hero extends Sprite {
+
+    private String[] allDirections = {"N", "W", "S", "E", "NW", "NE", "SW", "SE"};
+    final static int VAL_N = 0;
+    final static int VAL_W = 1;
+    final static int VAL_S = 2;
+    final static int VAL_E = 3;
+    final static int VAL_NW = 4;
+    final static int VAL_NE = 5;
+    final static int VAL_SW = 6;
+    final static int VAL_SE = 7;
 
 
     boolean isAlive;
@@ -29,6 +40,7 @@ public class Hero extends Sprite {
     private boolean moving;
     private boolean collisioned;
     private String lastDirection;
+    private String actualDirection;
 
 
 //CONSTRUCTORES DE LA CLASE
@@ -37,7 +49,7 @@ public class Hero extends Sprite {
      * Constructor de la clase vacio
      */
     public Hero() {
-        lastDirection = "E";
+        lastDirection = "";
         collisioned = false;
         matrixAnimation = new String[10][8];
         routesAnimation = new String[10];
@@ -113,24 +125,99 @@ public class Hero extends Sprite {
         return skillReturn;
     }
 
+
+    //COLECCION DE METODOS QUE GESTIONAN EL MOVIMIENTO DEL HEROE
+
+
+    /**
+     * Metodo encargado de definir que dirección toma el heroe segun la combinacion de teclas que tenga pulsada
+     *
+     * @param keys : array de booleanos con todos las teclas que han sido pulsadas y las que no
+     */
+    public void setMoveDirection(boolean[] keys) {
+        String directionAux = "";
+        int count = 0;
+        for (int i = 0; i < keys.length; i++) {
+            if (keys[i] && count < 3) {
+                count++;
+                switch (i) {
+                    case VAL_N:
+                        directionAux = directionAux.concat("N");
+                        break;
+                    case VAL_W:
+                        directionAux = directionAux.concat("W");
+                        break;
+                    case VAL_S:
+                        directionAux = directionAux.concat("S");
+                        break;
+                    case VAL_E:
+                        directionAux = directionAux.concat("E");
+                        break;
+                }
+            }
+        }
+        this.actualDirection = directionAux;
+    }
+
+    /**
+     * Metodo encargado de ajustar la velocidad y los parametros de movimiento segun la
+     * direccion actual
+     *
+     * @param keys : array de booleanos con todos las teclas que han sido pulsadas y las que no
+     */
+    public void setMoveParameters(boolean[] keys) {
+        int countFalses = 0;
+        for (int i = 0; i < keys.length; i++) {
+            if (keys[i]) {
+                switch (i) {
+                    case 0:
+                        vY = -2;
+                        break;
+                    case 1:
+                        vX = -2;
+                        break;
+                    case 2:
+                        vY = 2;
+                        break;
+                    case 3:
+                        vX = 2;
+                        break;
+                }
+            } else {
+                countFalses++;
+            }
+        }
+        if (countFalses == keys.length) {
+            this.setMoving(false);
+            this.vX = 0;
+            this.vY = 0;
+        }else{
+            this.setMoving(true);
+        }
+
+    }
+
     /**
      * Metodo encargado de definir el array de imagenes que se deverán utilizar para la animación
      * actual
      *
-     * @param direction
+     * @param direction : direccion de las cuales se quieren gestionar las imagenes
      */
     public void setMoveAnimation(String direction) {
         ResourcesCollector resCol = new ResourcesCollector();
-        if (!lastDirection.equalsIgnoreCase(direction)) {
+        if (!lastDirection.equalsIgnoreCase(direction) && !direction.equalsIgnoreCase("")) {
             super.imageRoutes = resCol.getRoutesByDirection(resCol.HERO_TARGET, resCol.WALK_ACTION, direction);
             lastDirection = direction;
         }
         if (imageRoutes != null) {
             countAnimatorPhase++;
-            if (countAnimatorPhase == imageRoutes.length) {
+            //TODO mejorar el tiempo de carga de imagenes para evitar pestaneo en escena
+            if (countAnimatorPhase == imageRoutes.length-1) {
                 countAnimatorPhase = 0;
             }
             fileImage = new File(imageRoutes[countAnimatorPhase]);
+            this.refreshBuffer();
+//            this.getScaledInstance(width, height, Image.SCALE_SMOOTH)
         }
     }
 
@@ -216,4 +303,13 @@ public class Hero extends Sprite {
     public void setMoving(boolean moving) {
         this.moving = moving;
     }
+
+    public String getActualDirection() {
+        return actualDirection;
+    }
+
+    public void setActualDirection(String actualDirection) {
+        this.actualDirection = actualDirection;
+    }
+
 }
