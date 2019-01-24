@@ -14,6 +14,17 @@ import java.io.IOException;
  * @author David Bermejo Simon
  */
 public class Sprite {
+    public String[] allDirections = {"N", "W", "S", "E", "NW", "NE", "SW", "SE"};
+    public final static int VAL_N = 0;
+    public final static int VAL_W = 1;
+    public final static int VAL_S = 2;
+    public final static int VAL_E = 3;
+    public final static int VAL_NW = 4;
+    public final static int VAL_NE = 5;
+    public final static int VAL_SW = 6;
+    public final static int VAL_SE = 7;
+
+
     int posX;
     int posY;
     int width;
@@ -58,7 +69,6 @@ public class Sprite {
             g.drawImage(imagenSprite, 0, 0,this.width,this.height, null);
             g.dispose();
         } catch (IOException ex) {
-            System.out.println(ex.getMessage());
             g.setColor(color);
             g.fillRect(0, 0, width, height);
             g.dispose();

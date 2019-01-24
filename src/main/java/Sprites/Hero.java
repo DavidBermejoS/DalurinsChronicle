@@ -15,18 +15,6 @@ import java.io.File;
  * @author David Bermejo Simon
  */
 public class Hero extends Sprite {
-
-    private String[] allDirections = {"N", "W", "S", "E", "NW", "NE", "SW", "SE"};
-    final static int VAL_N = 0;
-    final static int VAL_W = 1;
-    final static int VAL_S = 2;
-    final static int VAL_E = 3;
-    final static int VAL_NW = 4;
-    final static int VAL_NE = 5;
-    final static int VAL_SW = 6;
-    final static int VAL_SE = 7;
-
-
     boolean isAlive;
     String user;
     int totalHp;

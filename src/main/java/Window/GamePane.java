@@ -45,11 +45,10 @@ public class GamePane extends JPanel implements Runnable, KeyListener, MouseList
         this.score = 0;
         this.endLevel = true;
         this.gameOver = false;
-        this.screen = new FirstScreen(this);
+     //   this.screen = new FirstScreen(this);
         this.setFocusable(true);
         this.addKeyListener(this);
         this.addMouseListener(this);
-
         new Thread(this).start();
     }
 
@@ -79,11 +78,13 @@ public class GamePane extends JPanel implements Runnable, KeyListener, MouseList
     public void run() {
         while (true) {
             try {
-                repaint();
-                this.screen.manageGameFunctions();
+                if(screen!=null){
+                    repaint();
+                    this.screen.manageGameFunctions();
+                }
                 checkLevel();
-                Thread.currentThread().sleep(5);
                 Toolkit.getDefaultToolkit().sync();
+                Thread.currentThread().sleep(5);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

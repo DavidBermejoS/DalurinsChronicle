@@ -24,7 +24,7 @@ import Sprites.*;
 public class FirstScreen implements IScreen {
 
     private static final String BACKGROUND_GAME = "floors/floor_grass1.png";
-    private static final int NUM_ENEMIES = 10;
+    private static final int NUM_ENEMIES = 1;
 
     private final static int ENEMY_HP = 10;
     private final static int ENEMY_ATK = 5;
@@ -108,7 +108,7 @@ public class FirstScreen implements IScreen {
         hero.setPosY(0);
         //parametros de dimension
         hero.setWidth(80);
-        hero.setHeight(120);
+        hero.setHeight(140);
         //parametros de velocidad
 
         hero.setvX(0);
@@ -134,8 +134,8 @@ public class FirstScreen implements IScreen {
         //TODO realizar la implementacion de los parametros propios de los enemigos.
         for (int i = 0; i < enemies.length; i++) {
             Enemy enemy = new Enemy();
-            enemy.setPosX(gamePane.getWidth() / 2);
-            enemy.setPosY(gamePane.getHeight() / 2);
+            enemy.setPosX(500);
+            enemy.setPosY(400);
             //parametros de dimension
             enemy.setWidth(80);
             enemy.setHeight(120);
@@ -174,7 +174,7 @@ public class FirstScreen implements IScreen {
             item.setvX(0);
             item.setvY(0);
             //parametros de recursos gráficos y gestion de los mismos
-            item.setFileImage(new File("src/main/resources/attack_potion.png"));
+            item.setFileImage(new File("src/main/resources/potions/attack_potion.png"));
             item.refreshBuffer();
             item.setName("potion");
             item.setDescription("Poción mágica, si se toma sube el ataque");
@@ -263,13 +263,15 @@ public class FirstScreen implements IScreen {
      */
     @Override
     public void moveSprites(Sprite s) {
-        if(! (s instanceof Hero)){
+        if(! (s instanceof Hero) && ! (s instanceof Enemy)){
             s.refreshBuffer();
         }
         if (s instanceof Hero && hero.isMoving()) {
             s.moveSprite();
         }
         if (s instanceof Enemy) {
+            ((Enemy) s).setMoveDirection(hero);
+            ((Enemy) s).setMoveAnimation("SE");
 
         }
     }

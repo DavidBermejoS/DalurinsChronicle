@@ -21,7 +21,8 @@ import java.nio.Buffer;
  */
 public class Window {
 
-     JFrame frame;
+    private BufferedImage cursorImg = new BufferedImage(32,32,BufferedImage.TYPE_INT_ARGB_PRE);
+    JFrame frame;
      GamePane gamePane;
 
     /**
@@ -31,8 +32,14 @@ public class Window {
      */
      public Window(){
          this.frame = new JFrame();
-         frame.setBounds(0,0,800,600);
+         frame.setBounds(0,0,1200,800);
          frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+         try {
+             cursorImg = ImageIO.read(new File("src/main/resources/cursor/cursor_lighter.png"));
+         } catch (IOException e) {
+             System.out.println("aqui");
+             e.printStackTrace();
+         }
      }
 
     /**
@@ -43,13 +50,6 @@ public class Window {
          this.gamePane = new GamePane();
          frame.add(gamePane);
 
-
-        BufferedImage cursorImg = new BufferedImage(32,32,BufferedImage.TYPE_INT_ARGB);
-        try {
-            cursorImg = ImageIO.read(new File("src/main/resources/cursor/cursor_shiny.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(
                  cursorImg,
                  new Point(0, 0),

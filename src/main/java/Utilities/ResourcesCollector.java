@@ -18,6 +18,7 @@ public class ResourcesCollector {
 
 
     public final static String ITEM_RESOURCES = "src/main/resources/item";
+    public final static String POTION_RESOURCES = "src/main/resources/potions";
 
     public final static String HERO_ATTACK = "src/main/resources/hero/attack";
     public final static String HERO_BLOCK = "src/main/resources/hero/block";
@@ -116,6 +117,8 @@ public class ResourcesCollector {
         }
     }
 
+
+    
     /**
      * Metodo encargado de devolver un array de string según el target especificado y la acción que va a realizar
      * devolviendo directamente la ruta en dicho array
