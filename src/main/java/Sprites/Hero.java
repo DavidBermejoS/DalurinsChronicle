@@ -153,8 +153,8 @@ public class Hero extends Sprite {
                         break;
                 }
             }
+            this.actualDirection = directionAux;
         }
-        this.actualDirection = directionAux;
     }
 
     /**
@@ -170,16 +170,16 @@ public class Hero extends Sprite {
             if (keys[i]) {
                 switch (i) {
                     case 0:
-                        vY += -2;
+                        vY += -3;
                         break;
                     case 1:
-                        vX += -2;
+                        vX += -3;
                         break;
                     case 2:
-                        vY += 2;
+                        vY += 3;
                         break;
                     case 3:
-                        vX += 2;
+                        vX += 3;
                         break;
                 }
             }
@@ -190,9 +190,8 @@ public class Hero extends Sprite {
         }else{
             this.moving = true;
         }
-
         vTotal = Math.sqrt(Math.pow(vX,2)+Math.pow(vY,2));
-        if(vTotal > 2){
+        if(vTotal > 3){
             vX = Math.abs(vX)/vX * 1.44;
             vY = Math.abs(vY)/vY *1.44;
         }

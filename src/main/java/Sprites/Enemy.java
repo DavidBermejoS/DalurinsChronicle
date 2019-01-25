@@ -22,6 +22,8 @@ public class Enemy extends Sprite {
     String actualDirection;
     JProgressBar life;
     private boolean mustAttack;
+    private double vTotal;
+    private boolean followHero;
 
     /**
      * Constructor de la clase vacio
@@ -31,6 +33,7 @@ public class Enemy extends Sprite {
         this.isAlive = true;
         this.moving = false;
         this.mustAttack = false;
+        this.followHero = false;
         this.lastDirection = "";
         this.actualDirection = "";
 
@@ -92,27 +95,45 @@ public class Enemy extends Sprite {
         float angle = (float) Math.toDegrees(Math.atan2(diffY, diffX));
         if (angle > 30 && angle < 60) {
             this.actualDirection = "NW";
+            vY = -2;
+            vX = -2;
         }
         if (angle > 120 && angle < 150) {
             this.actualDirection = "NE";
+            vY = -2;
+            vX = 2;
         }
         if(angle>-150 && angle < -120){
             this.actualDirection = "SE";
+            vY = 2;
+            vX = 2;
         }
         if (angle < -30 && angle > -60) {
             this.actualDirection = "SW";
+            vY = 2;
+            vX = -2;
         }
         if((angle > -30 && angle <0) || (angle < 30 && angle>0)){
             this.actualDirection = "W";
+            vX = -2;
         }
         if ((angle < - 150 && angle > -180) || (angle > 150 && angle < 180)){
             this.actualDirection = "E";
+            vX= 2;
         }
         if (angle > 60 && angle < 120){
             this.actualDirection = "N";
+            vY=-2;
         }
         if(angle > -120 && angle < -60 ){
             this.actualDirection = "S";
+            vY = 2;
+        }
+
+        vTotal = Math.sqrt(Math.pow(vX,2)+Math.pow(vY,2));
+        if(vTotal > 2){
+            vX = Math.abs(vX)/vX * Math.cos(angle);
+            vY = Math.abs(vY)/vY * Math.cos(angle);
         }
 //        System.out.println(angle);
 //        System.out.println(actualDirection);
@@ -127,13 +148,25 @@ public class Enemy extends Sprite {
      *
      */
     public void setMoveParameters(Hero hero) {
-        int diffX = this.posX - hero.getPosX();
-        int diffY = this.posY - hero.getPosY();
-        float angle = (float)Math.atan2(diffY, diffX);
-        vX = hero.getvX()*-1;
-        vY = hero.getvY()*-1;
-        vX*= Math.cos(angle);
-        vY*= Math.sin(angle);
+
+        if(followHero){
+            int diffX = this.posX - hero.getPosX();
+            int diffY = this.posY - hero.getPosY();
+            float angle = (float)Math.atan2(diffY, diffX);
+            vTotal = Math.sqrt(Math.pow(vX,2)+Math.pow(vY,2));
+            if(vTotal > 2){
+                vX = Math.abs(vX)/vX * Math.cos(angle);
+                vY = Math.abs(vY)/vY * Math.cos(angle);
+            }
+        }else{
+            int diffX = this.posX - hero.getPosX();
+            int diffY = this.posY - hero.getPosY();
+            float angle = (float)Math.atan2(diffY, diffX);
+            vX = hero.getvX()*-1;
+            vY = hero.getvY()*-1;
+            vX*= Math.cos(angle);
+            vY*= Math.sin(angle);
+        }
 
 
     }
