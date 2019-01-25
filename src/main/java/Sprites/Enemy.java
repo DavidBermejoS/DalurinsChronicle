@@ -130,7 +130,6 @@ public class Enemy extends Sprite {
         int diffX = this.posX - hero.getPosX();
         int diffY = this.posY - hero.getPosY();
         float angle = (float)Math.atan2(diffY, diffX);
-
         vX = hero.getvX()*-1;
         vY = hero.getvY()*-1;
         vX*= Math.cos(angle);
@@ -150,12 +149,8 @@ public class Enemy extends Sprite {
             this.actualAnimationLine = resCol.getImagesTargetActionDirection(ResourcesCollector.ENEMY_TARGET,ResourcesCollector.WALK_ACTION,actualDirection);
             lastDirection = actualDirection;
         }
-            countAnimatorPhase++;
-            //TODO mejorar el tiempo de carga de imagenes para evitar pestaneo en escena
-            if(countAnimatorPhase == actualAnimationLine.length-1){
-            countAnimatorPhase = 0;
-            }
-        this.imageSprite = actualAnimationLine[countAnimatorPhase];
+        countAnimatorPhase++;
+        this.imageSprite = actualAnimationLine[countAnimatorPhase / 3 % actualAnimationLine.length];
         this.refreshBuffer();
 
     }

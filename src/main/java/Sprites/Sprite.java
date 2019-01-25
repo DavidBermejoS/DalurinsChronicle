@@ -29,8 +29,8 @@ public class Sprite {
     int posY;
     int width;
     int height;
-    int vX;
-    int vY;
+    double vX;
+    double vY;
     Color color;
     BufferedImage buffer;
     BufferedImage imageSprite;
@@ -152,19 +152,19 @@ public class Sprite {
         this.posY = posY;
     }
 
-    public int getvX() {
+    public double getvX() {
         return vX;
     }
 
-    public void setvX(int vX) {
+    public void setvX(double vX) {
         this.vX = vX;
     }
 
-    public int getvY() {
+    public double getvY() {
         return vY;
     }
 
-    public void setvY(int vY) {
+    public void setvY(double vY) {
         this.vY = vY;
     }
 
