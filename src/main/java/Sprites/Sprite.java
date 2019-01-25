@@ -1,5 +1,6 @@
 package Sprites;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -195,6 +196,15 @@ public class Sprite {
 
     public void setBuffer(BufferedImage buffer) {
         this.buffer = buffer;
+    }
+
+    public void setBufferByRoute(String route){
+        try {
+            imageSprite = ImageIO.read(new File(route));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public BufferedImage getBuffer() {

@@ -2,9 +2,9 @@ package Screens;
 
 import Sprites.Hero;
 import Window.GamePane;
+import Window.HeroMenu;
 
 import javax.imageio.ImageIO;
-import javax.swing.text.Utilities;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -37,6 +37,7 @@ public class FirstScreen implements IScreen {
     private final static int MAX_NUM_ITEMS = 5;
 
 
+    HeroMenu menu;
     GamePane gamePane;
     Image backgroundImage;
     ArrayList<Sprite> sprites;
@@ -56,7 +57,7 @@ public class FirstScreen implements IScreen {
         this.gamePane = gamePane;
         startFrame();
         addElements();
-
+        this.menu = new HeroMenu();
 
     }
 
@@ -174,7 +175,7 @@ public class FirstScreen implements IScreen {
             item.setvX(0);
             item.setvY(0);
             //parametros de recursos gráficos y gestion de los mismos
-            item.setFileImage(new File("src/main/resources/potions/attack_potion.png"));
+            item.setBufferByRoute("src/main/resources/potions/attack_potion.png");
             item.refreshBuffer();
             item.setName("potion");
             item.setDescription("Poción mágica, si se toma sube el ataque");
@@ -193,6 +194,9 @@ public class FirstScreen implements IScreen {
      */
     @Override
     public void drawScreen(Graphics g) {
+        if(hero!= null){
+            menu.statsBar(g,hero);
+        }
         drawBackGround(g);
         drawSprite(g);
     }
@@ -270,8 +274,8 @@ public class FirstScreen implements IScreen {
             s.moveSprite();
         }
         if (s instanceof Enemy) {
-            ((Enemy) s).setMoveDirection(hero);
-            ((Enemy) s).setMoveAnimation(((Enemy) s).getActualDirection());
+            ((Enemy) s).moveCharacter(hero);
+            s.moveSprite();
 
         }
     }

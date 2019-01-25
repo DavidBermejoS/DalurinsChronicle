@@ -26,7 +26,7 @@ import java.awt.event.MouseListener;
 public class GamePane extends JPanel implements Runnable, KeyListener, MouseListener {
 
 
-    public Menu menu;
+    public HeroMenu heroMenu;
 
     public String userName;
     private boolean endLevel;
@@ -213,4 +213,11 @@ public class GamePane extends JPanel implements Runnable, KeyListener, MouseList
         this.userName = userName;
     }
 
+    public HeroMenu getHeroMenu() {
+        return heroMenu;
+    }
+
+    public void setHeroMenu(HeroMenu heroMenu) {
+        this.heroMenu = heroMenu;
+    }
 }

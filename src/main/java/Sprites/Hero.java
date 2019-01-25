@@ -283,6 +283,13 @@ public class Hero extends Sprite {
         return items;
     }
 
+    public int getNumItems(){
+        if(items==null){
+            return 0;
+        }
+        return items.length;
+    }
+
     public void setItems(Item[] items) {
         this.items = items;
     }
