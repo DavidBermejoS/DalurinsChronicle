@@ -28,6 +28,7 @@ public class Hero extends Sprite {
     private String lastDirection;
     private String actualDirection;
     private boolean attacking;
+    private double vTotal;
 
 
     /**
@@ -152,8 +153,8 @@ public class Hero extends Sprite {
                         break;
                 }
             }
+            this.actualDirection = directionAux;
         }
-        this.actualDirection = directionAux;
     }
 
     /**
@@ -163,35 +164,37 @@ public class Hero extends Sprite {
      * @param keys : array de booleanos con todos las teclas que han sido pulsadas y las que no
      */
     public void setMoveParameters(boolean[] keys) {
-        int countFalses = 0;
+        this.vX=0;
+        this.vY = 0;
         for (int i = 0; i < keys.length; i++) {
             if (keys[i]) {
                 switch (i) {
                     case 0:
-                        vY = -2;
+                        vY += -3;
                         break;
                     case 1:
-                        vX = -2;
+                        vX += -3;
                         break;
                     case 2:
-                        vY = 2;
+                        vY += 3;
                         break;
                     case 3:
-                        vX = 2;
+                        vX += 3;
                         break;
                 }
-            } else {
-                countFalses++;
             }
         }
-        if (countFalses == keys.length) {
-            this.setMoving(false);
-            this.vX = 0;
-            this.vY = 0;
-        } else {
-            this.setMoving(true);
-        }
 
+        if (vX == 0 && vY == 0){
+            this.moving = false;
+        }else{
+            this.moving = true;
+        }
+        vTotal = Math.sqrt(Math.pow(vX,2)+Math.pow(vY,2));
+        if(vTotal > 3){
+            vX = Math.abs(vX)/vX * 1.44;
+            vY = Math.abs(vY)/vY *1.44;
+        }
     }
 
     /**
@@ -205,10 +208,7 @@ public class Hero extends Sprite {
             lastDirection = actualDirection;
         }
         countAnimatorPhase++;
-        if (countAnimatorPhase == actualAnimationLine.length - 1) {
-            countAnimatorPhase = 0;
-        }
-        this.imageSprite = actualAnimationLine[countAnimatorPhase];
+        this.imageSprite = actualAnimationLine[countAnimatorPhase / 3 % actualAnimationLine.length];
         this.refreshBuffer();
     }
 
