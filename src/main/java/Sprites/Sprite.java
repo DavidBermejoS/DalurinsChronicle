@@ -104,12 +104,12 @@ public class Sprite {
 
         //calculo de la colision en el eje horizontal
         if(this.getPosX()<s2.getPosX()){
-            int rightBorder = this.getPosX()+this.getHeight();
+            int rightBorder = this.getPosX()+this.getHeight()-60;
             if(rightBorder>=s2.getPosX()){
                 collidesX=true;
             }
         }else{
-            int rightBorder = s2.getPosX()+s2.getWidth();
+            int rightBorder = s2.getPosX()+(s2.getWidth()-100);
             if(rightBorder>= this.getPosX()){
                 collidesX=true;
             }
@@ -117,12 +117,12 @@ public class Sprite {
 
         //calculo de la colision en el eje vertical
         if(this.getPosY()<s2.getPosY()){
-            int bottomBorder = this.getPosY()+this.getHeight();
+            int bottomBorder = this.getPosY()+this.getHeight()-60;
             if(bottomBorder>= s2.getPosY()){
                 collidesY=true;
             }
         }else{
-            int bottomBorder = s2.getPosY()+s2.getWidth();
+            int bottomBorder = s2.getPosY()+s2.getWidth()-25;
             if(bottomBorder>=this.getPosY()){
                 collidesY=true;
             }

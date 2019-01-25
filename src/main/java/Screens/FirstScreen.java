@@ -25,7 +25,7 @@ public class FirstScreen implements IScreen {
 
     private static final String BACKGROUND_GAME = "floors/floor_grass1.png";
     private static final int NUM_ENEMIES = 1;
-    private static final int ENEMY_ATTACK_RATIO= 50;
+    private static final int ENEMY_ATTACK_RATIO= 100;
 
 
     private final static int ENEMY_HP = 10;
@@ -296,25 +296,28 @@ public class FirstScreen implements IScreen {
             checkCollisions(s);
             calculateBattles();
         }
-        //checkEndGame();
+        if(hero!=null && !hero.isAlive()){
+            checkEndLevel();
+        }
     }
 
     /**
      * Metodo encargado de calcular el sistema de combate entre el personaje y los enemigos
      */
     private void calculateBattles() {
-        Random luckyAttack = new Random ();
         for (int i = 0; i < enemies.length; i++) {
             if(enemies[i].isMustAttack()){
+                Random luckyAttack = new Random ();
                 int ratio = luckyAttack.nextInt(ENEMY_ATTACK_RATIO);
-                if(ratio < 5){
+//                System.out.println(ratio);
+                if(ratio < 20){
                     System.out.println("--Enemigo ataca!--");
                     hero.setTotalHp(hero.getTotalHp()-enemies[i].getAtk());
                     System.out.println("El jugador tiene: "+hero.getTotalHp());
-                }
-                if(hero.getTotalHp()<0){
-                    hero.setAlive(false);
-                    hero.setImageSprite(null);
+                    if(hero.getTotalHp()<0){
+                        hero.setAlive(false);
+                        break;
+                    }
                 }
             }
         }
@@ -344,8 +347,13 @@ public class FirstScreen implements IScreen {
         for (int i = 0; i < sprites.size(); i++) {
             Sprite s1 = sprites.get(i);
             for (int j = 0; j < enemies.length; j++) {
-                    if (s1 == enemies[j] && hero.squareCollider(s1)) {
-                        enemies[j].setMustAttack(true);
+                Enemy enemy = enemies[j];
+                if (s1 == enemy && hero.squareCollider(s1)) {
+                    enemy.setMustAttack(true);
+                    enemy.setvX(enemy.getvX()/10);
+                    enemy.setvY(enemy.getvX()/10);
+                    hero.setvX(hero.getvX()/10);
+                    hero.setvY(hero.getvX()/10);
                     }else{
                         enemies[j].setMustAttack(false);
                     }
@@ -377,7 +385,9 @@ public class FirstScreen implements IScreen {
 
     @Override
     public void checkEndLevel() {
-
+        if(hero!=null){
+            this.gamePane.setGameOver(true);
+        }
     }
 
     //EVENTOS DE RATON
