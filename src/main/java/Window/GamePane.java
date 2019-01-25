@@ -26,7 +26,7 @@ import java.awt.event.MouseListener;
 public class GamePane extends JPanel implements Runnable, KeyListener, MouseListener {
 
 
-    public Menu menu;
+    public HeroMenu heroMenu;
 
     public String userName;
     private boolean endLevel;
@@ -49,7 +49,6 @@ public class GamePane extends JPanel implements Runnable, KeyListener, MouseList
         this.setFocusable(true);
         this.addKeyListener(this);
         this.addMouseListener(this);
-
         new Thread(this).start();
     }
 
@@ -66,7 +65,6 @@ public class GamePane extends JPanel implements Runnable, KeyListener, MouseList
     @Override
     protected void paintComponent(Graphics g) {
         this.screen.drawScreen(g);
-
     }
 
 
@@ -79,11 +77,13 @@ public class GamePane extends JPanel implements Runnable, KeyListener, MouseList
     public void run() {
         while (true) {
             try {
-                repaint();
-                this.screen.manageGameFunctions();
+                if(screen!=null){
+                    repaint();
+                    this.screen.manageGameFunctions();
+                }
                 checkLevel();
-                Thread.currentThread().sleep(5);
                 Toolkit.getDefaultToolkit().sync();
+                Thread.currentThread().sleep(15);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -213,4 +213,11 @@ public class GamePane extends JPanel implements Runnable, KeyListener, MouseList
         this.userName = userName;
     }
 
+    public HeroMenu getHeroMenu() {
+        return heroMenu;
+    }
+
+    public void setHeroMenu(HeroMenu heroMenu) {
+        this.heroMenu = heroMenu;
+    }
 }

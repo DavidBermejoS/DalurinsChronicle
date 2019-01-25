@@ -54,7 +54,7 @@ public class GameOverScreen implements IScreen {
     }
 
     @Override
-    public void checkCollisions() {
+    public void checkCollisions(Sprite s) {
 
     }
 

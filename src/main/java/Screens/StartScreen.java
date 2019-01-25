@@ -52,9 +52,10 @@ public class StartScreen implements IScreen {
     }
 
     @Override
-    public void checkCollisions() {
+    public void checkCollisions(Sprite s) {
 
     }
+
 
     @Override
     public void checkEndLevel() {

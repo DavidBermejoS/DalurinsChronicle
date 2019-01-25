@@ -2,9 +2,9 @@ package Screens;
 
 import Sprites.Hero;
 import Window.GamePane;
+import Window.HeroMenu;
 
 import javax.imageio.ImageIO;
-import javax.swing.text.Utilities;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -24,7 +24,9 @@ import Sprites.*;
 public class FirstScreen implements IScreen {
 
     private static final String BACKGROUND_GAME = "floors/floor_grass1.png";
-    private static final int NUM_ENEMIES = 10;
+    private static final int NUM_ENEMIES = 1;
+    private static final int ENEMY_ATTACK_RATIO= 100;
+
 
     private final static int ENEMY_HP = 10;
     private final static int ENEMY_ATK = 5;
@@ -37,6 +39,7 @@ public class FirstScreen implements IScreen {
     private final static int MAX_NUM_ITEMS = 5;
 
 
+    HeroMenu menu;
     GamePane gamePane;
     Image backgroundImage;
     ArrayList<Sprite> sprites;
@@ -56,7 +59,7 @@ public class FirstScreen implements IScreen {
         this.gamePane = gamePane;
         startFrame();
         addElements();
-
+        this.menu = new HeroMenu();
 
     }
 
@@ -107,8 +110,8 @@ public class FirstScreen implements IScreen {
         hero.setPosX(0);
         hero.setPosY(0);
         //parametros de dimension
-        hero.setWidth(80);
-        hero.setHeight(120);
+        hero.setWidth(145);
+        hero.setHeight(145);
         //parametros de velocidad
 
         hero.setvX(0);
@@ -134,11 +137,11 @@ public class FirstScreen implements IScreen {
         //TODO realizar la implementacion de los parametros propios de los enemigos.
         for (int i = 0; i < enemies.length; i++) {
             Enemy enemy = new Enemy();
-            enemy.setPosX(gamePane.getWidth() / 2);
-            enemy.setPosY(gamePane.getHeight() / 2);
+            enemy.setPosX(500);
+            enemy.setPosY(400);
             //parametros de dimension
-            enemy.setWidth(80);
-            enemy.setHeight(120);
+            enemy.setWidth(145);
+            enemy.setHeight(145);
             //parametros de velocidad
             enemy.setvX(0);
             enemy.setvY(0);
@@ -174,7 +177,7 @@ public class FirstScreen implements IScreen {
             item.setvX(0);
             item.setvY(0);
             //parametros de recursos gráficos y gestion de los mismos
-            item.setFileImage(new File("src/main/resources/attack_potion.png"));
+            item.setBufferByRoute("src/main/resources/potions/attack_potion.png");
             item.refreshBuffer();
             item.setName("potion");
             item.setDescription("Poción mágica, si se toma sube el ataque");
@@ -193,6 +196,9 @@ public class FirstScreen implements IScreen {
      */
     @Override
     public void drawScreen(Graphics g) {
+        if (hero != null) {
+            menu.statsBar(g, hero);
+        }
         drawBackGround(g);
         drawSprite(g);
     }
@@ -263,13 +269,15 @@ public class FirstScreen implements IScreen {
      */
     @Override
     public void moveSprites(Sprite s) {
-        if(! (s instanceof Hero)){
+        if (!(s instanceof Hero) && !(s instanceof Enemy)) {
             s.refreshBuffer();
         }
         if (s instanceof Hero && hero.isMoving()) {
             s.moveSprite();
         }
         if (s instanceof Enemy) {
+            ((Enemy) s).moveCharacter(hero);
+            s.moveSprite();
 
         }
     }
@@ -285,21 +293,101 @@ public class FirstScreen implements IScreen {
     public void manageGameFunctions() {
         for (Sprite s : sprites) {
             moveSprites(s);
-            // checkWallsCollision();
-            // checkAsteroidShooted();
+            checkCollisions(s);
+            calculateBattles();
         }
-        //destroySprites();
-        //checkEndGame();
+        if(hero!=null && !hero.isAlive()){
+            checkEndLevel();
+        }
     }
 
-    @Override
-    public void checkCollisions() {
+    /**
+     * Metodo encargado de calcular el sistema de combate entre el personaje y los enemigos
+     */
+    private void calculateBattles() {
+        for (int i = 0; i < enemies.length; i++) {
+            if(enemies[i].isMustAttack()){
+                Random luckyAttack = new Random ();
+                int ratio = luckyAttack.nextInt(ENEMY_ATTACK_RATIO);
+//                System.out.println(ratio);
+                if(ratio < 20){
+                    System.out.println("--Enemigo ataca!--");
+                    hero.setTotalHp(hero.getTotalHp()-enemies[i].getAtk());
+                    System.out.println("El jugador tiene: "+hero.getTotalHp());
+                    if(hero.getTotalHp()<0){
+                        hero.setAlive(false);
+                        break;
+                    }
+                }
+            }
+        }
+        if(hero.isAttacking()){
 
+
+        }
+    }
+
+    /**
+     * Metodo encargado de comprobar las colisiones con las paredes de la ventana y cambiar la velocidad
+     * en caso de que exista dicha colision
+     *
+     * @param sprite
+     */
+    @Override
+    public void checkCollisions(Sprite sprite) {
+        checkWallCollisions(sprite);
+        checkSpritesCollisions();
+
+    }
+
+    /**
+     * Metodo encargado de realizar comprobaciones de como colisionan los sprites entre si
+     */
+    private void checkSpritesCollisions() {
+        for (int i = 0; i < sprites.size(); i++) {
+            Sprite s1 = sprites.get(i);
+            for (int j = 0; j < enemies.length; j++) {
+                Enemy enemy = enemies[j];
+                if (s1 == enemy && hero.squareCollider(s1)) {
+                    enemy.setMustAttack(true);
+                    enemy.setvX(enemy.getvX()/10);
+                    enemy.setvY(enemy.getvX()/10);
+                    hero.setvX(hero.getvX()/10);
+                    hero.setvY(hero.getvX()/10);
+                    }else{
+                        enemies[j].setMustAttack(false);
+                    }
+                }
+            if(s1 instanceof Item && hero.squareCollider(s1)){
+                s1.setImageSprite(null);
+            }
+        }
+    }
+
+
+    /**
+     * Metodo encargado de realizar comprobaciones de las colisiones entre los sprites y las paredes
+     * @param sprite : sprite a comprobar
+     */
+    private void checkWallCollisions(Sprite sprite) {
+        if (sprite.getPosX() <= 0) {
+            sprite.setvX(0);
+        } else if (sprite.getPosX() >= gamePane.getWidth() - sprite.getWidth()) {
+            sprite.setvX(0);
+        }
+
+        if (sprite.getPosY() <= 0) {
+            sprite.setvY(0);
+        } else if (sprite.getPosY() >= gamePane.getHeight() - sprite.getWidth()) {
+            sprite.setvY(0);
+        }
     }
 
     @Override
     public void checkEndLevel() {
-
+        if(hero!=null){
+            this.gamePane.setGameOver(true);
+        }
     }
 
     //EVENTOS DE RATON
@@ -354,9 +442,7 @@ public class FirstScreen implements IScreen {
         //TODO de dicha logica del array.
         synchronized (GamePane.class) {
             getKeyLogic(e);
-            hero.setMoveDirection(whatKeyPressed);
-            hero.setMoveParameters(whatKeyPressed);
-            hero.setMoveAnimation(hero.getActualDirection());
+            hero.moveCharacter(whatKeyPressed);
             return false;
         }
     }
