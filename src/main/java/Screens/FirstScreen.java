@@ -25,6 +25,8 @@ public class FirstScreen implements IScreen {
 
     private static final String BACKGROUND_GAME = "floors/floor_grass1.png";
     private static final int NUM_ENEMIES = 1;
+    private static final int ENEMY_ATTACK_RATIO= 50;
+
 
     private final static int ENEMY_HP = 10;
     private final static int ENEMY_ATK = 5;
@@ -194,8 +196,8 @@ public class FirstScreen implements IScreen {
      */
     @Override
     public void drawScreen(Graphics g) {
-        if(hero!= null){
-            menu.statsBar(g,hero);
+        if (hero != null) {
+            menu.statsBar(g, hero);
         }
         drawBackGround(g);
         drawSprite(g);
@@ -267,7 +269,7 @@ public class FirstScreen implements IScreen {
      */
     @Override
     public void moveSprites(Sprite s) {
-        if(! (s instanceof Hero) && ! (s instanceof Enemy)){
+        if (!(s instanceof Hero) && !(s instanceof Enemy)) {
             s.refreshBuffer();
         }
         if (s instanceof Hero && hero.isMoving()) {
@@ -291,10 +293,37 @@ public class FirstScreen implements IScreen {
     public void manageGameFunctions() {
         for (Sprite s : sprites) {
             moveSprites(s);
-            // checkWallsCollision();
+            checkCollisions(s);
+            calculateBattles();
         }
         //checkEndGame();
     }
+
+    /**
+     * Metodo encargado de calcular el sistema de combate entre el personaje y los enemigos
+     */
+    private void calculateBattles() {
+        Random luckyAttack = new Random ();
+        for (int i = 0; i < enemies.length; i++) {
+            if(enemies[i].isMustAttack()){
+                int ratio = luckyAttack.nextInt(ENEMY_ATTACK_RATIO);
+                if(ratio < 5){
+                    System.out.println("--Enemigo ataca!--");
+                    hero.setTotalHp(hero.getTotalHp()-enemies[i].getAtk());
+                    System.out.println("El jugador tiene: "+hero.getTotalHp());
+                }
+                if(hero.getTotalHp()<0){
+                    hero.setAlive(false);
+                    hero.setImageSprite(null);
+                }
+            }
+        }
+        if(hero.isAttacking()){
+
+
+        }
+    }
+
     /**
      * Metodo encargado de comprobar las colisiones con las paredes de la ventana y cambiar la velocidad
      * en caso de que exista dicha colision
@@ -304,21 +333,46 @@ public class FirstScreen implements IScreen {
     @Override
     public void checkCollisions(Sprite sprite) {
         checkWallCollisions(sprite);
+        checkSpritesCollisions();
 
     }
 
-    private void checkWallCollisions(Sprite sprite) {
-            if (sprite.getPosX() <= 0) {
-                sprite.setvX(0);
-            } else if (sprite.getPosX() >= gamePane.getWidth() - sprite.getWidth()) {
-                sprite.setvX(0);
+    /**
+     * Metodo encargado de realizar comprobaciones de como colisionan los sprites entre si
+     */
+    private void checkSpritesCollisions() {
+        for (int i = 0; i < sprites.size(); i++) {
+            Sprite s1 = sprites.get(i);
+            for (int j = 0; j < enemies.length; j++) {
+                    if (s1 == enemies[j] && hero.squareCollider(s1)) {
+                        enemies[j].setMustAttack(true);
+                    }else{
+                        enemies[j].setMustAttack(false);
+                    }
+                }
+            if(s1 instanceof Item && hero.squareCollider(s1)){
+                s1.setImageSprite(null);
             }
+        }
+    }
 
-            if (sprite.getPosY() <= 0) {
-                sprite.setvY(0);
-            } else if (sprite.getPosY() >= gamePane.getHeight() - sprite.getWidth()) {
-                sprite.setvY(0);
-            }
+
+    /**
+     * Metodo encargado de realizar comprobaciones de las colisiones entre los sprites y las paredes
+     * @param sprite : sprite a comprobar
+     */
+    private void checkWallCollisions(Sprite sprite) {
+        if (sprite.getPosX() <= 0) {
+            sprite.setvX(0);
+        } else if (sprite.getPosX() >= gamePane.getWidth() - sprite.getWidth()) {
+            sprite.setvX(0);
+        }
+
+        if (sprite.getPosY() <= 0) {
+            sprite.setvY(0);
+        } else if (sprite.getPosY() >= gamePane.getHeight() - sprite.getWidth()) {
+            sprite.setvY(0);
+        }
     }
 
     @Override

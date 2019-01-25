@@ -27,6 +27,7 @@ public class Hero extends Sprite {
     private boolean collisioned;
     private String lastDirection;
     private String actualDirection;
+    private boolean attacking;
 
 
     /**
@@ -35,8 +36,8 @@ public class Hero extends Sprite {
     public Hero() {
         this.walkingImagesLine = new BufferedImage[8][10];
         loadWalkingImages();
-
         lastDirection = "";
+        attacking = false;
         collisioned = false;
         matrixAnimation = new String[10][8];
         routesAnimation = new String[10];
@@ -221,6 +222,13 @@ public class Hero extends Sprite {
         }
     }
 
+
+    //GESTION DE COLISIONES DEL HEROE
+
+    public void checkHeroCollisions() {
+
+    }
+
     //GETTERS Y SETTERS
 
     public boolean isAlive() {
@@ -316,5 +324,9 @@ public class Hero extends Sprite {
 
     public void setActualDirection(String actualDirection) {
         this.actualDirection = actualDirection;
+    }
+
+    public boolean isAttacking() {
+        return this.attacking;
     }
 }

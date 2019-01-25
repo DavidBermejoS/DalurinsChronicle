@@ -45,7 +45,6 @@ public class Sprite {
 
 
     public Sprite(int posX, int posY, int vX, int vY, String id) {
-        countAnimatorPhase = 0;
         this.posX = posX;
         this.posY = posY;
         this.vX = vX;
@@ -54,7 +53,9 @@ public class Sprite {
     }
 
     public Sprite() {
+        countAnimatorPhase = 0;
         this.walkingImagesLine = new BufferedImage[8][10];
+//        this.color = new Color(0,0,0,255);
     }
 
 
@@ -68,7 +69,7 @@ public class Sprite {
             g.drawImage(imageSprite, 0, 0,this.width,this.height, null);
             g.dispose();
         }else{
-            g.setColor(color);
+            g.setColor(new Color(255,255,255,0));
             g.fillRect(0, 0, width, height);
             g.dispose();
 
@@ -97,6 +98,7 @@ public class Sprite {
      * @param s2 : sprite a comparar
      * @return check : true si colisionan, false si no.
      */
+
     public boolean squareCollider(Sprite s2){
         boolean collidesX =false , collidesY = false;
 
@@ -223,6 +225,11 @@ public class Sprite {
         this.height = height;
     }
 
+    public BufferedImage getImageSprite() {
+        return imageSprite;
+    }
 
-
+    public void setImageSprite(BufferedImage imageSprite) {
+        this.imageSprite = imageSprite;
+    }
 }

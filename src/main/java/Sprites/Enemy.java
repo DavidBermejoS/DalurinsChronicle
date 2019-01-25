@@ -4,7 +4,6 @@ import Utilities.ResourcesCollector;
 
 import javax.swing.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 
 /**
  * <h2>Clase Enemy</h2>
@@ -22,6 +21,7 @@ public class Enemy extends Sprite {
     String lastDirection;
     String actualDirection;
     JProgressBar life;
+    private boolean mustAttack;
 
     /**
      * Constructor de la clase vacio
@@ -30,6 +30,7 @@ public class Enemy extends Sprite {
         this.walkingImagesLine = new BufferedImage[8][10];
         this.isAlive = true;
         this.moving = false;
+        this.mustAttack = false;
         this.lastDirection = "";
         this.actualDirection = "";
 
@@ -224,5 +225,13 @@ public class Enemy extends Sprite {
 
     public void setActualDirection(String actualDirection) {
         this.actualDirection = actualDirection;
+    }
+
+    public void setMustAttack(boolean b) {
+        this.mustAttack = b;
+    }
+
+    public boolean isMustAttack() {
+        return mustAttack;
     }
 }
