@@ -14,15 +14,12 @@ import java.io.IOException;
  * @author David Bermejo Simon
  */
 public class Sprite {
-    public String[] allDirections = {"N", "W", "S", "E", "NW", "NE", "SW", "SE"};
-    public final static int VAL_N = 0;
-    public final static int VAL_W = 1;
-    public final static int VAL_S = 2;
-    public final static int VAL_E = 3;
-    public final static int VAL_NW = 4;
-    public final static int VAL_NE = 5;
-    public final static int VAL_SW = 6;
-    public final static int VAL_SE = 7;
+    public String[] allDirections = {"N", "S", "SW", "SE", "W", "E", "NW", "NE"};
+    public final static int KEY_N = 0;
+    public final static int KEY_W = 1;
+    public final static int KEY_S = 2;
+    public final static int KEY_E = 3;
+
 
 
     int posX;
@@ -31,17 +28,17 @@ public class Sprite {
     int height;
     double vX;
     double vY;
+    double vTotal;
+
+    int colliderTaxX;
+    int colliderTaxY;
+
     Color color;
     BufferedImage buffer;
     BufferedImage imageSprite;
     String id;
     File fileImage;
     int countAnimatorPhase;
-
-    BufferedImage[][] walkingImagesLine;
-    BufferedImage[] actualAnimationLine;
-    
-
 
 
     public Sprite(int posX, int posY, int vX, int vY, String id) {
@@ -54,7 +51,6 @@ public class Sprite {
 
     public Sprite() {
         countAnimatorPhase = 0;
-        this.walkingImagesLine = new BufferedImage[8][10];
 //        this.color = new Color(0,0,0,255);
     }
 
@@ -104,12 +100,12 @@ public class Sprite {
 
         //calculo de la colision en el eje horizontal
         if(this.getPosX()<s2.getPosX()){
-            int rightBorder = this.getPosX()+this.getHeight()-60;
+            int rightBorder = this.getPosX()+this.getColliderTaxX();
             if(rightBorder>=s2.getPosX()){
                 collidesX=true;
             }
         }else{
-            int rightBorder = s2.getPosX()+(s2.getWidth()-100);
+            int rightBorder = s2.getPosX()+(s2.getColliderTaxX());
             if(rightBorder>= this.getPosX()){
                 collidesX=true;
             }
@@ -117,12 +113,12 @@ public class Sprite {
 
         //calculo de la colision en el eje vertical
         if(this.getPosY()<s2.getPosY()){
-            int bottomBorder = this.getPosY()+this.getHeight()-60;
+            int bottomBorder = this.getPosY()+this.getColliderTaxY();
             if(bottomBorder>= s2.getPosY()){
                 collidesY=true;
             }
         }else{
-            int bottomBorder = s2.getPosY()+s2.getWidth()-25;
+            int bottomBorder = s2.getPosY()+s2.getColliderTaxY();
             if(bottomBorder>=this.getPosY()){
                 collidesY=true;
             }
@@ -231,5 +227,21 @@ public class Sprite {
 
     public void setImageSprite(BufferedImage imageSprite) {
         this.imageSprite = imageSprite;
+    }
+
+    public int getColliderTaxX() {
+        return colliderTaxX;
+    }
+
+    public void setColliderTaxX(int colliderTaxX) {
+        this.colliderTaxX = colliderTaxX;
+    }
+
+    public int getColliderTaxY() {
+        return colliderTaxY;
+    }
+
+    public void setColliderTaxY(int colliderTaxY) {
+        this.colliderTaxY = colliderTaxY;
     }
 }
