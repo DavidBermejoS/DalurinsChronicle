@@ -24,12 +24,19 @@ public class Enemy extends Sprite {
     private boolean mustAttack;
     private double vTotal;
     private boolean followHero;
+    BufferedImage[] actualAnimationLine;
+    BufferedImage[][] walkingImagesLine;
+    BufferedImage[][] attackingImagesLine;
+
 
     /**
      * Constructor de la clase vacio
      */
-    public Enemy(){
+    public Enemy() {
         this.walkingImagesLine = new BufferedImage[8][10];
+        loadWalkingImages();
+        this.attackingImagesLine = new BufferedImage[8][18];
+//        loadAttackingImages();
         this.isAlive = true;
         this.moving = false;
         this.mustAttack = false;
@@ -188,6 +195,30 @@ public class Enemy extends Sprite {
 
     }
 
+
+    //METODOS ENCARGADO DE GUARDAR LAS IMAGENES QUE USARÁ EL enemigo
+    /**
+     * Este metodo se encarga de cargar las imagenes del enemigo andando en el array de la clase walkingImagesLine
+     */
+    private void loadWalkingImages() {
+        ResourcesCollector resCol = new ResourcesCollector();
+        for (int i = 0; i < walkingImagesLine.length; i++) {
+            for (int j = 0; j < allDirections.length; j++) {
+                walkingImagesLine[i] = resCol.getImagesTargetActionDirection(resCol.ENEMY_TARGET, resCol.WALK_ACTION, allDirections[j]);
+            }
+        }
+    }
+//    /**
+//     * Este metodo se encarga de cargar las imagenes del heroe atacando en el array de la clase attackingImagesLine
+//     */
+//    private void loadAttackingImages(){
+//        ResourcesCollector resCol = new ResourcesCollector();
+//        for (int i = 0; i < attackingImagesLine.length; i++) {
+//            for (int j = 0; j < allDirections.length; j++) {
+//                attackingImagesLine[i] = resCol.getImagesTargetActionDirection(resCol.ENEMY_TARGET, resCol.ATTACK_ACTION, allDirections[j]);
+//            }
+//        }
+//    }
     //GETTERS Y SETTERS DE LA CLASE
 
     public boolean isAlive() {

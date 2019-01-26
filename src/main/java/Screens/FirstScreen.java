@@ -25,7 +25,7 @@ public class FirstScreen implements IScreen {
 
     private static final String BACKGROUND_GAME = "floors/floor_grass1.png";
     private static final int NUM_ENEMIES = 1;
-    private static final int ENEMY_ATTACK_RATIO= 100;
+    private static final int ENEMY_ATTACK_RATIO = 100;
 
 
     private final static int ENEMY_HP = 10;
@@ -117,7 +117,11 @@ public class FirstScreen implements IScreen {
         hero.setvX(0);
         hero.setvY(0);
         //parametros de recursos gráficos y gestion de los mismos
-        hero.setFileImage(new File("src/main/resources/hero/walk/walk_00000.png"));
+        try {
+            hero.setImageSprite(ImageIO.read(new File("src/main/resources/hero/walk/descend/walk_70000.png")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         hero.refreshBuffer();
         //asignacion de id
         hero.setId("hero");
@@ -140,8 +144,10 @@ public class FirstScreen implements IScreen {
             enemy.setPosX(500);
             enemy.setPosY(400);
             //parametros de dimension
-            enemy.setWidth(145);
-            enemy.setHeight(145);
+            enemy.setWidth(150);
+            enemy.setHeight(150);
+            enemy.setColliderTaxX(-25);
+            enemy.setColliderTaxY(-100);
             //parametros de velocidad
             enemy.setvX(0);
             enemy.setvY(0);
@@ -296,7 +302,7 @@ public class FirstScreen implements IScreen {
             checkCollisions(s);
             calculateBattles();
         }
-        if(hero!=null && !hero.isAlive()){
+        if (hero != null && !hero.isAlive()) {
             checkEndLevel();
         }
     }
@@ -306,22 +312,22 @@ public class FirstScreen implements IScreen {
      */
     private void calculateBattles() {
         for (int i = 0; i < enemies.length; i++) {
-            if(enemies[i].isMustAttack()){
-                Random luckyAttack = new Random ();
+            if (enemies[i].isMustAttack()) {
+                Random luckyAttack = new Random();
                 int ratio = luckyAttack.nextInt(ENEMY_ATTACK_RATIO);
 //                System.out.println(ratio);
-                if(ratio < 20){
+                if (ratio < 20) {
                     System.out.println("--Enemigo ataca!--");
-                    hero.setTotalHp(hero.getTotalHp()-enemies[i].getAtk());
-                    System.out.println("El jugador tiene: "+hero.getTotalHp());
-                    if(hero.getTotalHp()<0){
+                    hero.setTotalHp(hero.getTotalHp() - enemies[i].getAtk());
+                    System.out.println("El jugador tiene: " + hero.getTotalHp());
+                    if (hero.getTotalHp() < 0) {
                         hero.setAlive(false);
                         break;
                     }
                 }
             }
         }
-        if(hero.isAttacking()){
+        if (hero.isAttacking()) {
 
 
         }
@@ -350,15 +356,15 @@ public class FirstScreen implements IScreen {
                 Enemy enemy = enemies[j];
                 if (s1 == enemy && hero.squareCollider(s1)) {
                     enemy.setMustAttack(true);
-                    enemy.setvX(enemy.getvX()/10);
-                    enemy.setvY(enemy.getvX()/10);
-                    hero.setvX(hero.getvX()/10);
-                    hero.setvY(hero.getvX()/10);
-                    }else{
-                        enemies[j].setMustAttack(false);
-                    }
+                    enemy.setvX(enemy.getvX() / 10);
+                    enemy.setvY(enemy.getvX() / 10);
+                    hero.setvX(hero.getvX() / 10);
+                    hero.setvY(hero.getvX() / 10);
+                } else {
+                    enemies[j].setMustAttack(false);
                 }
-            if(s1 instanceof Item && hero.squareCollider(s1)){
+            }
+            if (s1 instanceof Item && hero.squareCollider(s1)) {
                 s1.setImageSprite(null);
             }
         }
@@ -367,6 +373,7 @@ public class FirstScreen implements IScreen {
 
     /**
      * Metodo encargado de realizar comprobaciones de las colisiones entre los sprites y las paredes
+     *
      * @param sprite : sprite a comprobar
      */
     private void checkWallCollisions(Sprite sprite) {
@@ -385,7 +392,7 @@ public class FirstScreen implements IScreen {
 
     @Override
     public void checkEndLevel() {
-        if(hero!=null){
+        if (hero != null) {
             this.gamePane.setGameOver(true);
         }
     }
@@ -399,9 +406,7 @@ public class FirstScreen implements IScreen {
 
     @Override
     public void clickMouse(MouseEvent e) {
-//        this.previousMouseY = e.getY();
-//        this.previousMouseX = e.getX();
-//        hero.setMoving(true);
+
 
     }
 
@@ -442,7 +447,22 @@ public class FirstScreen implements IScreen {
         //TODO de dicha logica del array.
         synchronized (GamePane.class) {
             getKeyLogic(e);
-            hero.moveCharacter(whatKeyPressed);
+            if (hero.isAttacking()) {
+                hero.setWidth(200);
+                hero.setHeight(200);
+                hero.setColliderTaxX(-30);
+                hero.setColliderTaxX(-30);
+                hero.Attack();
+                hero.setMoving(false);
+            }else{
+                hero.setHeight(150);
+                hero.setHeight(150);
+                hero.setColliderTaxX(-60);
+                hero.setColliderTaxY(-60);
+                hero.moveCharacter(whatKeyPressed);
+            }
+
+
             return false;
         }
     }
@@ -465,6 +485,9 @@ public class FirstScreen implements IScreen {
                     case KeyEvent.VK_D:
                         whatKeyPressed[3] = true;
                         break;
+                    case KeyEvent.VK_J:
+                        this.hero.setAttacking(true);
+                        break;
                 }
                 break;
             case KeyEvent.KEY_RELEASED:
@@ -481,6 +504,9 @@ public class FirstScreen implements IScreen {
                         break;
                     case KeyEvent.VK_D:
                         whatKeyPressed[3] = false;
+                        break;
+                    case KeyEvent.VK_J:
+                        this.hero.setAttacking(false);
                         break;
                 }
         }
