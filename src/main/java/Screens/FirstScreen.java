@@ -279,6 +279,7 @@ public class FirstScreen implements IScreen {
             s.refreshBuffer();
         }
         if (s instanceof Hero && hero.isMoving()) {
+            s.refreshBuffer();
             s.moveSprite();
         }
         if (s instanceof Enemy) {
@@ -447,21 +448,21 @@ public class FirstScreen implements IScreen {
         //TODO de dicha logica del array.
         synchronized (GamePane.class) {
             getKeyLogic(e);
-            if (hero.isAttacking()) {
-                hero.setWidth(200);
-                hero.setHeight(200);
-                hero.setColliderTaxX(-30);
-                hero.setColliderTaxX(-30);
-                hero.Attack();
+            if(hero.isMoving() && hero.isAttacking()){
                 hero.setMoving(false);
-            }else{
-                hero.setHeight(150);
-                hero.setHeight(150);
+            }
+
+            if(hero.isMoving() && !hero.isAttacking()){
                 hero.setColliderTaxX(-60);
                 hero.setColliderTaxY(-60);
                 hero.moveCharacter(whatKeyPressed);
             }
 
+            if(!hero.isMoving() && hero.isAttacking()){
+                hero.setColliderTaxX(-30);
+                hero.setColliderTaxX(-30);
+                hero.Attack();
+            }
 
             return false;
         }
@@ -470,23 +471,33 @@ public class FirstScreen implements IScreen {
     private void getKeyLogic(KeyEvent e) {
         int keyCode;
         switch (e.getID()) {
+            //TODO arreglar las transiciones y los cambios de imagen entre la animacion de ataque y la de andar.
             case KeyEvent.KEY_PRESSED:
                 keyCode = e.getKeyCode();
                 switch (keyCode) {
                     case KeyEvent.VK_W:
                         whatKeyPressed[0] = true;
+                        this.hero.setAttacking(false);
+                        this.hero.setMoving(true);
                         break;
                     case KeyEvent.VK_A:
                         whatKeyPressed[1] = true;
+                        this.hero.setAttacking(false);
+                        this.hero.setMoving(true);
                         break;
                     case KeyEvent.VK_S:
                         whatKeyPressed[2] = true;
+                        this.hero.setAttacking(false);
+                        this.hero.setMoving(true);
                         break;
                     case KeyEvent.VK_D:
                         whatKeyPressed[3] = true;
+                        this.hero.setAttacking(false);
+                        this.hero.setMoving(true);
                         break;
                     case KeyEvent.VK_J:
                         this.hero.setAttacking(true);
+                        this.hero.setMoving(false);
                         break;
                 }
                 break;
@@ -495,15 +506,19 @@ public class FirstScreen implements IScreen {
                 switch (keyCode) {
                     case KeyEvent.VK_W:
                         whatKeyPressed[0] = false;
+                        this.hero.setMoving(false);
                         break;
                     case KeyEvent.VK_A:
                         whatKeyPressed[1] = false;
+                        this.hero.setMoving(false);
                         break;
                     case KeyEvent.VK_S:
                         whatKeyPressed[2] = false;
+                        this.hero.setMoving(false);
                         break;
                     case KeyEvent.VK_D:
                         whatKeyPressed[3] = false;
+                        this.hero.setMoving(false);
                         break;
                     case KeyEvent.VK_J:
                         this.hero.setAttacking(false);

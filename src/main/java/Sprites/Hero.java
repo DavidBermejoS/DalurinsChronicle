@@ -131,17 +131,24 @@ public class Hero extends Sprite {
      * Metodo encargado de englobar los otros metodos que establecen el movimiento del personaje
      */
     public void moveCharacter(boolean[] keys) {
-        setMoveDirection(keys);
-        setParamDirection();
-        setMoveParameters(keys);
-        setMoveAnimation();
+        if(isMoving()){
+            setHeight(145);
+            setHeight(145);
+            setMoveDirection(keys);
+            setParamDirection();
+            setMoveParameters(keys);
+            setMoveAnimation();
+        }
 
     }
 
     public void Attack() {
-
-        setParamDirection();
-        setAttackAnimation();
+        if(isAttacking()){
+            setWidth(200);
+            setHeight(200);
+            setParamDirection();
+            setAttackAnimation();
+        }
 
     }
 
@@ -260,13 +267,18 @@ public class Hero extends Sprite {
      */
     public void setMoveAnimation() {
         if (isMoving()) {
+            setHeight(145);
+            setHeight(145);
             if (!lastDirection.equalsIgnoreCase(actualDirection) && !actualDirection.equalsIgnoreCase("")) {
                 this.actualAnimationLine = this.walkingImagesLine[paramDirection];
                 lastDirection = actualDirection;
             }
             countAnimatorPhase++;
             this.imageSprite = actualAnimationLine[countAnimatorPhase / 3 % actualAnimationLine.length];
-            this.refreshBuffer();
+            if (countAnimatorPhase == this.actualAnimationLine.length -1) {
+                countAnimatorPhase = 0;
+            }
+//            this.refreshBuffer();
         }
     }
 
@@ -276,14 +288,16 @@ public class Hero extends Sprite {
      * actual de ataque
      */
     public void setAttackAnimation() {
-        if (isAttacking()) {
             if (!actualDirection.equalsIgnoreCase("")) {
                 this.actualAnimationLine = this.attackingImagesLine[paramDirection];
             }
             countAnimatorPhase++;
             this.imageSprite = actualAnimationLine[countAnimatorPhase / 2 % actualAnimationLine.length];
+            if (countAnimatorPhase == this.actualAnimationLine.length -1) {
+                countAnimatorPhase = 0;
+            }
             this.refreshBuffer();
-        }
+
 
     }
 

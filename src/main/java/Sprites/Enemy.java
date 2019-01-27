@@ -142,8 +142,7 @@ public class Enemy extends Sprite {
             vX = Math.abs(vX)/vX * Math.cos(angle);
             vY = Math.abs(vY)/vY * Math.cos(angle);
         }
-//        System.out.println(angle);
-//        System.out.println(actualDirection);
+
 
 
 
@@ -155,7 +154,6 @@ public class Enemy extends Sprite {
      *
      */
     public void setMoveParameters(Hero hero) {
-
         if(followHero){
             int diffX = this.posX - hero.getPosX();
             int diffY = this.posY - hero.getPosY();
@@ -219,6 +217,8 @@ public class Enemy extends Sprite {
 //            }
 //        }
 //    }
+
+
     //GETTERS Y SETTERS DE LA CLASE
 
     public boolean isAlive() {
