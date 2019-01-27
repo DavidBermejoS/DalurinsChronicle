@@ -83,7 +83,7 @@ public class GamePane extends JPanel implements Runnable, KeyListener, MouseList
                 }
                 checkLevel();
                 Toolkit.getDefaultToolkit().sync();
-                Thread.currentThread().sleep(15);
+                Thread.currentThread().sleep(15);//ORIGINAL : 15
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -131,6 +131,7 @@ public class GamePane extends JPanel implements Runnable, KeyListener, MouseList
     }
 
     public void keyPressed(KeyEvent keyEvent) {
+        this.screen.keyPressed(keyEvent);
         this.screen.dispatchKeyEvent(keyEvent);
     }
 

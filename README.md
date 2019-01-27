@@ -1,5 +1,5 @@
 # Dalurin's Chronicles
-## v = 0.10.0
+## v = 0.11.0
 Juego Arcade Isométrico realizado como proyecto para el módulo de Desarrollo de interfaces en el grado Superior de DAM
 
 
@@ -14,6 +14,10 @@ Juego Arcade Isométrico realizado como proyecto para el módulo de Desarrollo d
 - implementación de movimiento de enemigo hacia el personaje
 10. v0.10.0 =
 - comienzo de implementación de animacion de ataque para el héroe
+11. v0.11.0 =
+- arreglados bugs de colliders de pared y bugs de animaciones de
+ataque y de movimiento del heroe.
+- implementado sistema de combate mas eficiente
 
 
 

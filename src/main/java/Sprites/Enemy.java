@@ -4,6 +4,7 @@ import Utilities.ResourcesCollector;
 
 import javax.swing.*;
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
 /**
  * <h2>Clase Enemy</h2>
@@ -27,6 +28,7 @@ public class Enemy extends Sprite {
     BufferedImage[] actualAnimationLine;
     BufferedImage[][] walkingImagesLine;
     BufferedImage[][] attackingImagesLine;
+    private int paramDirection;
 
 
     /**
@@ -85,8 +87,9 @@ public class Enemy extends Sprite {
      */
     public void moveCharacter(Hero hero) {
         setMoveDirection(hero);
-        setMoveParameters(hero);
+        setParamDirection();
         setMoveAnimation();
+        setMoveParameters(hero);
 
 
     }
@@ -142,10 +145,44 @@ public class Enemy extends Sprite {
             vX = Math.abs(vX)/vX * Math.cos(angle);
             vY = Math.abs(vY)/vY * Math.cos(angle);
         }
+    }
+    /**
+     * Metodo encargado de establecer una direccion como parametro para hacer referencia al array de imagenes
+     * que necesita para cargar la animacion
+     */
+    private void setParamDirection() {
+        if (actualDirection.equalsIgnoreCase("N")) {
+            this.paramDirection = 0;
 
+        }
+        if (actualDirection.equalsIgnoreCase("S")) {
+            this.paramDirection = 1;
 
+        }
+        if (actualDirection.equalsIgnoreCase("E")) {
+            this.paramDirection = 5;
 
+        }
+        if (actualDirection.equalsIgnoreCase("W")) {
+            this.paramDirection = 4;
 
+        }
+        if (actualDirection.equalsIgnoreCase("NW") || actualDirection.equalsIgnoreCase("WN")) {
+            this.paramDirection = 6;
+        }
+        if (actualDirection.equalsIgnoreCase("NE") || actualDirection.equalsIgnoreCase("EN")) {
+            this.paramDirection = 7;
+        }
+        if (actualDirection.equalsIgnoreCase("SW") || actualDirection.equalsIgnoreCase("WS")) {
+            this.paramDirection = 2;
+        }
+        if (actualDirection.equalsIgnoreCase("SE") || actualDirection.equalsIgnoreCase("ES")) {
+            this.paramDirection = 3;
+        }
+        if (actualDirection.equalsIgnoreCase("")) {
+            this.actualDirection = lastDirection;
+            setParamDirection();
+        }
     }
 
     /**
@@ -154,7 +191,7 @@ public class Enemy extends Sprite {
      *
      */
     public void setMoveParameters(Hero hero) {
-        if(followHero){
+        if(followHero && !collide){
             int diffX = this.posX - hero.getPosX();
             int diffY = this.posY - hero.getPosY();
             float angle = (float)Math.atan2(diffY, diffX);
@@ -163,7 +200,7 @@ public class Enemy extends Sprite {
                 vX = Math.abs(vX)/vX * Math.cos(angle);
                 vY = Math.abs(vY)/vY * Math.cos(angle);
             }
-        }else{
+        }else if (!followHero && !collide){
             int diffX = this.posX - hero.getPosX();
             int diffY = this.posY - hero.getPosY();
             float angle = (float)Math.atan2(diffY, diffX);
@@ -182,13 +219,12 @@ public class Enemy extends Sprite {
      *
      */
     public void setMoveAnimation() {
-        ResourcesCollector resCol = new ResourcesCollector();
-        if (!lastDirection.equalsIgnoreCase(actualDirection) && !actualDirection.equalsIgnoreCase("")) {
-            this.actualAnimationLine = resCol.getImagesTargetActionDirection(ResourcesCollector.ENEMY_TARGET,ResourcesCollector.WALK_ACTION,actualDirection);
+        if (!actualDirection.equalsIgnoreCase("")) {
+            this.actualAnimationLine = this.walkingImagesLine[paramDirection];
             lastDirection = actualDirection;
         }
         countAnimatorPhase++;
-        this.imageSprite = actualAnimationLine[countAnimatorPhase / 3 % actualAnimationLine.length];
+        this.imageSprite = actualAnimationLine[countAnimatorPhase / 4 % actualAnimationLine.length];
         this.refreshBuffer();
 
     }
@@ -200,10 +236,8 @@ public class Enemy extends Sprite {
      */
     private void loadWalkingImages() {
         ResourcesCollector resCol = new ResourcesCollector();
-        for (int i = 0; i < walkingImagesLine.length; i++) {
-            for (int j = 0; j < allDirections.length; j++) {
-                walkingImagesLine[i] = resCol.getImagesTargetActionDirection(resCol.ENEMY_TARGET, resCol.WALK_ACTION, allDirections[j]);
-            }
+        for (int i = 0; i < allDirections.length; i++) {
+            walkingImagesLine[i] = resCol.getImagesTargetActionDirection(resCol.ENEMY_TARGET, resCol.WALK_ACTION, allDirections[i]);
         }
     }
 //    /**
@@ -216,8 +250,20 @@ public class Enemy extends Sprite {
 //                attackingImagesLine[i] = resCol.getImagesTargetActionDirection(resCol.ENEMY_TARGET, resCol.ATTACK_ACTION, allDirections[j]);
 //            }
 //        }
+
 //    }
 
+    public void attack(Hero hero) {
+        this.followHero = true;
+        if(mustAttack){
+            System.out.println("El enemigo ataca!");
+            hero.setTotalHp(hero.getTotalHp()-(this.atk - hero.getDef()));
+            System.out.println("Al heroe le quedan: " + hero.getTotalHp());
+
+            mustAttack = false;
+        }
+
+    }
 
     //GETTERS Y SETTERS DE LA CLASE
 

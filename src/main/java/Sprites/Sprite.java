@@ -21,7 +21,6 @@ public class Sprite {
     public final static int KEY_E = 3;
 
 
-
     int posX;
     int posY;
     int width;
@@ -32,6 +31,8 @@ public class Sprite {
 
     int colliderTaxX;
     int colliderTaxY;
+
+    boolean collide;
 
     Color color;
     BufferedImage buffer;
@@ -51,7 +52,8 @@ public class Sprite {
 
     public Sprite() {
         countAnimatorPhase = 0;
-//        this.color = new Color(0,0,0,255);
+        //todo METIDO FONDO DE COLOR AZUL PARA VER LAS SUPERFICIES DE LOS COLLIDERS DE LOS PERSONAJES
+        this.color = new Color(0, 0, 255, 255);
     }
 
 
@@ -61,11 +63,11 @@ public class Sprite {
     public void refreshBuffer() {
         buffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics g = buffer.getGraphics();
-        if(imageSprite!=null){
-            g.drawImage(imageSprite, 0, 0,this.width,this.height, null);
+        if (imageSprite != null) {
+            g.drawImage(imageSprite, 0, 0, this.width - 20, this.height, null);
             g.dispose();
-        }else{
-            g.setColor(new Color(255,255,255,0));
+        } else {
+            g.setColor(new Color(255, 255, 255, 0));
             g.fillRect(0, 0, width, height);
             g.dispose();
 
@@ -84,50 +86,45 @@ public class Sprite {
     }
 
 
-    public boolean checkCollision(Sprite other) {
-        return false;
-    }
-
     /**
      * Metodo encargado de crear un collider cuadrado y determinar si un sprite
      * colisiona con otro
+     *
      * @param s2 : sprite a comparar
      * @return check : true si colisionan, false si no.
      */
 
-    public boolean squareCollider(Sprite s2){
-        boolean collidesX =false , collidesY = false;
+    public boolean squareCollider(Sprite s2) {
+        boolean collidesX = false, collidesY = false;
 
         //calculo de la colision en el eje horizontal
-        if(this.getPosX()<s2.getPosX()){
-            int rightBorder = this.getPosX()+this.getColliderTaxX();
-            if(rightBorder>=s2.getPosX()){
-                collidesX=true;
+        if (this.getPosX() < s2.getPosX()) {
+            int rightBorder = this.getPosX() + this.getWidth();
+            if (rightBorder >= s2.getPosX()) {
+                collidesX = true;
             }
-        }else{
-            int rightBorder = s2.getPosX()+(s2.getColliderTaxX());
-            if(rightBorder>= this.getPosX()){
-                collidesX=true;
+        } else {
+            int rightBorder = s2.getPosX() + s2.getWidth();
+            if (rightBorder >= this.getPosX()) {
+                collidesX = true;
             }
         }
 
         //calculo de la colision en el eje vertical
-        if(this.getPosY()<s2.getPosY()){
-            int bottomBorder = this.getPosY()+this.getColliderTaxY();
-            if(bottomBorder>= s2.getPosY()){
-                collidesY=true;
+        if (this.getPosY() < s2.getPosY()) {
+            int bottomBorder = this.getPosY() + this.getHeight();
+            if (bottomBorder >= s2.getPosY()) {
+                collidesY = true;
             }
-        }else{
-            int bottomBorder = s2.getPosY()+s2.getColliderTaxY();
-            if(bottomBorder>=this.getPosY()){
-                collidesY=true;
+        } else {
+            int bottomBorder = s2.getPosY() + s2.getHeight();
+            if (bottomBorder >= this.getPosY()) {
+                collidesY = true;
             }
         }
 
         return collidesX && collidesY;
     }
-
-
 
 
     //GETTERS Y SETTERS
@@ -196,7 +193,7 @@ public class Sprite {
         this.buffer = buffer;
     }
 
-    public void setBufferByRoute(String route){
+    public void setBufferByRoute(String route) {
         try {
             imageSprite = ImageIO.read(new File(route));
         } catch (IOException e) {
@@ -243,5 +240,13 @@ public class Sprite {
 
     public void setColliderTaxY(int colliderTaxY) {
         this.colliderTaxY = colliderTaxY;
+    }
+
+    public boolean isCollide() {
+        return collide;
+    }
+
+    public void setCollide(boolean collide) {
+        this.collide = collide;
     }
 }
