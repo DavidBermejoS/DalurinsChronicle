@@ -3,6 +3,7 @@ package Sprites;
 import Utilities.ResourcesCollector;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
@@ -125,23 +126,29 @@ public class Hero extends Sprite {
         }
         return skillReturn;
     }
-    //COLECCION DE METODOS QUE GESTIONAN EL MOVIMIENTO DEL HEROE
+
+
+    //COLECCION DE METODOS QUE GESTIONAN LAS ACCIONES DEL HEROE
 
     /**
      * Metodo encargado de englobar los otros metodos que establecen el movimiento del personaje
      */
     public void moveCharacter(boolean[] keys) {
+        this.setAttacking(false);
         setMoveDirection(keys);
         setParamDirection();
-        setMoveParameters(keys);
+        if(!collide){
+            setMoveParameters(keys);
+        }
         setMoveAnimation();
-
     }
 
-    public void Attack() {
 
+    public void Attack() {
+        this.setMoving(false);
         setParamDirection();
         setAttackAnimation();
+
 
     }
 
@@ -173,45 +180,6 @@ public class Hero extends Sprite {
                 }
             }
             this.actualDirection = directionAux;
-        }
-    }
-
-    /**
-     * Metodo encargado de ajustar la velocidad y los parametros de movimiento segun la
-     * direccion actual
-     *
-     * @param keys : array de booleanos con todos las teclas que han sido pulsadas y las que no
-     */
-    public void setMoveParameters(boolean[] keys) {
-        this.vX = 0;
-        this.vY = 0;
-        for (int i = 0; i < keys.length; i++) {
-            if (keys[i]) {
-                switch (i) {
-                    case 0:
-                        vY += -3;
-                        break;
-                    case 1:
-                        vX += -3;
-                        break;
-                    case 2:
-                        vY += 3;
-                        break;
-                    case 3:
-                        vX += 3;
-                        break;
-                }
-            }
-        }
-        if (vX == 0 && vY == 0) {
-            this.moving = false;
-        } else {
-            this.moving = true;
-        }
-        vTotal = Math.sqrt(Math.pow(vX, 2) + Math.pow(vY, 2));
-        if (vTotal > 3) {
-            vX = Math.abs(vX) / vX * 1.44;
-            vY = Math.abs(vY) / vY * 1.44;
         }
     }
 
@@ -255,19 +223,64 @@ public class Hero extends Sprite {
     }
 
     /**
+     * Metodo encargado de ajustar la velocidad y los parametros de movimiento segun la
+     * direccion actual
+     *
+     * @param keys : array de booleanos con todos las teclas que han sido pulsadas y las que no
+     */
+    public void setMoveParameters(boolean[] keys) {
+        this.vX = 0;
+        this.vY = 0;
+        for (int i = 0; i < keys.length; i++) {
+            if (keys[i]) {
+                switch (i) {
+                    case 0:
+                        vY += -3;
+                        break;
+                    case 1:
+                        vX += -3;
+                        break;
+                    case 2:
+                        vY += 3;
+                        break;
+                    case 3:
+                        vX += 3;
+                        break;
+                }
+            }
+        }
+        if (vX == 0 && vY == 0) {
+            this.moving = false;
+        } else {
+            this.moving = true;
+        }
+        vTotal = Math.sqrt(Math.pow(vX, 2) + Math.pow(vY, 2));
+        if (vTotal > 3) {
+            vX = Math.abs(vX) / vX * 1.44;
+            vY = Math.abs(vY) / vY * 1.44;
+        }
+    }
+
+    /**
      * Metodo encargado de definir el array de imagenes que se deverán utilizar para la animación
      * actual de movimiento
      */
     public void setMoveAnimation() {
         if (isMoving()) {
-            if (!lastDirection.equalsIgnoreCase(actualDirection) && !actualDirection.equalsIgnoreCase("")) {
+            if ( !actualDirection.equalsIgnoreCase("")) {
                 this.actualAnimationLine = this.walkingImagesLine[paramDirection];
                 lastDirection = actualDirection;
             }
             countAnimatorPhase++;
             this.imageSprite = actualAnimationLine[countAnimatorPhase / 3 % actualAnimationLine.length];
+            if (countAnimatorPhase == this.actualAnimationLine.length - 1) {
+                countAnimatorPhase = 0;
+            }
+            this.width = 150;
+            this.height = 150;
             this.refreshBuffer();
         }
+
     }
 
 
@@ -276,15 +289,14 @@ public class Hero extends Sprite {
      * actual de ataque
      */
     public void setAttackAnimation() {
-        if (isAttacking()) {
-            if (!actualDirection.equalsIgnoreCase("")) {
-                this.actualAnimationLine = this.attackingImagesLine[paramDirection];
-            }
-            countAnimatorPhase++;
-            this.imageSprite = actualAnimationLine[countAnimatorPhase / 2 % actualAnimationLine.length];
-            this.refreshBuffer();
+        if (!actualDirection.equalsIgnoreCase("")) {
+            this.actualAnimationLine = this.attackingImagesLine[paramDirection];
         }
-
+        countAnimatorPhase++;
+        this.imageSprite = actualAnimationLine[countAnimatorPhase / 5 % actualAnimationLine.length];
+        this.width = 200;
+        this.height = 200;
+        this.refreshBuffer();
     }
 
 
