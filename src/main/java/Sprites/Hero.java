@@ -2,9 +2,12 @@ package Sprites;
 
 import Utilities.ResourcesCollector;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 
 /**
@@ -44,6 +47,8 @@ public class Hero extends Sprite {
     BufferedImage[] actualAnimationLine;
     BufferedImage[][] walkingImagesLine;
     BufferedImage[][] attackingImagesLine;
+     BufferedImage[] deathImagesLine;
+    boolean perpetuallyDeath;
 
 
     /**
@@ -56,7 +61,7 @@ public class Hero extends Sprite {
         loadAttackingImages();
         lastDirection = "";
         attacking = false;
-        lastDirection = "";
+        lastDirection = "S";
         matrixAnimation = new String[10][8];
         routesAnimation = new String[10];
     }
@@ -103,21 +108,42 @@ public class Hero extends Sprite {
      * Metodo encargado de englobar los otros metodos que establecen el movimiento del personaje
      */
     public void moveCharacter(boolean[] keys) {
-        this.setAttacking(false);
-        setMoveDirection(keys);
-        setParamDirection();
-        if(!collide){
-            setMoveParameters(keys);
+        if(isAlive()){
+
+            this.setAttacking(false);
+            setMoveDirection(keys);
+            setParamDirection();
+            if(!collide){
+                setMoveParameters(keys);
+            }
+            setMoveAnimation();
         }
-        setMoveAnimation();
     }
 
 
     public void attackCharacter() {
-        this.setMoving(false);
-        setParamDirection();
-        setAttackAnimation();
+        if(isAlive){
+            this.setMoving(false);
+            setParamDirection();
+            setAttackAnimation();
+        }
     }
+
+    /**
+     * Metodo que gestiona la muerte del enemigo
+     */
+    public void setDeathAnimation(){
+        if(!isAlive && !perpetuallyDeath){
+            try {
+                this.buffer = ImageIO.read(new File("src/main/resources/hero/death/death_40006.png"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    //COLECCION DE METODOS QUE GESTIONAN LAS ANIMACIONES DEL HEROE
 
 
     /**
@@ -240,10 +266,7 @@ public class Hero extends Sprite {
             }
             countAnimatorPhase++;
             this.imageSprite = actualAnimationLine[countAnimatorPhase /3 % actualAnimationLine.length];
-//            this.imageSprite = actualAnimationLine[countAnimatorPhase];
-//            if (countAnimatorPhase == this.actualAnimationLine.length - 1) {
-//                countAnimatorPhase = 0;
-//            }
+
             this.width = 150;
             this.height = 150;
             this.refreshBuffer();
@@ -312,6 +335,16 @@ public class Hero extends Sprite {
         for (int j = 0; j < allDirections.length; j++) {
             attackingImagesLine[j] = resCol.getImagesTargetActionDirection(resCol.HERO_TARGET, resCol.ATTACK_ACTION, allDirections[j]);
         }
+    }
+
+
+
+    /**
+     * Este metodo se encarga de cargar las imagenes del enemigo muriendo en el array de la clase attackingImagesLine
+     */
+    private void loadDeathImages() {
+        ResourcesCollector resCol = new ResourcesCollector();
+        deathImagesLine = resCol.getEnemyDeathsImages();
     }
 
 

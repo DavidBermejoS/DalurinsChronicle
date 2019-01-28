@@ -243,4 +243,40 @@ public class ResourcesCollector {
     }
 
 
+    public BufferedImage[] getEnemyDeathsImages(){
+        BufferedImage bufferImageAux = null;
+        try {
+            bufferImageAux = ImageIO.read(new File("src/main/resources/enemy/death/bSpearman_Die_Down_strip8.png"));
+            BufferedImage [] images = new BufferedImage[8];
+            for (int i = 0; i < images.length; i++) {
+                    images[i] = new BufferedImage(96,96,BufferedImage.TYPE_INT_ARGB);
+                    images[i] = bufferImageAux.getSubimage(i*150,0,150,150);
+            }
+            return images;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    public BufferedImage[][] getEnemyAttacksImages(){
+        BufferedImage bufferImageAux = null;
+        try {
+            bufferImageAux = ImageIO.read(new File("src/main/resources/enemy/attack/tile_attack.png"));
+            BufferedImage [][] images = new BufferedImage[8][8];
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 8; j++) {
+                    images[i][j] = new BufferedImage(171,171,BufferedImage.TYPE_INT_ARGB);
+                    images[i][j] = bufferImageAux.getSubimage(j*171,i*171,96,96);
+                }
+            }
+            return images;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
 }

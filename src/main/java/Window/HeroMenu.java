@@ -18,6 +18,9 @@ public class HeroMenu extends JPanel {
     JLabel canvasHeroImage;
     JProgressBar heroLife;
     JLabel numPotions;
+    JLabel labelAttack;
+    JLabel labelDefense;
+    JLabel labelMaxHP;
     BufferedImage potionImage;
     Hero hero;
 
@@ -35,7 +38,6 @@ public class HeroMenu extends JPanel {
         try {
             this.potionImage = ImageIO.read(new File("src/main/resources/potions/attack_potion.png"));
             this.imagesFaces = new BufferedImage[8];
-//            this.heroImage =
             addComponents();
         } catch (IOException e) {
             e.printStackTrace();
@@ -72,24 +74,64 @@ public class HeroMenu extends JPanel {
         settings.ipadx = 40;
         settings.ipady = 10;
         this.add(heroLife, settings);
+
+
+        this.labelAttack = new JLabel("ATK : "+this.hero.getAtk());
+        this.labelAttack.setForeground(Color.RED);
+        settings = new GridBagConstraints();
+        settings.gridx = 2;
+        settings.gridy=0;
+        settings.ipadx = 40;
+        settings.ipady = 10;
+        settings.insets = new Insets(0,20,0,0);
+
+        this.add(labelAttack, settings);
+
+        this.labelDefense= new JLabel("DEF : "+this.hero.getDef());
+        this.labelDefense.setForeground(Color.RED);
+        settings = new GridBagConstraints();
+        settings.gridx = 3;
+        settings.gridy=0;
+        settings.ipadx = 40;
+        settings.ipady = 10;
+        settings.insets = new Insets(0,20,0,0);
+
+        this.add(labelDefense, settings);
+
+        this.labelMaxHP= new JLabel("MAX HP : "+Hero.MAX_HP);
+        this.labelMaxHP.setForeground(Color.RED);
+        settings = new GridBagConstraints();
+        settings.gridx = 4;
+        settings.gridy=0;
+        settings.ipadx = 40;
+        settings.ipady = 10;
+        settings.insets = new Insets(0,20,0,0);
+        this.add(labelMaxHP, settings);
+
     }
 
     /**
      * Metodo para pintar los componentes del menu superior
      */
-    public void paintMenuComponents(Hero hero) {
+    public void paintMenuComponents(Hero hero, boolean endLevel) {
         this.hero = hero;
+        if(hero!=null){
 
-        if (hero.getTotalHp() < Hero.MAX_HP / 2) {
-            this.canvasHeroImage.setIcon(new ImageIcon("src/main/resources/hero/faces/danger.png", "dangerFace"));
+            if (hero.getTotalHp() < Hero.MAX_HP / 2) {
+                this.canvasHeroImage.setIcon(new ImageIcon("src/main/resources/hero/faces/danger.png", "dangerFace"));
+            }
+
+            if (hero.getTotalHp() <= 0) {
+                this.canvasHeroImage.setIcon(new ImageIcon("src/main/resources/hero/faces/defeat.png", "defeatFace"));
+            }
+
+            if(this.gamePane.isGameOver()){
+                this.canvasHeroImage.setIcon(new ImageIcon("src/main/resources/hero/faces/victory.png", "victoryFace"));
+            }
+
+            this.heroLife.setValue(gamePane.getHero().getTotalHp());
+            this.heroLife.setString(String.valueOf(hero.getTotalHp()));
         }
-
-        if (hero.getTotalHp() <= 0) {
-            this.canvasHeroImage.setIcon(new ImageIcon("src/main/resources/hero/faces/defeat.png", "defeatFace"));
-        }
-
-        this.heroLife.setValue(gamePane.getHero().getTotalHp());
-        this.heroLife.setString(String.valueOf(hero.getTotalHp()));
     }
 
 

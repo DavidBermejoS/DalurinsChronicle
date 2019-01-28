@@ -25,6 +25,8 @@ ataque y de movimiento del heroe.
 - Comienzo de implementación del menu
 13. v0.13.0 =
 - Comienzo de implementacion del menu del heroe.
+- Comienzo de implementación de niveles.
+- implementados muertes del personaje y del enemigo.
 
 
 

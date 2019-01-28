@@ -33,7 +33,7 @@ public class FirstLevel implements IScreen {
     private final static int HERO_HP = 30;
     private final static int HERO_ATK = 10;
     private final static int HERO_DEF = 3;
-    private final static int HERO_ACC= 200;
+    private final static int HERO_ACC= 400;
 
 
     private final static int MAX_NUM_ITEMS = 5;
@@ -293,12 +293,23 @@ public class FirstLevel implements IScreen {
     @Override
     public void manageGameFunctions() {
         for (Sprite s : sprites) {
-            moveSprites(s);
-            checkCollisions(s);
-            calculateBattles();
-        }
-        if (hero != null && !hero.isAlive()) {
-            checkEndLevel();
+            if(s instanceof Enemy){
+                if(((Enemy) s).isAlive()){
+                    moveSprites(s);
+                    checkCollisions(s);
+                    calculateBattles();
+                }else{
+                    ((Enemy) s).setDeathAnimation();
+                }
+            }else{
+                moveSprites(s);
+                checkCollisions(s);
+                calculateBattles();
+                if (hero != null && !hero.isAlive()) {
+                    hero.setDeathAnimation();
+                    checkEndLevel();
+                }
+            }
         }
     }
 
@@ -314,7 +325,6 @@ public class FirstLevel implements IScreen {
             }
             if(hero.isAttacking() && hero.circleCollider(enemies[i])){
                 hero.makeDamage(enemies[i]);
-
                 if(enemies[i].getTotalHp()<= 0 ){
                     enemies[i].setAlive(false);
                     gamePane.setScore(gamePane.getScore()+150);
@@ -346,8 +356,8 @@ public class FirstLevel implements IScreen {
             if (s instanceof Enemy) {
                 Enemy enemyAux = (Enemy) s;
                 if (enemyAux.circleCollider(hero)) {
-                    enemyAux.setvX(0);
-                    enemyAux.setvY(0);
+//                    enemyAux.setvX(enemyAux.getvX()*-1);
+//                    enemyAux.setvY(enemyAux.getvY()*-1);
                     if (new Random().nextInt(5000) < 50) {
                         System.out.println("El enemigo Intenta atacar!!!");
                         enemyAux.setMustAttack(true);
@@ -358,8 +368,8 @@ public class FirstLevel implements IScreen {
             if (s instanceof Hero) {
                 for (int i = 0; i < enemies.length; i++) {
                     if (hero.circleCollider(enemies[i])) {
-                        hero.setvX(0);
-                        hero.setvY(0);
+//                        hero.setvX(hero.getvX()*-1);
+//                        hero.setvY(hero.getvY()*-1);
                     }
                 }
             }
@@ -411,8 +421,22 @@ public class FirstLevel implements IScreen {
      */
     @Override
     public void checkEndLevel() {
-        if (hero != null) {
+        if (!hero.isAlive()) {
+            this.gamePane.setEndLevel(false);
             this.gamePane.setGameOver(true);
+        }else{
+            int count = 0;
+            for (int i = 0; i < enemies.length; i++) {
+                if(!enemies[i].isAlive()){
+                    count++;
+                }
+                if(count == enemies.length){
+                    System.out.println("has vencido");
+                    this.gamePane.setEndLevel(true);
+                    this.gamePane.setGameOver(true);
+                    break;
+                }
+            }
         }
     }
 
