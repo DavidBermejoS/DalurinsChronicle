@@ -25,8 +25,8 @@ import java.util.Random;
 //TODO IMPLEMENTAR LA CLASE ENTERA
 public class SecondLevel implements IScreen {
 
-    private static final String BACKGROUND_GAME = "src/main/floors/sand1.png";
-    private static final int NUM_ENEMIES = 3;
+    private static final String BACKGROUND_GAME = "src/main/resources/floor/town.png";
+    private static final int NUM_ENEMIES = 0;
 
     private final static int ENEMY_HP = 10;
     private final static int ENEMY_ATK = 5;
@@ -366,7 +366,7 @@ public class SecondLevel implements IScreen {
             sprite.setCollide(false);
         }
 
-        if (sprite.getPosY() <= 0) {
+        if (sprite.getPosY() <= -150) {
             sprite.setCollide(true);
             if (sprite.getvY() == 0) {
                 sprite.setvY(2);

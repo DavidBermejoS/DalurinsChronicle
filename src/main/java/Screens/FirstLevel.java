@@ -2,7 +2,6 @@ package Screens;
 
 import Sprites.Hero;
 import Window.GamePane;
-import Window.HeroMenu;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -305,12 +304,10 @@ public class FirstLevel implements IScreen {
                 moveSprites(s);
                 checkCollisions(s);
                 calculateBattles();
-                if (hero != null && !hero.isAlive()) {
-                    hero.setDeathAnimation();
                     checkEndLevel();
                 }
             }
-        }
+
     }
 
     /**
@@ -344,32 +341,23 @@ public class FirstLevel implements IScreen {
     @Override
     public void checkCollisions(Sprite sprite) {
         checkWallCollisions(sprite);
-        checkSpritesCollisions();
+        checkEnemiesCollisions();
 
     }
 
     /**
      * Metodo encargado de realizar comprobaciones de como colisionan los sprites entre sid
      */
-    private void checkSpritesCollisions() {
+    private void checkEnemiesCollisions() {
         for (Sprite s : sprites) {
             if (s instanceof Enemy) {
                 Enemy enemyAux = (Enemy) s;
-                if (enemyAux.circleCollider(hero)) {
-//                    enemyAux.setvX(enemyAux.getvX()*-1);
-//                    enemyAux.setvY(enemyAux.getvY()*-1);
-                    if (new Random().nextInt(5000) < 50) {
-                        System.out.println("El enemigo Intenta atacar!!!");
-                        enemyAux.setMustAttack(true);
-                    }
+                if(enemyAux.isAlive()){
+                    if (enemyAux.circleCollider(hero)) {
+                        if (new Random().nextInt(5000) < 50) {
+                            enemyAux.setMustAttack(true);
+                        }
 
-                }
-            }
-            if (s instanceof Hero) {
-                for (int i = 0; i < enemies.length; i++) {
-                    if (hero.circleCollider(enemies[i])) {
-//                        hero.setvX(hero.getvX()*-1);
-//                        hero.setvY(hero.getvY()*-1);
                     }
                 }
             }
@@ -422,8 +410,10 @@ public class FirstLevel implements IScreen {
     @Override
     public void checkEndLevel() {
         if (!hero.isAlive()) {
+            hero.setDeathAnimation();
             this.gamePane.setEndLevel(false);
             this.gamePane.setGameOver(true);
+
         }else{
             int count = 0;
             for (int i = 0; i < enemies.length; i++) {

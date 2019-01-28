@@ -29,10 +29,10 @@ public class GamePane extends JPanel implements Runnable, KeyListener, MouseList
 
     public HeroMenu heroMenu;
     public String userName;
-    private boolean endLevel;
-    private int actualLevel;
+    public boolean endLevel;
+    public boolean gameOver;
+    public int actualLevel;
     private IScreen screen;
-    private boolean gameOver;
     private double score;
     private Hero hero;
 
@@ -66,8 +66,8 @@ public class GamePane extends JPanel implements Runnable, KeyListener, MouseList
     @Override
     protected void paintComponent(Graphics g) {
         this.screen.drawScreen(g);
-        if(this.heroMenu!=null){
-            this.heroMenu.paintMenuComponents(this.screen.getHero(),this.endLevel);
+        if (this.heroMenu != null) {
+            this.heroMenu.paintMenuComponents(this.screen.getHero(), this.endLevel);
         }
     }
 
@@ -81,7 +81,7 @@ public class GamePane extends JPanel implements Runnable, KeyListener, MouseList
     public void run() {
         while (true) {
             try {
-                if(screen!=null){
+                if (screen != null) {
                     repaint();
                     this.screen.manageGameFunctions();
                 }
@@ -109,13 +109,10 @@ public class GamePane extends JPanel implements Runnable, KeyListener, MouseList
                     this.screen = new StartScreen(this);
                     endLevel = false;
                     break;
-
                 case 1:
                     this.screen = new FirstLevel(this);
                     endLevel = false;
                     break;
-
-                //TODO gestion del flujo para la carga de los distintos niveles
                 case 2:
                     this.screen = new SecondLevel(this);
                     endLevel = false;
@@ -126,18 +123,22 @@ public class GamePane extends JPanel implements Runnable, KeyListener, MouseList
                     endLevel = false;
                     break;
             }
-        }else if(gameOver && endLevel){
+        } else if (gameOver && endLevel) {
             JOptionPane.showMessageDialog(
                     this,
-                    "");
-            this.screen = new GameOverScreen(this);
+                    "Has vencido a tu enemigo, la aventura comienza ahora...\n Después de registrar el " +
+                            "cadaver del hombre que intentaba asesinarte, has encontrado un fragmento de mapa " +
+                            "que puede serte de mucha utilidad");
+            this.heroMenu.putMapOnMenu();
+            actualLevel++;
+            this.gameOver = false;
+            this.endLevel = true;
 
-        }else if(gameOver && !endLevel){
+        } else if (gameOver && !endLevel) {
             JOptionPane.showMessageDialog(
                     this,
                     "Te ha vencido tu enemigo, has muerto en combate");
             this.gameOver = false;
-            this.endLevel = false;
             this.screen = new GameOverScreen(this);
         }
     }
@@ -233,5 +234,8 @@ public class GamePane extends JPanel implements Runnable, KeyListener, MouseList
         this.hero = hero;
     }
 
+    public boolean isEndLevel() {
+        return this.endLevel;
+    }
 
 }

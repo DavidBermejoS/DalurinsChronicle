@@ -106,7 +106,6 @@ public class Hero extends Sprite {
      */
     public void moveCharacter(boolean[] keys) {
         if(isAlive()){
-
             this.setAttacking(false);
             setMoveDirection(keys);
             setParamDirection();
@@ -117,13 +116,28 @@ public class Hero extends Sprite {
         }
     }
 
-
+    /**
+     * Metodo que gestiona el ataque del heroe
+     */
     public void attackCharacter() {
-        if(isAlive){
+        if(isAlive()){
             this.setMoving(false);
             setParamDirection();
             setAttackAnimation();
         }
+    }
+
+    /**
+     * Metodo que comprueba si el personaje esta vivo o muerto según su vida
+     */
+    public boolean checkAlive() {
+        if(this.getTotalHp()<=0){
+            this.isAlive = false;
+        }else{
+            this.isAlive=false;
+        }
+
+        return this.isAlive;
     }
 
     /**
@@ -284,7 +298,7 @@ public class Hero extends Sprite {
         if(countAnimatorPhase==actualAnimationLine.length){
             countAnimatorPhase = 0;
         }
-        this.imageSprite = actualAnimationLine[countAnimatorPhase / 2 % actualAnimationLine.length];
+        this.imageSprite = actualAnimationLine[countAnimatorPhase / 1 % actualAnimationLine.length];
         this.imageSprite = this.imageSprite.getSubimage(41,26,137,177);
         this.width = 180;
         this.height = 180;
@@ -397,4 +411,6 @@ public class Hero extends Sprite {
     public boolean isAttacking() {
         return this.attacking;
     }
+
+
 }
