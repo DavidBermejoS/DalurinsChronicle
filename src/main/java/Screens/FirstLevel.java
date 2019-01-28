@@ -1,6 +1,7 @@
 package Screens;
 
 import Sprites.Hero;
+import Utilities.ControlManager;
 import Window.GamePane;
 
 import javax.imageio.ImageIO;
@@ -25,14 +26,14 @@ public class FirstLevel implements IScreen {
     private static final String BACKGROUND_GAME = "floors/floor_grass1.png";
     private static final int NUM_ENEMIES = 1;
 
-    private final static int ENEMY_HP = 10;
+    private final static int ENEMY_HP = 40;
     private final static int ENEMY_ATK = 5;
     private final static int ENEMY_DEF = 5;
 
     private final static int HERO_HP = 30;
     private final static int HERO_ATK = 10;
     private final static int HERO_DEF = 3;
-    private final static int HERO_ACC= 400;
+    private final static int HERO_ACC= 10;
 
 
     private final static int MAX_NUM_ITEMS = 5;
@@ -43,11 +44,11 @@ public class FirstLevel implements IScreen {
 
     boolean endLevel;
     boolean gameOver;
-    boolean[] whatKeyPressed;
 
     Hero hero;
     Enemy[] enemies;
     Item[] items;
+    ControlManager controlManager;
 
 
     public FirstLevel(GamePane gamePane) {
@@ -68,13 +69,10 @@ public class FirstLevel implements IScreen {
      */
     @Override
     public void startFrame() {
+        this.controlManager = new ControlManager(this);
         this.endLevel = false;
         this.gameOver = false;
         this.sprites = new ArrayList<Sprite>();
-        this.whatKeyPressed = new boolean[4];
-        for (int i = 0; i < whatKeyPressed.length; i++) {
-            whatKeyPressed[i] = false;
-        }
         this.enemies = new Enemy[NUM_ENEMIES];
         this.items = new Item[new Random().nextInt(MAX_NUM_ITEMS)];
         manageGameFunctions();
@@ -320,7 +318,7 @@ public class FirstLevel implements IScreen {
                 hero.setAlive(false);
                 break;
             }
-            if(hero.isAttacking() && hero.circleCollider(enemies[i])){
+            if(hero.isAttacking() && hero.circleCollider(enemies[i]) && hero.isAttackAnimatorRunning()){
                 hero.makeDamage(enemies[i]);
                 if(enemies[i].getTotalHp()<= 0 ){
                     enemies[i].setAlive(false);
@@ -451,6 +449,7 @@ public class FirstLevel implements IScreen {
 
     }
 
+
     /**
      * Metodo encargado de gestionar los eventos de teclado,
      * es decir, que sucede en la pantalla cuando se pulsa
@@ -460,14 +459,8 @@ public class FirstLevel implements IScreen {
      */
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_J) {
-            if (!hero.isMoving()) {
-                hero.setAttacking(true);
-                hero.attackCharacter();
-            }
-        }
+        //no hace nada
     }
-
 
     /**
      * Metodo que gestiona el movimiento del personaje según la tecla del teclado pulsada.
@@ -482,9 +475,10 @@ public class FirstLevel implements IScreen {
     @Override
     public boolean dispatchKeyEvent(KeyEvent e) {
         synchronized (GamePane.class) {
-            getKeyLogic(e);
+            controlManager.getKeyLogic(e);
+            controlManager.getAttackControl(e,hero);
             if (!hero.isAttacking()) {
-                hero.moveCharacter(whatKeyPressed);
+                hero.moveCharacter(controlManager.getWhatKeyPressed());
             }
             return false;
         }
@@ -495,51 +489,6 @@ public class FirstLevel implements IScreen {
         return this.hero;
     }
 
-    private void getKeyLogic(KeyEvent e) {
-        int keyCode;
-        switch (e.getID()) {
-            case KeyEvent.KEY_PRESSED:
-                keyCode = e.getKeyCode();
-                switch (keyCode) {
-                    case KeyEvent.VK_W:
-                        whatKeyPressed[0] = true;
-                        break;
-                    case KeyEvent.VK_A:
-                        whatKeyPressed[1] = true;
-                        break;
-                    case KeyEvent.VK_S:
-                        whatKeyPressed[2] = true;
-                        break;
-                    case KeyEvent.VK_D:
-                        whatKeyPressed[3] = true;
-                        break;
 
-                }
-                break;
-            case KeyEvent.KEY_RELEASED:
-                keyCode = e.getKeyCode();
-                switch (keyCode) {
-                    case KeyEvent.VK_W:
-                        whatKeyPressed[0] = false;
-                        this.hero.setMoving(false);
-                        break;
-                    case KeyEvent.VK_A:
-                        whatKeyPressed[1] = false;
-                        this.hero.setMoving(false);
-                        break;
-                    case KeyEvent.VK_S:
-                        whatKeyPressed[2] = false;
-                        this.hero.setMoving(false);
-                        break;
-                    case KeyEvent.VK_D:
-                        whatKeyPressed[3] = false;
-                        this.hero.setMoving(false);
-                        break;
-                    case KeyEvent.VK_J:
-                        this.hero.setAttacking(false);
-                        break;
-                }
-        }
-    }
 
 }
