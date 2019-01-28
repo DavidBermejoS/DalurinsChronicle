@@ -42,7 +42,7 @@ public class GamePane extends JPanel implements Runnable, KeyListener, MouseList
      * sus listeners. Ademas comienza a ejecutar el run.
      */
     public GamePane() {
-        this.actualLevel = -1;
+        this.actualLevel = 0;
         this.score = 0;
         this.endLevel = true;
         this.gameOver = false;
@@ -81,11 +81,13 @@ public class GamePane extends JPanel implements Runnable, KeyListener, MouseList
     public void run() {
         while (true) {
             try {
+                checkLevel();
                 if (screen != null) {
                     repaint();
-                    this.screen.manageGameFunctions();
+                    if(!endLevel){
+                        this.screen.manageGameFunctions();
+                    }
                 }
-                checkLevel();
                 Toolkit.getDefaultToolkit().sync();
                 Thread.currentThread().sleep(15);//ORIGINAL : 15
             } catch (InterruptedException e) {
@@ -124,13 +126,6 @@ public class GamePane extends JPanel implements Runnable, KeyListener, MouseList
                     break;
             }
         } else if (gameOver && endLevel) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Has vencido a tu enemigo, la aventura comienza ahora...\n Después de registrar el " +
-                            "cadaver del hombre que intentaba asesinarte, has encontrado un fragmento de mapa " +
-                            "que puede serte de mucha utilidad");
-            this.heroMenu.putMapOnMenu();
-            actualLevel++;
             this.gameOver = false;
             this.endLevel = true;
 

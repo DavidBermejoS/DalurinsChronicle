@@ -33,6 +33,9 @@ ataque y de movimiento del heroe.
 15. v0.15.0 =
 - Arreglo de implementación del sistema de niveles.
 - implementado el mapa en el menu
+- Mejorado el sistema de combate del personaje.
+- Anadida la clase ControlManager para que aloje todas las funcionalidades del control de usuario
+- Implementado comienzo del segundo nivel
 
 
 
