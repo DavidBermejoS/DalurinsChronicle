@@ -25,6 +25,7 @@ public class HeroMenu extends JPanel {
     JLabel labelAttack;
     JLabel labelDefense;
     JLabel labelMaxHP;
+    JLabel map;
     BufferedImage potionImage;
     Hero hero;
 
@@ -52,11 +53,22 @@ public class HeroMenu extends JPanel {
         this.setLayout(new GridBagLayout());
         GridBagConstraints settings;
         ResourcesCollector rc = new ResourcesCollector();
+
+
+        this.map = new JLabel();
+        settings = new GridBagConstraints();
+        settings.gridx = 0;
+        settings.gridy = 0;
+        settings.ipadx = 5;
+        settings.ipady = 5;
+        this.add(map,settings);
+
+
         this.imagesFaces = rc.getHeroFaces();
         this.canvasHeroImage = new JLabel();
         this.canvasHeroImage.setIcon(new ImageIcon("src/main/resources/hero/faces/normal.png", "normalFace"));
         settings = new GridBagConstraints();
-        settings.gridx = 0;
+        settings.gridx = 1;
         settings.gridy = 0;
         settings.ipadx = 5;
         settings.ipady = 5;
@@ -67,7 +79,7 @@ public class HeroMenu extends JPanel {
         this.heroLife.setBackground(Color.RED);
         this.heroLife.setForeground(Color.GREEN);
         settings = new GridBagConstraints();
-        settings.gridx = 1;
+        settings.gridx = 2;
         settings.gridy = 0;
         settings.ipadx = 40;
         settings.ipady = 10;
@@ -76,7 +88,7 @@ public class HeroMenu extends JPanel {
         this.labelAttack = new JLabel("ATK : "+this.hero.getAtk());
         this.labelAttack.setForeground(Color.RED);
         settings = new GridBagConstraints();
-        settings.gridx = 2;
+        settings.gridx = 3;
         settings.gridy=0;
         settings.ipadx = 40;
         settings.ipady = 10;
@@ -86,7 +98,7 @@ public class HeroMenu extends JPanel {
         this.labelDefense= new JLabel("DEF : "+this.hero.getDef());
         this.labelDefense.setForeground(Color.RED);
         settings = new GridBagConstraints();
-        settings.gridx = 3;
+        settings.gridx = 4;
         settings.gridy=0;
         settings.ipadx = 40;
         settings.ipady = 10;
@@ -96,7 +108,7 @@ public class HeroMenu extends JPanel {
         this.labelMaxHP= new JLabel("MAX HP : "+Hero.MAX_HP);
         this.labelMaxHP.setForeground(Color.RED);
         settings = new GridBagConstraints();
-        settings.gridx = 4;
+        settings.gridx = 5;
         settings.gridy=0;
         settings.ipadx = 40;
         settings.ipady = 10;
@@ -111,13 +123,16 @@ public class HeroMenu extends JPanel {
     public void paintMenuComponents(Hero hero, boolean endLevel) {
         this.hero = hero;
         if(hero!=null){
+            if(hero.getTotalHp() == Hero.MAX_HP){
+                this.canvasHeroImage.setIcon(new ImageIcon("src/main/resources/hero/faces/normal.png", "normalFace"));
+            }
             if (hero.getTotalHp() < Hero.MAX_HP / 2) {
                 this.canvasHeroImage.setIcon(new ImageIcon("src/main/resources/hero/faces/danger.png", "dangerFace"));
             }
             if (hero.getTotalHp() <= 0) {
                 this.canvasHeroImage.setIcon(new ImageIcon("src/main/resources/hero/faces/defeat.png", "defeatFace"));
             }
-            if(this.gamePane.isGameOver()){
+            if(this.gamePane.isEndLevel()){
                 this.canvasHeroImage.setIcon(new ImageIcon("src/main/resources/hero/faces/victory.png", "victoryFace"));
             }
             this.heroLife.setValue(gamePane.getHero().getTotalHp());
@@ -125,7 +140,11 @@ public class HeroMenu extends JPanel {
         }
     }
 
+    /**
+     * Coloca un mapa en la barra del menu
+     */
+    public void putMapOnMenu() {
+        this.map.setIcon(new ImageIcon("src/main/resources/maps/worldMap.png","map"));
 
-
-
+    }
 }

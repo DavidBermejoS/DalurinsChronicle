@@ -3,12 +3,12 @@ package Sprites;
 import Utilities.ResourcesCollector;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
+
+import static java.lang.Thread.sleep;
 
 /**
  * <h2>Clase Hero</h2>
@@ -29,7 +29,7 @@ public class Hero extends Sprite {
     int def;
     int acc;
 
-    Item [] items;
+    Item[] items;
     Skill[] skills;
     String[][] matrixAnimation;
     String[] routesAnimation;
@@ -46,6 +46,8 @@ public class Hero extends Sprite {
     BufferedImage[][] walkingImagesLine;
     BufferedImage[][] attackingImagesLine;
     boolean perpetuallyDeath;
+    private boolean isAttackAnimatorRunning;
+    private Thread threadAttackAnimation;
 
 
     /**
@@ -58,9 +60,11 @@ public class Hero extends Sprite {
         loadAttackingImages();
         lastDirection = "";
         attacking = false;
+        isAttackAnimatorRunning = false;
         lastDirection = "S";
         matrixAnimation = new String[10][8];
         routesAnimation = new String[10];
+        this.threadAttackAnimation = new Thread();
     }
 
     /**
@@ -105,21 +109,22 @@ public class Hero extends Sprite {
      * Metodo encargado de englobar los otros metodos que establecen el movimiento del personaje
      */
     public void moveCharacter(boolean[] keys) {
-        if(isAlive()){
-
+        if (isAlive()) {
             this.setAttacking(false);
             setMoveDirection(keys);
             setParamDirection();
-            if(!collide){
+            if (!collide) {
                 setMoveParameters(keys);
             }
             setMoveAnimation();
         }
     }
 
-
+    /**
+     * Metodo que gestiona el ataque del heroe
+     */
     public void attackCharacter() {
-        if(isAlive){
+        if (isAlive()) {
             this.setMoving(false);
             setParamDirection();
             setAttackAnimation();
@@ -127,10 +132,23 @@ public class Hero extends Sprite {
     }
 
     /**
+     * Metodo que comprueba si el personaje esta vivo o muerto según su vida
+     */
+    public boolean checkAlive() {
+        if (this.getTotalHp() <= 0) {
+            this.isAlive = false;
+        } else {
+            this.isAlive = false;
+        }
+
+        return this.isAlive;
+    }
+
+    /**
      * Metodo que gestiona la muerte del enemigo
      */
-    public void setDeathAnimation(){
-        if(!isAlive && !perpetuallyDeath){
+    public void setDeathAnimation() {
+        if (!isAlive && !perpetuallyDeath) {
             try {
                 this.buffer = ImageIO.read(new File("src/main/resources/hero/death/death_40006.png"));
             } catch (IOException e) {
@@ -257,12 +275,12 @@ public class Hero extends Sprite {
      */
     public void setMoveAnimation() {
         if (isMoving()) {
-            if ( !actualDirection.equalsIgnoreCase("")) {
+            if (!actualDirection.equalsIgnoreCase("")) {
                 this.actualAnimationLine = this.walkingImagesLine[paramDirection];
                 lastDirection = actualDirection;
             }
             countAnimatorPhase++;
-            this.imageSprite = actualAnimationLine[countAnimatorPhase /3 % actualAnimationLine.length];
+            this.imageSprite = actualAnimationLine[countAnimatorPhase / 3 % actualAnimationLine.length];
 
             this.width = 150;
             this.height = 150;
@@ -277,37 +295,61 @@ public class Hero extends Sprite {
      * actual de ataque
      */
     public void setAttackAnimation() {
-        if (!actualDirection.equalsIgnoreCase("")) {
-            this.actualAnimationLine = this.attackingImagesLine[paramDirection];
+        if (!isAttackAnimatorRunning) {
+            threadAttackAnimation = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    isAttackAnimatorRunning = true;
+                    try {
+                        for (int i = 0; i < attackingImagesLine.length; i++) {
+                            if (attacking) {
+                                sleep(120);
+                                if (!actualDirection.equalsIgnoreCase("")) {
+                                    actualAnimationLine = attackingImagesLine[paramDirection];
+                                }
+                                imageSprite = actualAnimationLine[i];
+                                imageSprite = imageSprite.getSubimage(41, 26, 137, 157);
+                                width = 160;
+                                height = 160;
+                                refreshBuffer();
+                                if (i == attackingImagesLine.length - 1) {
+                                    setAttacking(false);
+                                    isAttackAnimatorRunning = false;
+                                }
+                            }
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            threadAttackAnimation.start();
+            if (!isAttackAnimatorRunning) {
+                threadAttackAnimation.yield();
+            }
         }
-        countAnimatorPhase++;
-        if(countAnimatorPhase==actualAnimationLine.length){
-            countAnimatorPhase = 0;
-        }
-        this.imageSprite = actualAnimationLine[countAnimatorPhase / 2 % actualAnimationLine.length];
-        this.imageSprite = this.imageSprite.getSubimage(41,26,137,177);
-        this.width = 180;
-        this.height = 180;
-        this.refreshBuffer();
-        this.setAttacking(false);
     }
+
 
     /**
      * Metodo que gestiona el daño que realiza el heroe al atacar a un enemigo
+     *
      * @param enemy
      */
     public void makeDamage(Enemy enemy) {
-        Random r = new Random();
-        int probabilityAttack = r.nextInt(1000);
-        if(this.getAcc()>probabilityAttack){
-            int damage = enemy.getTotalHp()-(this.getAtk()-enemy.getDef());
-            enemy.setTotalHp(damage);
-            enemy.setRefreshDamageTime(System.nanoTime());
-            enemy.setDamage(damage);
-            System.out.println("El enemigo tiene un total de :" +enemy.getTotalHp());
-        }
-        if(enemy.getTotalHp() <= 0 ){
-            enemy.setAlive(false);
+        if(isAttackAnimatorRunning){
+            Random r = new Random();
+            int probabilityAttack = r.nextInt(1000);
+            if (this.getAcc() > probabilityAttack) {
+                int damage = enemy.getTotalHp() - (this.getAtk() - enemy.getDef());
+                enemy.setTotalHp(damage);
+                enemy.setRefreshDamageTime(System.nanoTime());
+                enemy.setDamage(damage);
+                System.out.println("El enemigo tiene un total de :" + enemy.getTotalHp());
+            }
+            if (enemy.getTotalHp() <= 0) {
+                enemy.setAlive(false);
+            }
         }
     }
 
@@ -333,7 +375,6 @@ public class Hero extends Sprite {
             attackingImagesLine[j] = resCol.getImagesTargetActionDirection(resCol.HERO_TARGET, resCol.ATTACK_ACTION, allDirections[j]);
         }
     }
-
 
 
     //GETTERS Y SETTERS
@@ -396,5 +437,14 @@ public class Hero extends Sprite {
 
     public boolean isAttacking() {
         return this.attacking;
+    }
+
+    private boolean getAttacking() {
+        return this.attacking;
+    }
+
+
+    public boolean isAttackAnimatorRunning() {
+        return this.isAttackAnimatorRunning;
     }
 }

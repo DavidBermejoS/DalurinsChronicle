@@ -78,7 +78,9 @@ public class GameOverScreen implements IScreen {
 
     @Override
     public void clickMouse(MouseEvent e) {
-        gamePane.setActualLevel(0);
+        gamePane.setActualLevel(-1);
+        gamePane.setEndLevel(true);
+        gamePane.setGameOver(false);
 
     }
 

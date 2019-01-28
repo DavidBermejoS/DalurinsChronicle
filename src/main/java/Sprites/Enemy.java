@@ -293,6 +293,8 @@ public class Enemy extends Sprite {
         if (!isAlive && !perpetuallyDeath) {
             try {
                 this.buffer = ImageIO.read(new File("src/main/resources/enemy/death/enemyDeath.png"));
+                this.width = 100;
+                this.height = 100;
             } catch (IOException e) {
                 e.printStackTrace();
             }

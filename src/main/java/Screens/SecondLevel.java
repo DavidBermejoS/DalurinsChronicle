@@ -7,6 +7,7 @@ import Sprites.Sprite;
 import Window.GamePane;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -25,8 +26,8 @@ import java.util.Random;
 //TODO IMPLEMENTAR LA CLASE ENTERA
 public class SecondLevel implements IScreen {
 
-    private static final String BACKGROUND_GAME = "src/main/floors/sand1.png";
-    private static final int NUM_ENEMIES = 3;
+    private static final String BACKGROUND_GAME = "src/main/resources/floors/town.png";
+    private static final int NUM_ENEMIES = 0;
 
     private final static int ENEMY_HP = 10;
     private final static int ENEMY_ATK = 5;
@@ -52,6 +53,7 @@ public class SecondLevel implements IScreen {
         this.gamePane = gamePane;
         startFrame();
         addElements();
+
     }
 
 
@@ -74,6 +76,12 @@ public class SecondLevel implements IScreen {
         }
         this.enemies = new Enemy[NUM_ENEMIES];
         this.items = new Item[new Random().nextInt(MAX_NUM_ITEMS)];
+        JOptionPane.showMessageDialog(
+                this.gamePane,
+                "Has vencido a tu enemigo, la aventura comienza ahora...\n Después de registrar el " +
+                        "cadaver del hombre que intentaba asesinarte, has encontrado un fragmento de mapa " +
+                        "que puede serte de mucha utilidad");
+        this.gamePane.heroMenu.putMapOnMenu();
         manageGameFunctions();
     }
 
@@ -96,6 +104,8 @@ public class SecondLevel implements IScreen {
      */
     private void addHero() {
         this.hero = gamePane.getHero();
+        this.hero.setPosX(gamePane.getWidth()/2);
+        this.hero.setPosY(gamePane.getHeight()/2);
         sprites.add(hero);
     }
 
@@ -366,7 +376,7 @@ public class SecondLevel implements IScreen {
             sprite.setCollide(false);
         }
 
-        if (sprite.getPosY() <= 0) {
+        if (sprite.getPosY() <= -150) {
             sprite.setCollide(true);
             if (sprite.getvY() == 0) {
                 sprite.setvY(2);
