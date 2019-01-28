@@ -228,11 +228,47 @@ public class ResourcesCollector {
             bufferImageAux = ImageIO.read(new File("src/main/resources/hero/faces/hero.png"));
             BufferedImage [] images = new BufferedImage[8];
             int count = 0;
-            for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 2; j++) {
+            for (int i = 0; i < 2; i++) {
+                for (int j = 0; j < 4; j++) {
                     images[count] = new BufferedImage(96,96,BufferedImage.TYPE_INT_ARGB);
-                    images[count] = bufferImageAux.getSubimage(i*96,j*96,96,96);
+                    images[count] = bufferImageAux.getSubimage(j*96,i*96,96,96);
                     count++;
+                }
+            }
+            return images;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    public BufferedImage[] getEnemyDeathsImages(){
+        BufferedImage bufferImageAux = null;
+        try {
+            bufferImageAux = ImageIO.read(new File("src/main/resources/enemy/death/bSpearman_Die_Down_strip8.png"));
+            BufferedImage [] images = new BufferedImage[8];
+            for (int i = 0; i < images.length; i++) {
+                    images[i] = new BufferedImage(96,96,BufferedImage.TYPE_INT_ARGB);
+                    images[i] = bufferImageAux.getSubimage(i*150,0,150,150);
+            }
+            return images;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    public BufferedImage[][] getEnemyAttacksImages(){
+        BufferedImage bufferImageAux = null;
+        try {
+            bufferImageAux = ImageIO.read(new File("src/main/resources/enemy/attack/tile_attack.png"));
+            BufferedImage [][] images = new BufferedImage[8][8];
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 8; j++) {
+                    images[i][j] = new BufferedImage(171,171,BufferedImage.TYPE_INT_ARGB);
+                    images[i][j] = bufferImageAux.getSubimage(j*171,i*171,96,96);
                 }
             }
             return images;

@@ -1,5 +1,5 @@
 # Dalurin's Chronicles
-## v = 0.12.0
+## v = 0.13.0
 Juego Arcade Isométrico realizado como proyecto para el módulo de Desarrollo de interfaces en el grado Superior de DAM
 
 
@@ -23,6 +23,10 @@ ataque y de movimiento del heroe.
 - Depurado el sistema de combate y colisiones.
 - Arreglado el bug de aumento de collider en cambio de animación
 - Comienzo de implementación del menu
+13. v0.13.0 =
+- Comienzo de implementacion del menu del heroe.
+- Comienzo de implementación de niveles.
+- implementados muertes del personaje y del enemigo.
 
 
 

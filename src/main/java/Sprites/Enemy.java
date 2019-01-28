@@ -2,17 +2,19 @@ package Sprites;
 
 import Utilities.ResourcesCollector;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Random;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * <h2>Clase Enemy</h2>
  * Esta clase gestiona los parametros y valores de los elementos enemigos.
- * @see Sprite
- * @author David Bermejo Simon
  *
+ * @author David Bermejo Simon
+ * @see Sprite
  */
 public class Enemy extends Sprite {
     boolean isAlive;
@@ -26,10 +28,12 @@ public class Enemy extends Sprite {
     private boolean mustAttack;
     private double vTotal;
     private boolean followHero;
+    BufferedImage[] deathImagesLine;
     BufferedImage[] actualAnimationLine;
     BufferedImage[][] walkingImagesLine;
     BufferedImage[][] attackingImagesLine;
     private int paramDirection;
+    private boolean perpetuallyDeath;
 
 
     /**
@@ -39,18 +43,22 @@ public class Enemy extends Sprite {
         this.walkingImagesLine = new BufferedImage[8][10];
         loadWalkingImages();
         this.attackingImagesLine = new BufferedImage[8][18];
-//        loadAttackingImages();
+        loadAttackingImages();
+        this.deathImagesLine = new BufferedImage[8];
+        loadDeathImages();
         this.isAlive = true;
         this.moving = false;
         this.mustAttack = false;
         this.followHero = false;
-        this.lastDirection = "";
+        this.perpetuallyDeath = false;
+        this.lastDirection = "NW";
         this.actualDirection = "";
 
     }
 
     /**
      * Constructor de la clase con todos los parametros tanto de la clase como de la clase Sprite de la que hereda
+     *
      * @param posX
      * @param posY
      * @param vX
@@ -87,12 +95,12 @@ public class Enemy extends Sprite {
      * Metodo encargado de englobar los otros metodos que establecen el movimiento del personaje
      */
     public void moveCharacter(Hero hero) {
-        setMoveDirection(hero);
-        setParamDirection();
-        setMoveAnimation();
-        setMoveParameters(hero);
-
-
+        if(isAlive){
+            setMoveDirection(hero);
+            setParamDirection();
+            setMoveAnimation();
+            setMoveParameters(hero);
+        }
     }
 
     /**
@@ -114,7 +122,7 @@ public class Enemy extends Sprite {
             vY = -2;
             vX = 2;
         }
-        if(angle>-150 && angle < -120){
+        if (angle > -150 && angle < -120) {
             this.actualDirection = "SE";
             vY = 2;
             vX = 2;
@@ -124,29 +132,30 @@ public class Enemy extends Sprite {
             vY = 2;
             vX = -2;
         }
-        if((angle > -30 && angle <0) || (angle < 30 && angle>0)){
+        if ((angle > -30 && angle < 0) || (angle < 30 && angle > 0)) {
             this.actualDirection = "W";
             vX = -2;
         }
-        if ((angle < - 150 && angle > -180) || (angle > 150 && angle < 180)){
+        if ((angle < -150 && angle > -180) || (angle > 150 && angle < 180)) {
             this.actualDirection = "E";
-            vX= 2;
+            vX = 2;
         }
-        if (angle > 60 && angle < 120){
+        if (angle > 60 && angle < 120) {
             this.actualDirection = "N";
-            vY=-2;
+            vY = -2;
         }
-        if(angle > -120 && angle < -60 ){
+        if (angle > -120 && angle < -60) {
             this.actualDirection = "S";
             vY = 2;
         }
 
-        vTotal = Math.sqrt(Math.pow(vX,2)+Math.pow(vY,2));
-        if(vTotal > 2){
-            vX = Math.abs(vX)/vX * Math.cos(angle);
-            vY = Math.abs(vY)/vY * Math.cos(angle);
+        vTotal = Math.sqrt(Math.pow(vX, 2) + Math.pow(vY, 2));
+        if (vTotal > 2) {
+            vX = Math.abs(vX) / vX * Math.cos(angle);
+            vY = Math.abs(vY) / vY * Math.cos(angle);
         }
     }
+
     /**
      * Metodo encargado de establecer una direccion como parametro para hacer referencia al array de imagenes
      * que necesita para cargar la animacion
@@ -154,7 +163,6 @@ public class Enemy extends Sprite {
     private void setParamDirection() {
         if (actualDirection.equalsIgnoreCase("N")) {
             this.paramDirection = 0;
-
         }
         if (actualDirection.equalsIgnoreCase("S")) {
             this.paramDirection = 1;
@@ -189,26 +197,25 @@ public class Enemy extends Sprite {
     /**
      * Metodo encargado de ajustar la velocidad y los parametros de movimiento segun la
      * direccion actual
-     *
      */
     public void setMoveParameters(Hero hero) {
-        if(followHero && !collide){
+        if (followHero && !collide) {
             int diffX = this.posX - hero.getPosX();
             int diffY = this.posY - hero.getPosY();
-            float angle = (float)Math.atan2(diffY, diffX);
-            vTotal = Math.sqrt(Math.pow(vX,2)+Math.pow(vY,2));
-            if(vTotal > 2){
-                vX = Math.abs(vX)/vX * Math.cos(angle);
-                vY = Math.abs(vY)/vY * Math.cos(angle);
+            float angle = (float) Math.atan2(diffY, diffX);
+            vTotal = Math.sqrt(Math.pow(vX, 2) + Math.pow(vY, 2));
+            if (vTotal > 2) {
+                vX = Math.abs(vX) / vX * Math.cos(angle);
+                vY = Math.abs(vY) / vY * Math.cos(angle);
             }
-        }else if (!followHero && !collide){
+        } else if (!followHero && !collide) {
             int diffX = this.posX - hero.getPosX();
             int diffY = this.posY - hero.getPosY();
-            float angle = (float)Math.atan2(diffY, diffX);
-            vX = hero.getvX()*-1;
-            vY = hero.getvY()*-1;
-            vX*= Math.cos(angle);
-            vY*= Math.sin(angle);
+            float angle = (float) Math.atan2(diffY, diffX);
+            vX = hero.getvX() * -1;
+            vY = hero.getvY() * -1;
+            vX *= Math.cos(angle);
+            vY *= Math.sin(angle);
         }
 
 
@@ -217,21 +224,96 @@ public class Enemy extends Sprite {
     /**
      * Metodo encargado de definir el array de imagenes que se deverán utilizar para la animación
      * actual
-     *
      */
     public void setMoveAnimation() {
-        if (!actualDirection.equalsIgnoreCase("")) {
-            this.actualAnimationLine = this.walkingImagesLine[paramDirection];
-            lastDirection = actualDirection;
+        if (!mustAttack && isAlive) {
+            if (!actualDirection.equalsIgnoreCase("")) {
+                this.actualAnimationLine = this.walkingImagesLine[paramDirection];
+                lastDirection = actualDirection;
+            }
+            countAnimatorPhase++;
+            this.imageSprite = actualAnimationLine[countAnimatorPhase / 4 % actualAnimationLine.length];
+            this.width=140;
+            this.height=140;
+            this.refreshBuffer();
         }
-        countAnimatorPhase++;
-        this.imageSprite = actualAnimationLine[countAnimatorPhase / 4 % actualAnimationLine.length];
-        this.refreshBuffer();
-
     }
 
 
+
+
+
+
+//METODOS QUE GESTIONAN EL SISTEMA DE COMBATE DEL ENEMIGO
+
+    /**
+     * Metodo que gestiona el ataque del enemigo sobre la vida del heroe
+     * @param hero
+     */
+    public void attack(Hero hero) {
+        if(isAlive){
+            this.followHero = true;
+            if (mustAttack && isAlive) {
+                setAttackAnimations();
+                makeDamage(hero);
+            }
+        }
+    }
+
+    private void makeDamage(Hero hero) {
+        System.out.println("El enemigo ataca!");
+        hero.setTotalHp(hero.getTotalHp() - (this.atk - hero.getDef()));
+        System.out.println("Al heroe le quedan: " + hero.getTotalHp());
+        mustAttack = false;
+    }
+
+
+    /**
+     * Metodo encargado de gestionar la animacion para el ataque del enemigo
+     */
+    public void setAttackAnimations() {
+        if(isAlive){
+            setParamDirection();
+            this.refreshBuffer();
+            if (!actualDirection.equalsIgnoreCase("")) {
+                this.actualAnimationLine = this.attackingImagesLine[paramDirection];
+            }
+            countAnimatorPhase++;
+            if(countAnimatorPhase >= actualAnimationLine.length-1){
+                countAnimatorPhase = 0;
+            }
+            this.imageSprite = actualAnimationLine[countAnimatorPhase];
+            this.width = 100;
+            this.height = 100;
+            this.refreshBuffer();
+        }
+    }
+
+    /**
+     * Metodo que gestiona la muerte del enemigo
+     */
+    public void setDeathAnimation(){
+        if(!isAlive && !perpetuallyDeath){
+            try {
+                this.buffer = ImageIO.read(new File("src/main/resources/enemy/death/enemyDeath.png"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
     //METODOS ENCARGADO DE GUARDAR LAS IMAGENES QUE USARÁ EL enemigo
+
     /**
      * Este metodo se encarga de cargar las imagenes del enemigo andando en el array de la clase walkingImagesLine
      */
@@ -241,31 +323,26 @@ public class Enemy extends Sprite {
             walkingImagesLine[i] = resCol.getImagesTargetActionDirection(resCol.ENEMY_TARGET, resCol.WALK_ACTION, allDirections[i]);
         }
     }
-//    /**
-//     * Este metodo se encarga de cargar las imagenes del heroe atacando en el array de la clase attackingImagesLine
-//     */
-//    private void loadAttackingImages(){
-//        ResourcesCollector resCol = new ResourcesCollector();
-//        for (int i = 0; i < attackingImagesLine.length; i++) {
-//            for (int j = 0; j < allDirections.length; j++) {
-//                attackingImagesLine[i] = resCol.getImagesTargetActionDirection(resCol.ENEMY_TARGET, resCol.ATTACK_ACTION, allDirections[j]);
-//            }
-//        }
 
-//    }
-
-    public void attack(Hero hero) {
-        this.followHero = true;
-        if(mustAttack){
-            System.out.println("El enemigo ataca!");
-            hero.setTotalHp(hero.getTotalHp()-(this.atk - hero.getDef()));
-            System.out.println("Al heroe le quedan: " + hero.getTotalHp());
-
-
-            mustAttack = false;
-        }
+    /**
+     * Este metodo se encarga de cargar las imagenes del enemigo atacando en el array de la clase attackingImagesLine
+     */
+    private void loadAttackingImages() {
+        ResourcesCollector resCol = new ResourcesCollector();
+        attackingImagesLine = resCol.getEnemyAttacksImages();
 
     }
+
+    /**
+     * Este metodo se encarga de cargar las imagenes del enemigo muriendo en el array de la clase attackingImagesLine
+     */
+    private void loadDeathImages() {
+        ResourcesCollector resCol = new ResourcesCollector();
+        deathImagesLine = resCol.getEnemyDeathsImages();
+    }
+
+
+
 
     //GETTERS Y SETTERS DE LA CLASE
 
@@ -341,4 +418,6 @@ public class Enemy extends Sprite {
     public boolean isMustAttack() {
         return mustAttack;
     }
+
+
 }

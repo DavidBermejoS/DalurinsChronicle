@@ -1,14 +1,25 @@
 package Screens;
 
+import Sprites.Hero;
 import Sprites.Sprite;
 import Window.GamePane;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 
 public class VictoryScreen implements IScreen {
+
+
+    private static final String BACKGROUND_VICTORY = "src/main/resources/backgrounds/victory.png";
+    Color fontsColor = new Color(255,255,255,50);
+
+    //    //PARAMETROS DE CONTROL
     GamePane gamePane;
+    Image backgroundImage;
 
 
     public VictoryScreen( GamePane gamePane){
@@ -22,16 +33,6 @@ public class VictoryScreen implements IScreen {
 
     @Override
     public void addElements() {
-
-    }
-
-    @Override
-    public void drawScreen(Graphics g) {
-
-    }
-
-    @Override
-    public void resizeScreen(Graphics g) {
 
     }
 
@@ -78,6 +79,7 @@ public class VictoryScreen implements IScreen {
 
     @Override
     public void clickMouse(MouseEvent e) {
+        gamePane.setActualLevel(0);
 
     }
 
@@ -95,4 +97,52 @@ public class VictoryScreen implements IScreen {
     public boolean dispatchKeyEvent(KeyEvent e) {
         return false;
     }
+
+    @Override
+    public Hero getHero() {
+        return null;
+    }
+
+
+    @Override
+    public void drawScreen(Graphics g){
+        drawBackground(g);
+        drawAnimationScreen(g);
+        manageGameFunctions();
+    }
+
+    /**
+     * Metodo encargado de pintar el fondo del panel de juego
+     *
+     * @param g
+     */
+    private void drawBackground(Graphics g) {
+        File bckg;
+        bckg = new File(BACKGROUND_VICTORY);
+        try {
+            backgroundImage = ImageIO.read(bckg);
+            backgroundImage = backgroundImage.getScaledInstance(gamePane.getWidth(), gamePane.getHeight(), 4);
+        } catch (IOException e) {
+            System.out.println("Error al cargar la imagen de fondo");
+            System.out.println("Error: " + e.getMessage());
+        }
+        g.drawImage(backgroundImage, 0, 0, null);
+    }
+
+
+    /**
+     * Metodo encargado de gestionar la animacion de la pantalla principal
+     */
+    private void drawAnimationScreen(Graphics g) {
+        g.setFont(new Font("MonoSpace", Font.BOLD, 32));
+        g.setColor(fontsColor);
+        g.drawString("VICTORIA ", gamePane.getWidth() / 4,gamePane.getHeight() /4);
+        g.drawString("HAZ CLICK PARA VOLVER AL INICIO", gamePane.getWidth() / 4,gamePane.getHeight() /4+50);
+        g.dispose();
+    }
+    @Override
+    public void resizeScreen(Graphics g) {
+        backgroundImage = backgroundImage.getScaledInstance(gamePane.getWidth(), gamePane.getHeight(), 4);
+    }
+
 }
