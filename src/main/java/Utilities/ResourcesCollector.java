@@ -27,7 +27,7 @@ public class ResourcesCollector {
     public final static String HERO_DEATH = "src/main/resources/hero/death";
     public final static String HERO_WALK = "src/main/resources/hero/walk";
 
-    public final static String ENEMY_ATTACK = "src/main/resources/enemy/attack";
+    public final static String ENEMY_ATTACK = "src/main/resources/enemy/makeDamage";
     public final static String ENEMY_BLOCK = "src/main/resources/enemy/block";
     public final static String ENEMY_DEATH = "src/main/resources/enemy/death";
     public final static String ENEMY_WALK = "src/main/resources/enemy/walk";

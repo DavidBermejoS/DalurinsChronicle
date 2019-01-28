@@ -53,7 +53,7 @@ public class Sprite {
     public Sprite() {
         countAnimatorPhase = 0;
         //todo METIDO FONDO DE COLOR AZUL PARA VER LAS SUPERFICIES DE LOS COLLIDERS DE LOS PERSONAJES
-        this.color = new Color(0, 0, 255, 255);
+//        this.color = new Color(0, 0, 255, 255);
     }
 
 
@@ -87,47 +87,6 @@ public class Sprite {
 
 
     /**
-     * Metodo encargado de crear un collider cuadrado y determinar si un sprite
-     * colisiona con otro
-     *
-     * @param s2 : sprite a comparar
-     * @return check : true si colisionan, false si no.
-     */
-
-//    public boolean squareCollider(Sprite s2) {
-//        boolean collidesX = false, collidesY = false;
-//
-//        //calculo de la colision en el eje horizontal
-//        if (this.getPosX() < s2.getPosX()) {
-//            int rightBorder = this.getPosX() + this.getWidth();
-//            if (rightBorder >= s2.getPosX()) {
-//                collidesX = true;
-//            }
-//        } else {
-//            int rightBorder = s2.getPosX() + s2.getWidth();
-//            if (rightBorder >= this.getPosX()) {
-//                collidesX = true;
-//            }
-//        }
-//
-//        //calculo de la colision en el eje vertical
-//        if (this.getPosY() < s2.getPosY()) {
-//            int bottomBorder = this.getPosY() + this.getHeight();
-//            if (bottomBorder >= s2.getPosY()) {
-//                collidesY = true;
-//            }
-//        } else {
-//            int bottomBorder = s2.getPosY() + s2.getHeight();
-//            if (bottomBorder >= this.getPosY()) {
-//                collidesY = true;
-//            }
-//        }
-//
-//        return collidesX && collidesY;
-//    }
-
-
-    /**
      * Metodo encargado de crear un collider circular y determinar si un sprite
      * colisiona con otro
      * @return check : true si colisionan, false si no.
@@ -153,7 +112,7 @@ public class Sprite {
             d = Math.sqrt(Math.pow(center1[0]-center2[0], 2) + Math.pow(center1[1]-center2[1], 2));
         }
 
-        if (d <= plusRadios) {
+        if (d <= plusRadios+10) {
             collides = true;
         } else {
             collides = false;

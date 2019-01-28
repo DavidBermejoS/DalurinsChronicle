@@ -25,16 +25,14 @@ public class FirstScreen implements IScreen {
 
     private static final String BACKGROUND_GAME = "floors/floor_grass1.png";
     private static final int NUM_ENEMIES = 1;
-    private static final int ENEMY_ATTACK_RATIO = 100;
-
 
     private final static int ENEMY_HP = 10;
-    private final static int ENEMY_ATK = 3;
+    private final static int ENEMY_ATK = 5;
     private final static int ENEMY_DEF = 5;
 
     private final static int HERO_HP = 30;
-    private final static int HERO_ATK = 5;
-    private final static int HERO_DEF = 1;
+    private final static int HERO_ATK = 10;
+    private final static int HERO_DEF = 3;
     private final static int HERO_ACC= 200;
 
 
@@ -49,8 +47,6 @@ public class FirstScreen implements IScreen {
     boolean endLevel;
     boolean gameOver;
     boolean[] whatKeyPressed;
-
-    double score;
 
     Hero hero;
     Enemy[] enemies;
@@ -206,7 +202,7 @@ public class FirstScreen implements IScreen {
     @Override
     public void drawScreen(Graphics g) {
         if (hero != null) {
-            menu.statsBar(g, hero);
+            menu.statsBar(g, hero, gamePane);
         }
         drawBackGround(g);
         drawSprite(g);
@@ -322,13 +318,12 @@ public class FirstScreen implements IScreen {
                 break;
             }
             if(hero.isAttacking() && hero.circleCollider(enemies[i])){
-                Random r = new Random();
-                int probabilityAttack = r.nextInt(1000);
-                if(hero.getAcc()>probabilityAttack){
-                    enemies[i].setTotalHp(enemies[i].getTotalHp()-(hero.getAtk()-enemies[i].getDef()));
-                    System.out.println("El enemigo tiene un total de :" +enemies[i].getTotalHp());
-                }
+                hero.makeDamage(enemies[i]);
 
+                if(enemies[i].getTotalHp()<= 0 ){
+                    enemies[i].setAlive(false);
+                    gamePane.setScore(gamePane.getScore()+150);
+                }
             }
 
         }
@@ -416,6 +411,9 @@ public class FirstScreen implements IScreen {
         }
     }
 
+    /**
+     * Metodo encargado de realizar comprobaciones de si se ha terminado el juego o no
+     */
     @Override
     public void checkEndLevel() {
         if (hero != null) {
@@ -455,7 +453,8 @@ public class FirstScreen implements IScreen {
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_J) {
             if (!hero.isMoving()) {
-                hero.Attack();
+                hero.setAttacking(true);
+                hero.attackCharacter();
             }
         }
     }

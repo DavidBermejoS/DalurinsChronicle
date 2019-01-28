@@ -5,6 +5,7 @@ import Utilities.ResourcesCollector;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
 /**
  * <h2>Clase Hero</h2>
@@ -22,18 +23,15 @@ public class Hero extends Sprite {
     int acc;
 
 
-    JProgressBar life;
+
     Item[] items;
     Skill[] skills;
     String[][] matrixAnimation;
     String[] routesAnimation;
 
-
-
     private String lastDirection;
     private String actualDirection;
     private int paramDirection;
-
 
     private boolean moving;
     private boolean attacking;
@@ -94,41 +92,6 @@ public class Hero extends Sprite {
         this.user = user;
     }
 
-    /**
-     * Metodo encargado de devolver el item
-     * cuyo nombre se recibe por parametro
-     *
-     * @param name : nombre del item
-     * @return
-     */
-    public Item getSelectedItem(String name) {
-        Item itemReturn = null;
-        for (int i = 0; i < items.length; i++) {
-            if (items[i].getName().equalsIgnoreCase(name)) {
-                itemReturn = items[i];
-            }
-        }
-        return itemReturn;
-    }
-
-
-    /**
-     * Metodo encargado de devolver el item
-     * cuyo nombre se recibe por parametro
-     *
-     * @param name : nombre de la habilidad
-     * @return
-     */
-    public Skill getSelectedSkill(String name) {
-        Skill skillReturn = null;
-        for (int i = 0; i < skills.length; i++) {
-            if (skills[i].getName().equalsIgnoreCase(name)) {
-                skillReturn = skills[i];
-            }
-        }
-        return skillReturn;
-    }
-
 
     //COLECCION DE METODOS QUE GESTIONAN LAS ACCIONES DEL HEROE
 
@@ -146,12 +109,10 @@ public class Hero extends Sprite {
     }
 
 
-    public void Attack() {
+    public void attackCharacter() {
         this.setMoving(false);
         setParamDirection();
         setAttackAnimation();
-
-
     }
 
 
@@ -295,10 +256,33 @@ public class Hero extends Sprite {
             this.actualAnimationLine = this.attackingImagesLine[paramDirection];
         }
         countAnimatorPhase++;
-        this.imageSprite = actualAnimationLine[countAnimatorPhase / 5 % actualAnimationLine.length];
-        this.width = 200;
-        this.height = 200;
+        if(countAnimatorPhase==actualAnimationLine.length){
+            countAnimatorPhase = 0;
+        }
+        this.imageSprite = actualAnimationLine[countAnimatorPhase];
+//        this.imageSprite = actualAnimationLine[countAnimatorPhase / 5 % actualAnimationLine.length];
+        this.imageSprite = this.imageSprite.getSubimage(41,26,137,177);
+        this.width = 180;
+        this.height = 180;
         this.refreshBuffer();
+        this.setAttacking(false);
+    }
+
+    /**
+     * Metodo que gestiona el daño que realiza el heroe al atacar a un enemigo
+     * @param enemy
+     */
+    public void makeDamage(Enemy enemy) {
+        Random r = new Random();
+        int probabilityAttack = r.nextInt(1000);
+        if(this.getAcc()>probabilityAttack){
+            int damage = enemy.getTotalHp()-(this.getAtk()-enemy.getDef());
+            enemy.setTotalHp(damage);
+            System.out.println("El enemigo tiene un total de :" +enemy.getTotalHp());
+        }
+        if(enemy.getTotalHp() <= 0 ){
+            enemy.setAlive(false);
+        }
     }
 
 
@@ -325,13 +309,13 @@ public class Hero extends Sprite {
     }
 
 
-    //GESTION DE COLISIONES DEL HEROE
-    public void checkHeroCollisions() {
 
-    }
+
+
 
 
     //GETTERS Y SETTERS
+
     public boolean isAlive() {
         return isAlive;
     }
@@ -386,14 +370,6 @@ public class Hero extends Sprite {
 
     public void setBufferedImage(BufferedImage bufferedImage) {
         this.buffer = bufferedImage;
-    }
-
-    public JProgressBar getLife() {
-        return life;
-    }
-
-    public void setLife(JProgressBar life) {
-        this.life = life;
     }
 
     public Item[] getItems() {
@@ -453,5 +429,39 @@ public class Hero extends Sprite {
 
     public boolean isAttacking() {
         return this.attacking;
+    }
+
+    /**
+     * Metodo encargado de devolver el item
+     * cuyo nombre se recibe por parametro
+     *
+     * @param name : nombre del item
+     * @return
+     */
+    public Item getSelectedItem(String name) {
+        Item itemReturn = null;
+        for (int i = 0; i < items.length; i++) {
+            if (items[i].getName().equalsIgnoreCase(name)) {
+                itemReturn = items[i];
+            }
+        }
+        return itemReturn;
+    }
+
+    /**
+     * Metodo encargado de devolver el item
+     * cuyo nombre se recibe por parametro
+     *
+     * @param name : nombre de la habilidad
+     * @return
+     */
+    public Skill getSelectedSkill(String name) {
+        Skill skillReturn = null;
+        for (int i = 0; i < skills.length; i++) {
+            if (skills[i].getName().equalsIgnoreCase(name)) {
+                skillReturn = skills[i];
+            }
+        }
+        return skillReturn;
     }
 }

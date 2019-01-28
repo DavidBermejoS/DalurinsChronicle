@@ -16,10 +16,11 @@ public class HeroMenu {
     }
 
 
-    public void statsBar(Graphics g, Hero hero){
+    public void statsBar(Graphics g, Hero hero,GamePane gamePane){
         Random r = new Random();
-        g.setFont(new Font("MonoSpace", Font.BOLD, 24));
+        g.fillRect(0,0,gamePane.getWidth(),gamePane.getHeight());
         g.setColor(Color.RED);
+        g.setFont(new Font("MonoSpace", Font.BOLD, 24));
         g.drawString("Potions: ", 0, 0);
         g.drawString("x "+ hero.getNumItems(),30,0);
         BufferedImage potionRed = new BufferedImage(20,20,BufferedImage.TYPE_INT_ARGB);
@@ -31,6 +32,8 @@ public class HeroMenu {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
 
     }
 }
