@@ -23,8 +23,8 @@ public class Window {
 
     private BufferedImage cursorImg = new BufferedImage(32,32,BufferedImage.TYPE_INT_ARGB_PRE);
     JFrame frame;
-     GamePane gamePane;
-    private HeroMenu heroMenu;
+    GamePane gamePane;
+    HeroMenu heroMenu;
 
     /**
      * Constructor de la clase
@@ -50,26 +50,33 @@ public class Window {
          this.frame.setLayout(new GridBagLayout());
          GridBagConstraints settings;
 
-         this.gamePane = new GamePane();
-         settings = new GridBagConstraints();
-         settings.gridx = 0;
-         settings.gridy = 1;
-         settings.weighty = 3;
-         frame.add(gamePane,settings);
+        this.gamePane = new GamePane();
+        settings = new GridBagConstraints();
+        settings.gridx = 0;
+        settings.gridy = 1;
+        settings.weightx = 1;
+        settings.weighty = 10;
+        settings.fill = GridBagConstraints.BOTH;
+        frame.add(gamePane,settings);
 
         this.heroMenu = new HeroMenu(this.gamePane);
         settings = new GridBagConstraints();
         settings.gridx = 0;
-        settings.gridy = 1;
-        settings.weighty = 10;
+        settings.gridy = 0;
+        settings.weightx = 1;
+        settings.weighty = 1;
+        settings.fill = GridBagConstraints.BOTH;
+
         frame.add(heroMenu,settings);
+        gamePane.setHeroMenu(this.heroMenu);
 
         Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(
                  cursorImg,
                  new Point(0, 0),
                  "blank cursor"
          );
-         frame.getContentPane().setCursor(blankCursor);
+        frame.getContentPane().setCursor(blankCursor);
+
 
      }
 

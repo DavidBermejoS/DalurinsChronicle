@@ -47,7 +47,7 @@ public class GamePane extends JPanel implements Runnable, KeyListener, MouseList
         this.score = 0;
         this.endLevel = true;
         this.gameOver = false;
-        this.screen = new FirstScreen(this);
+        this.screen = new FirstLevel(this);
         this.setFocusable(true);
         this.addKeyListener(this);
         this.addMouseListener(this);
@@ -68,7 +68,7 @@ public class GamePane extends JPanel implements Runnable, KeyListener, MouseList
     protected void paintComponent(Graphics g) {
         this.screen.drawScreen(g);
         if(this.heroMenu!=null){
-            this.heroMenu.paintMenuComponents(g);
+            this.heroMenu.paintMenuComponents(this.screen.getHero());
         }
     }
 
@@ -111,7 +111,7 @@ public class GamePane extends JPanel implements Runnable, KeyListener, MouseList
                     endLevel = false;
                     break;
                 case 1:
-                    this.screen = new FirstScreen(this);
+                    this.screen = new FirstLevel(this);
                     endLevel = false;
                     break;
                 //TODO gestion del flujo para la carga de los distintos niveles
@@ -242,4 +242,6 @@ public class GamePane extends JPanel implements Runnable, KeyListener, MouseList
     public void setHero(Hero hero) {
         this.hero = hero;
     }
+
+
 }

@@ -1,5 +1,6 @@
 package Screens;
 
+import Sprites.Hero;
 import Sprites.Sprite;
 import Window.GamePane;
 
@@ -94,5 +95,10 @@ public class VictoryScreen implements IScreen {
     @Override
     public boolean dispatchKeyEvent(KeyEvent e) {
         return false;
+    }
+
+    @Override
+    public Hero getHero() {
+        return null;
     }
 }

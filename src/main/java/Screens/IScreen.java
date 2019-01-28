@@ -1,5 +1,6 @@
 package Screens;
 
+import Sprites.Hero;
 import Sprites.Sprite;
 
 import java.awt.*;
@@ -40,4 +41,5 @@ public interface IScreen {
     public boolean dispatchKeyEvent(KeyEvent e);
 
 
+    public Hero getHero();
 }

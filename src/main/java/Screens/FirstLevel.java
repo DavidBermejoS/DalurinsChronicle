@@ -16,12 +16,12 @@ import java.util.Random;
 import Sprites.*;
 
 /**
- * <h2>Clase FirstScreen</h2>
+ * <h2>Clase FirstLevel</h2>
  * Esta clase compone la gestión de gráficos y de sistema de juego que se empleará para el primer nivel / pantalla
  *
  * @author David Bermejo Simon
  */
-public class FirstScreen implements IScreen {
+public class FirstLevel implements IScreen {
 
     private static final String BACKGROUND_GAME = "floors/floor_grass1.png";
     private static final int NUM_ENEMIES = 1;
@@ -51,7 +51,7 @@ public class FirstScreen implements IScreen {
     Item[] items;
 
 
-    public FirstScreen(GamePane gamePane) {
+    public FirstLevel(GamePane gamePane) {
         this.gamePane = gamePane;
         startFrame();
         addElements();
@@ -474,6 +474,11 @@ public class FirstScreen implements IScreen {
             }
             return false;
         }
+    }
+
+    @Override
+    public Hero getHero() {
+        return this.hero;
     }
 
     private void getKeyLogic(KeyEvent e) {

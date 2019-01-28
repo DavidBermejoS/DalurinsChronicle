@@ -19,6 +19,7 @@ public class HeroMenu extends JPanel {
     JProgressBar heroLife;
     JLabel numPotions;
     BufferedImage potionImage;
+    Hero hero;
 
 
     private static final int NORMAL_FACE_PARAM = 0;
@@ -30,6 +31,7 @@ public class HeroMenu extends JPanel {
 
     public HeroMenu(GamePane gamePane) {
         this.gamePane = gamePane;
+        this.hero = gamePane.getHero();
         try {
             this.potionImage = ImageIO.read(new File("src/main/resources/potions/attack_potion.png"));
             this.imagesFaces = new BufferedImage[8];
@@ -50,56 +52,44 @@ public class HeroMenu extends JPanel {
 
         this.imagesFaces = rc.getHeroFaces();
 
-//        this.canvasHeroImage = new JLabel();
-//        Graphics canvasFaces = this.canvasHeroImage.getGraphics();
-//        canvasFaces.drawImage(this.imagesFaces[0], 0, 0, null);
-//        canvasFaces.dispose();
-//        settings = new GridBagConstraints();
-//        settings.gridx = 0;
-//        settings.gridy = 0;
-//        settings.ipadx = 5;
-//        settings.ipady = 5;
-//        this.add(canvasHeroImage, settings);
+        this.canvasHeroImage = new JLabel();
+        this.canvasHeroImage.setIcon(new ImageIcon("src/main/resources/hero/faces/normal.png", "normalFace"));
+        settings = new GridBagConstraints();
+        settings.gridx = 0;
+        settings.gridy = 0;
+        settings.ipadx = 5;
+        settings.ipady = 5;
+        this.add(canvasHeroImage, settings);
 
 
         this.heroLife = new JProgressBar(0, Hero.MAX_HP);
         this.heroLife.setString("HERO HP");
+        this.heroLife.setBackground(Color.RED);
+        this.heroLife.setForeground(Color.GREEN);
         settings = new GridBagConstraints();
         settings.gridx = 1;
         settings.gridy = 0;
-        settings.ipadx = 10;
+        settings.ipadx = 40;
         settings.ipady = 10;
         this.add(heroLife, settings);
     }
 
     /**
      * Metodo para pintar los componentes del menu superior
-     * @param g
      */
-    public void paintMenuComponents(Graphics g) {
-        if (gamePane.getHero().isAttacking()) {
-            Graphics canvasFaces = this.canvasHeroImage.getGraphics();
-            canvasFaces.drawImage(this.imagesFaces[COMBAT_FACE_PARAM], 0, 0, null);
-            canvasFaces.dispose();
+    public void paintMenuComponents(Hero hero) {
+        this.hero = hero;
+
+        if (hero.getTotalHp() < Hero.MAX_HP / 2) {
+            this.canvasHeroImage.setIcon(new ImageIcon("src/main/resources/hero/faces/danger.png", "dangerFace"));
         }
 
-        if (gamePane.getHero().getTotalHp() < Hero.MAX_HP / 2) {
-            Graphics canvasFaces = this.canvasHeroImage.getGraphics();
-            canvasFaces.drawImage(this.imagesFaces[DANGER_FACE_PARAM], 0, 0, null);
-            canvasFaces.dispose();
-        }
-        if (!gamePane.getHero().isAlive()) {
-            Graphics canvasFaces = this.canvasHeroImage.getGraphics();
-            canvasFaces.drawImage(this.imagesFaces[DEFEAT_FACE_PARAM], 0, 0, null);
-            canvasFaces.dispose();
-        }
-        if (gamePane.isEndLevel()) {
-            Graphics canvasFaces = this.canvasHeroImage.getGraphics();
-            canvasFaces.drawImage(this.imagesFaces[VICTORY_FACE_PARAM], 0, 0, null);
-            canvasFaces.dispose();
+        if (hero.getTotalHp() <= 0) {
+            this.canvasHeroImage.setIcon(new ImageIcon("src/main/resources/hero/faces/defeat.png", "defeatFace"));
         }
 
         this.heroLife.setValue(gamePane.getHero().getTotalHp());
+        this.heroLife.setString(String.valueOf(hero.getTotalHp()));
     }
 
 

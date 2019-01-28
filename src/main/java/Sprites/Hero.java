@@ -239,10 +239,11 @@ public class Hero extends Sprite {
                 lastDirection = actualDirection;
             }
             countAnimatorPhase++;
-            this.imageSprite = actualAnimationLine[countAnimatorPhase / 3 % actualAnimationLine.length];
-            if (countAnimatorPhase == this.actualAnimationLine.length - 1) {
-                countAnimatorPhase = 0;
-            }
+            this.imageSprite = actualAnimationLine[countAnimatorPhase /3 % actualAnimationLine.length];
+//            this.imageSprite = actualAnimationLine[countAnimatorPhase];
+//            if (countAnimatorPhase == this.actualAnimationLine.length - 1) {
+//                countAnimatorPhase = 0;
+//            }
             this.width = 150;
             this.height = 150;
             this.refreshBuffer();
@@ -263,8 +264,7 @@ public class Hero extends Sprite {
         if(countAnimatorPhase==actualAnimationLine.length){
             countAnimatorPhase = 0;
         }
-        this.imageSprite = actualAnimationLine[countAnimatorPhase];
-//        this.imageSprite = actualAnimationLine[countAnimatorPhase / 5 % actualAnimationLine.length];
+        this.imageSprite = actualAnimationLine[countAnimatorPhase / 3 % actualAnimationLine.length];
         this.imageSprite = this.imageSprite.getSubimage(41,26,137,177);
         this.width = 180;
         this.height = 180;
