@@ -11,7 +11,6 @@ import Window.Window;
  * @author David Bermejo Simon
  */
 public class Main {
-
     /**
      * Hilo principal "main"
      * @param args

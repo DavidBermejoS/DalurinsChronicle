@@ -80,17 +80,6 @@ public class Sprite {
 
     }
 
-    private void paintDamage(Graphics g) {
-//        double actualDamageTime = System.nanoTime();
-//        System.out.println(actualDamageTime);
-////        if(actualDamageTime - this.refreshDamageTime == 10000){
-////            this.damage = 0;
-////        }
-//        g.setFont(new Font("MonoSpaced",Font.BOLD,24));
-//        g.setColor(Color.RED);
-//        g.drawString(String.valueOf(damage),20,20);
-    }
-
 
     /**
      * Metodo encargado de mover el sprite por la pantalla (metodo generico, otras clases pueden
@@ -190,10 +179,6 @@ public class Sprite {
         this.vY = vY;
     }
 
-    public String getId() {
-        return id;
-    }
-
     public void setId(String id) {
         this.id = id;
     }
@@ -214,14 +199,6 @@ public class Sprite {
         return color;
     }
 
-    public void setColor(Color color) {
-        this.color = color;
-    }
-
-    public void setBuffer(BufferedImage buffer) {
-        this.buffer = buffer;
-    }
-
     public void setBufferByRoute(String route) {
         try {
             imageSprite = ImageIO.read(new File(route));
@@ -235,10 +212,6 @@ public class Sprite {
         return buffer;
     }
 
-    public File getFileImage() {
-        return fileImage;
-    }
-
     public void setFileImage(File fileImage) {
         this.fileImage = fileImage;
     }
@@ -247,32 +220,16 @@ public class Sprite {
         this.height = height;
     }
 
-    public BufferedImage getImageSprite() {
-        return imageSprite;
-    }
-
     public void setImageSprite(BufferedImage imageSprite) {
         this.imageSprite = imageSprite;
-    }
-
-    public int getColliderTaxX() {
-        return colliderTaxX;
     }
 
     public void setColliderTaxX(int colliderTaxX) {
         this.colliderTaxX = colliderTaxX;
     }
 
-    public int getColliderTaxY() {
-        return colliderTaxY;
-    }
-
     public void setColliderTaxY(int colliderTaxY) {
         this.colliderTaxY = colliderTaxY;
-    }
-
-    public boolean isCollide() {
-        return collide;
     }
 
     public void setCollide(boolean collide) {
@@ -280,10 +237,6 @@ public class Sprite {
     }
 
     protected void setDamage(int damage) {
-    }
-
-    public double getRefreshDamageTime() {
-        return refreshDamageTime;
     }
 
     public void setRefreshDamageTime(double refreshDamageTime) {

@@ -29,9 +29,7 @@ public class Hero extends Sprite {
     int def;
     int acc;
 
-
-
-    Item[] items;
+    Item [] items;
     Skill[] skills;
     String[][] matrixAnimation;
     String[] routesAnimation;
@@ -47,7 +45,6 @@ public class Hero extends Sprite {
     BufferedImage[] actualAnimationLine;
     BufferedImage[][] walkingImagesLine;
     BufferedImage[][] attackingImagesLine;
-     BufferedImage[] deathImagesLine;
     boolean perpetuallyDeath;
 
 
@@ -287,7 +284,7 @@ public class Hero extends Sprite {
         if(countAnimatorPhase==actualAnimationLine.length){
             countAnimatorPhase = 0;
         }
-        this.imageSprite = actualAnimationLine[countAnimatorPhase / 3 % actualAnimationLine.length];
+        this.imageSprite = actualAnimationLine[countAnimatorPhase / 2 % actualAnimationLine.length];
         this.imageSprite = this.imageSprite.getSubimage(41,26,137,177);
         this.width = 180;
         this.height = 180;
@@ -339,20 +336,6 @@ public class Hero extends Sprite {
 
 
 
-    /**
-     * Este metodo se encarga de cargar las imagenes del enemigo muriendo en el array de la clase attackingImagesLine
-     */
-    private void loadDeathImages() {
-        ResourcesCollector resCol = new ResourcesCollector();
-        deathImagesLine = resCol.getEnemyDeathsImages();
-    }
-
-
-
-
-
-
-
     //GETTERS Y SETTERS
 
     public boolean isAlive() {
@@ -361,10 +344,6 @@ public class Hero extends Sprite {
 
     public void setAlive(boolean alive) {
         isAlive = alive;
-    }
-
-    public String getUser() {
-        return user;
     }
 
     public void setUser(String user) {
@@ -403,37 +382,6 @@ public class Hero extends Sprite {
         this.acc = acc;
     }
 
-    public BufferedImage getBufferedImage() {
-        return buffer;
-    }
-
-    public void setBufferedImage(BufferedImage bufferedImage) {
-        this.buffer = bufferedImage;
-    }
-
-    public Item[] getItems() {
-        return items;
-    }
-
-    public int getNumItems() {
-        if (items == null) {
-            return 0;
-        }
-        return items.length;
-    }
-
-    public void setItems(Item[] items) {
-        this.items = items;
-    }
-
-    public Skill[] getSkills() {
-        return skills;
-    }
-
-    public void setSkills(Skill[] skills) {
-        this.skills = skills;
-    }
-
     public boolean isMoving() {
         return moving;
     }
@@ -442,65 +390,11 @@ public class Hero extends Sprite {
         this.moving = moving;
     }
 
-    public String getActualDirection() {
-        return actualDirection;
-    }
-
-    public void setActualDirection(String actualDirection) {
-        this.actualDirection = actualDirection;
-    }
-
     public void setAttacking(boolean attacking) {
         this.attacking = attacking;
     }
 
-    public boolean isCollides() {
-        return collides;
-    }
-
-    public void setCollides(boolean collides) {
-        this.collides = collides;
-    }
-
-    public void setAttacking(Boolean b) {
-        this.attacking = b;
-    }
-
     public boolean isAttacking() {
         return this.attacking;
-    }
-
-    /**
-     * Metodo encargado de devolver el item
-     * cuyo nombre se recibe por parametro
-     *
-     * @param name : nombre del item
-     * @return
-     */
-    public Item getSelectedItem(String name) {
-        Item itemReturn = null;
-        for (int i = 0; i < items.length; i++) {
-            if (items[i].getName().equalsIgnoreCase(name)) {
-                itemReturn = items[i];
-            }
-        }
-        return itemReturn;
-    }
-
-    /**
-     * Metodo encargado de devolver el item
-     * cuyo nombre se recibe por parametro
-     *
-     * @param name : nombre de la habilidad
-     * @return
-     */
-    public Skill getSelectedSkill(String name) {
-        Skill skillReturn = null;
-        for (int i = 0; i < skills.length; i++) {
-            if (skills[i].getName().equalsIgnoreCase(name)) {
-                skillReturn = skills[i];
-            }
-        }
-        return skillReturn;
     }
 }
