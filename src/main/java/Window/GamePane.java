@@ -28,7 +28,6 @@ public class GamePane extends JPanel implements Runnable, KeyListener, MouseList
 
 
     public HeroMenu heroMenu;
-
     public String userName;
     private boolean endLevel;
     private int actualLevel;
@@ -110,11 +109,18 @@ public class GamePane extends JPanel implements Runnable, KeyListener, MouseList
                     this.screen = new StartScreen(this);
                     endLevel = false;
                     break;
+
                 case 1:
                     this.screen = new FirstLevel(this);
                     endLevel = false;
                     break;
+
                 //TODO gestion del flujo para la carga de los distintos niveles
+                case 2:
+                    this.screen = new SecondLevel(this);
+                    endLevel = false;
+                    break;
+
                 case 5:
                     this.screen = new VictoryScreen(this);
                     endLevel = false;
@@ -133,9 +139,7 @@ public class GamePane extends JPanel implements Runnable, KeyListener, MouseList
             this.gameOver = false;
             this.endLevel = false;
             this.screen = new GameOverScreen(this);
-
         }
-
     }
 
 
@@ -189,16 +193,8 @@ public class GamePane extends JPanel implements Runnable, KeyListener, MouseList
 
     //GETTERS Y SETTERS DE LA CLASE
 
-    public boolean isEndLevel() {
-        return endLevel;
-    }
-
     public void setEndLevel(boolean endLevel) {
         this.endLevel = endLevel;
-    }
-
-    public int getActualLevel() {
-        return actualLevel;
     }
 
     public void setActualLevel(int actualLevel) {
@@ -225,24 +221,8 @@ public class GamePane extends JPanel implements Runnable, KeyListener, MouseList
         return userName;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public HeroMenu getHeroMenu() {
-        return heroMenu;
-    }
-
     public void setHeroMenu(HeroMenu heroMenu) {
         this.heroMenu = heroMenu;
-    }
-
-    public IScreen getScreen() {
-        return screen;
-    }
-
-    public void setScreen(IScreen screen) {
-        this.screen = screen;
     }
 
     public Hero getHero() {

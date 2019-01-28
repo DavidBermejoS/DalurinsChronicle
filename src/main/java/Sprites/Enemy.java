@@ -95,7 +95,7 @@ public class Enemy extends Sprite {
      * Metodo encargado de englobar los otros metodos que establecen el movimiento del personaje
      */
     public void moveCharacter(Hero hero) {
-        if(isAlive){
+        if (isAlive) {
             setMoveDirection(hero);
             setParamDirection();
             setMoveAnimation();
@@ -233,25 +233,22 @@ public class Enemy extends Sprite {
             }
             countAnimatorPhase++;
             this.imageSprite = actualAnimationLine[countAnimatorPhase / 4 % actualAnimationLine.length];
-            this.width=140;
-            this.height=140;
+            this.width = 140;
+            this.height = 140;
             this.refreshBuffer();
         }
     }
 
 
-
-
-
-
-//METODOS QUE GESTIONAN EL SISTEMA DE COMBATE DEL ENEMIGO
+    //METODOS QUE GESTIONAN EL SISTEMA DE COMBATE DEL ENEMIGO
 
     /**
      * Metodo que gestiona el ataque del enemigo sobre la vida del heroe
+     *
      * @param hero
      */
     public void attack(Hero hero) {
-        if(isAlive){
+        if (isAlive) {
             this.followHero = true;
             if (mustAttack && isAlive) {
                 setAttackAnimations();
@@ -272,14 +269,14 @@ public class Enemy extends Sprite {
      * Metodo encargado de gestionar la animacion para el ataque del enemigo
      */
     public void setAttackAnimations() {
-        if(isAlive){
+        if (isAlive) {
             setParamDirection();
             this.refreshBuffer();
             if (!actualDirection.equalsIgnoreCase("")) {
                 this.actualAnimationLine = this.attackingImagesLine[paramDirection];
             }
             countAnimatorPhase++;
-            if(countAnimatorPhase >= actualAnimationLine.length-1){
+            if (countAnimatorPhase >= actualAnimationLine.length - 1) {
                 countAnimatorPhase = 0;
             }
             this.imageSprite = actualAnimationLine[countAnimatorPhase];
@@ -292,8 +289,8 @@ public class Enemy extends Sprite {
     /**
      * Metodo que gestiona la muerte del enemigo
      */
-    public void setDeathAnimation(){
-        if(!isAlive && !perpetuallyDeath){
+    public void setDeathAnimation() {
+        if (!isAlive && !perpetuallyDeath) {
             try {
                 this.buffer = ImageIO.read(new File("src/main/resources/enemy/death/enemyDeath.png"));
             } catch (IOException e) {
@@ -301,15 +298,6 @@ public class Enemy extends Sprite {
             }
         }
     }
-
-
-
-
-
-
-
-
-
 
 
     //METODOS ENCARGADO DE GUARDAR LAS IMAGENES QUE USARÁ EL enemigo
@@ -342,8 +330,6 @@ public class Enemy extends Sprite {
     }
 
 
-
-
     //GETTERS Y SETTERS DE LA CLASE
 
     public boolean isAlive() {
@@ -362,10 +348,6 @@ public class Enemy extends Sprite {
         this.totalHp = totalHp;
     }
 
-    public int getAtk() {
-        return atk;
-    }
-
     public void setAtk(int atk) {
         this.atk = atk;
     }
@@ -378,45 +360,8 @@ public class Enemy extends Sprite {
         this.def = def;
     }
 
-    public JProgressBar getLife() {
-        return life;
-    }
-
-    public void setLife(JProgressBar life) {
-        this.life = life;
-    }
-
-    public boolean isMoving() {
-        return moving;
-    }
-
-    public void setMoving(boolean moving) {
-        this.moving = moving;
-    }
-
-
-    public String getLastDirection() {
-        return lastDirection;
-    }
-
-    public void setLastDirection(String lastDirection) {
-        this.lastDirection = lastDirection;
-    }
-
-    public String getActualDirection() {
-        return actualDirection;
-    }
-
-    public void setActualDirection(String actualDirection) {
-        this.actualDirection = actualDirection;
-    }
-
     public void setMustAttack(boolean b) {
         this.mustAttack = b;
-    }
-
-    public boolean isMustAttack() {
-        return mustAttack;
     }
 
 
