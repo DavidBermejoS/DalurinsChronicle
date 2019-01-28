@@ -35,6 +35,8 @@ public class FirstScreen implements IScreen {
     private final static int HERO_HP = 30;
     private final static int HERO_ATK = 5;
     private final static int HERO_DEF = 1;
+    private final static int HERO_ACC= 200;
+
 
     private final static int MAX_NUM_ITEMS = 5;
 
@@ -116,6 +118,7 @@ public class FirstScreen implements IScreen {
 
         hero.setvX(0);
         hero.setvY(0);
+
         //parametros de recursos gráficos y gestion de los mismos
         try {
             hero.setImageSprite(ImageIO.read(new File("src/main/resources/hero/walk/descend/walk_70000.png")));
@@ -127,6 +130,7 @@ public class FirstScreen implements IScreen {
         hero.setId("hero");
         //asignacion de atributos del heroe
         hero.setAlive(true);
+        hero.setAcc(HERO_ACC);
         hero.setAtk(HERO_ATK);
         hero.setDef(HERO_DEF);
         hero.setTotalHp(HERO_HP);
@@ -317,6 +321,15 @@ public class FirstScreen implements IScreen {
                 hero.setAlive(false);
                 break;
             }
+            if(hero.isAttacking() && hero.circleCollider(enemies[i])){
+                Random r = new Random();
+                int probabilityAttack = r.nextInt(1000);
+                if(hero.getAcc()>probabilityAttack){
+                    enemies[i].setTotalHp(enemies[i].getTotalHp()-(hero.getAtk()-enemies[i].getDef()));
+                    System.out.println("El enemigo tiene un total de :" +enemies[i].getTotalHp());
+                }
+
+            }
 
         }
     }
@@ -342,7 +355,7 @@ public class FirstScreen implements IScreen {
         for (Sprite s : sprites) {
             if (s instanceof Enemy) {
                 Enemy enemyAux = (Enemy) s;
-                if (enemyAux.squareCollider(hero)) {
+                if (enemyAux.circleCollider(hero)) {
                     enemyAux.setvX(0);
                     enemyAux.setvY(0);
                     if (new Random().nextInt(5000) < 50) {
@@ -354,31 +367,13 @@ public class FirstScreen implements IScreen {
             }
             if (s instanceof Hero) {
                 for (int i = 0; i < enemies.length; i++) {
-                    if (hero.squareCollider(enemies[i])) {
+                    if (hero.circleCollider(enemies[i])) {
                         hero.setvX(0);
                         hero.setvY(0);
                     }
                 }
             }
         }
-//        for (int i = 0; i < sprites.size(); i++) {
-//            Sprite s1 = sprites.get(i);
-//            for (int j = 0; j < enemies.length; j++) {
-//                Enemy enemy = enemies[j];
-//                if (s1 == enemy && hero.squareCollider(s1)) {
-//                    enemy.setMustAttack(true);
-//                    enemy.setvX(enemy.getvX() / 10);
-//                    enemy.setvY(enemy.getvX() / 10);
-//                    hero.setvX(hero.getvX() / 10);
-//                    hero.setvY(hero.getvX() / 10);
-//                } else {
-//                    enemies[j].setMustAttack(false);
-//                }
-//            }
-//            if (s1 instanceof Item && hero.squareCollider(s1)) {
-//                s1.setImageSprite(null);
-//            }
-//        }
     }
 
 

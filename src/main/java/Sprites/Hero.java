@@ -19,6 +19,7 @@ public class Hero extends Sprite {
     int totalHp;
     int atk;
     int def;
+    int acc;
 
 
     JProgressBar life;
@@ -28,14 +29,15 @@ public class Hero extends Sprite {
     String[] routesAnimation;
 
 
-    private boolean moving;
 
     private String lastDirection;
     private String actualDirection;
     private int paramDirection;
 
 
+    private boolean moving;
     private boolean attacking;
+    private boolean collides;
 
     BufferedImage[] actualAnimationLine;
     BufferedImage[][] walkingImagesLine;
@@ -370,6 +372,14 @@ public class Hero extends Sprite {
         this.def = def;
     }
 
+    public int getAcc() {
+        return acc;
+    }
+
+    public void setAcc(int acc) {
+        this.acc = acc;
+    }
+
     public BufferedImage getBufferedImage() {
         return buffer;
     }
@@ -423,6 +433,18 @@ public class Hero extends Sprite {
 
     public void setActualDirection(String actualDirection) {
         this.actualDirection = actualDirection;
+    }
+
+    public void setAttacking(boolean attacking) {
+        this.attacking = attacking;
+    }
+
+    public boolean isCollides() {
+        return collides;
+    }
+
+    public void setCollides(boolean collides) {
+        this.collides = collides;
     }
 
     public void setAttacking(Boolean b) {
