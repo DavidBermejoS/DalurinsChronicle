@@ -1,6 +1,7 @@
 package Window;
 
 import Screens.*;
+import Sprites.Hero;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,6 +35,7 @@ public class GamePane extends JPanel implements Runnable, KeyListener, MouseList
     private IScreen screen;
     private boolean gameOver;
     private double score;
+    private Hero hero;
 
     /**
      * <h3>Constructor de la clase.</h3>
@@ -65,6 +67,9 @@ public class GamePane extends JPanel implements Runnable, KeyListener, MouseList
     @Override
     protected void paintComponent(Graphics g) {
         this.screen.drawScreen(g);
+        if(this.heroMenu!=null){
+            this.heroMenu.paintMenuComponents(g);
+        }
     }
 
 
@@ -220,5 +225,21 @@ public class GamePane extends JPanel implements Runnable, KeyListener, MouseList
 
     public void setHeroMenu(HeroMenu heroMenu) {
         this.heroMenu = heroMenu;
+    }
+
+    public IScreen getScreen() {
+        return screen;
+    }
+
+    public void setScreen(IScreen screen) {
+        this.screen = screen;
+    }
+
+    public Hero getHero() {
+        return hero;
+    }
+
+    public void setHero(Hero hero) {
+        this.hero = hero;
     }
 }

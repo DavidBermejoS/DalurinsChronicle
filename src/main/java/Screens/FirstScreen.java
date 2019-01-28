@@ -25,21 +25,19 @@ public class FirstScreen implements IScreen {
 
     private static final String BACKGROUND_GAME = "floors/floor_grass1.png";
     private static final int NUM_ENEMIES = 1;
-    private static final int ENEMY_ATTACK_RATIO = 100;
-
 
     private final static int ENEMY_HP = 10;
-    private final static int ENEMY_ATK = 3;
+    private final static int ENEMY_ATK = 5;
     private final static int ENEMY_DEF = 5;
 
     private final static int HERO_HP = 30;
-    private final static int HERO_ATK = 5;
-    private final static int HERO_DEF = 1;
+    private final static int HERO_ATK = 10;
+    private final static int HERO_DEF = 3;
+    private final static int HERO_ACC= 200;
+
 
     private final static int MAX_NUM_ITEMS = 5;
 
-
-    HeroMenu menu;
     GamePane gamePane;
     Image backgroundImage;
     ArrayList<Sprite> sprites;
@@ -47,8 +45,6 @@ public class FirstScreen implements IScreen {
     boolean endLevel;
     boolean gameOver;
     boolean[] whatKeyPressed;
-
-    double score;
 
     Hero hero;
     Enemy[] enemies;
@@ -59,7 +55,6 @@ public class FirstScreen implements IScreen {
         this.gamePane = gamePane;
         startFrame();
         addElements();
-        this.menu = new HeroMenu();
 
     }
 
@@ -116,6 +111,7 @@ public class FirstScreen implements IScreen {
 
         hero.setvX(0);
         hero.setvY(0);
+
         //parametros de recursos gráficos y gestion de los mismos
         try {
             hero.setImageSprite(ImageIO.read(new File("src/main/resources/hero/walk/descend/walk_70000.png")));
@@ -127,11 +123,13 @@ public class FirstScreen implements IScreen {
         hero.setId("hero");
         //asignacion de atributos del heroe
         hero.setAlive(true);
+        hero.setAcc(HERO_ACC);
         hero.setAtk(HERO_ATK);
         hero.setDef(HERO_DEF);
         hero.setTotalHp(HERO_HP);
         hero.setUser(gamePane.getUserName());
         sprites.add(hero);
+        gamePane.setHero(hero);
     }
 
     /**
@@ -201,9 +199,6 @@ public class FirstScreen implements IScreen {
      */
     @Override
     public void drawScreen(Graphics g) {
-        if (hero != null) {
-            menu.statsBar(g, hero);
-        }
         drawBackGround(g);
         drawSprite(g);
     }
@@ -317,6 +312,14 @@ public class FirstScreen implements IScreen {
                 hero.setAlive(false);
                 break;
             }
+            if(hero.isAttacking() && hero.circleCollider(enemies[i])){
+                hero.makeDamage(enemies[i]);
+
+                if(enemies[i].getTotalHp()<= 0 ){
+                    enemies[i].setAlive(false);
+                    gamePane.setScore(gamePane.getScore()+150);
+                }
+            }
 
         }
     }
@@ -342,7 +345,7 @@ public class FirstScreen implements IScreen {
         for (Sprite s : sprites) {
             if (s instanceof Enemy) {
                 Enemy enemyAux = (Enemy) s;
-                if (enemyAux.squareCollider(hero)) {
+                if (enemyAux.circleCollider(hero)) {
                     enemyAux.setvX(0);
                     enemyAux.setvY(0);
                     if (new Random().nextInt(5000) < 50) {
@@ -354,31 +357,13 @@ public class FirstScreen implements IScreen {
             }
             if (s instanceof Hero) {
                 for (int i = 0; i < enemies.length; i++) {
-                    if (hero.squareCollider(enemies[i])) {
+                    if (hero.circleCollider(enemies[i])) {
                         hero.setvX(0);
                         hero.setvY(0);
                     }
                 }
             }
         }
-//        for (int i = 0; i < sprites.size(); i++) {
-//            Sprite s1 = sprites.get(i);
-//            for (int j = 0; j < enemies.length; j++) {
-//                Enemy enemy = enemies[j];
-//                if (s1 == enemy && hero.squareCollider(s1)) {
-//                    enemy.setMustAttack(true);
-//                    enemy.setvX(enemy.getvX() / 10);
-//                    enemy.setvY(enemy.getvX() / 10);
-//                    hero.setvX(hero.getvX() / 10);
-//                    hero.setvY(hero.getvX() / 10);
-//                } else {
-//                    enemies[j].setMustAttack(false);
-//                }
-//            }
-//            if (s1 instanceof Item && hero.squareCollider(s1)) {
-//                s1.setImageSprite(null);
-//            }
-//        }
     }
 
 
@@ -421,6 +406,9 @@ public class FirstScreen implements IScreen {
         }
     }
 
+    /**
+     * Metodo encargado de realizar comprobaciones de si se ha terminado el juego o no
+     */
     @Override
     public void checkEndLevel() {
         if (hero != null) {
@@ -460,7 +448,8 @@ public class FirstScreen implements IScreen {
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_J) {
             if (!hero.isMoving()) {
-                hero.Attack();
+                hero.setAttacking(true);
+                hero.attackCharacter();
             }
         }
     }

@@ -3,6 +3,7 @@ package Sprites;
 import Utilities.ResourcesCollector;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
@@ -259,6 +260,7 @@ public class Enemy extends Sprite {
             System.out.println("El enemigo ataca!");
             hero.setTotalHp(hero.getTotalHp()-(this.atk - hero.getDef()));
             System.out.println("Al heroe le quedan: " + hero.getTotalHp());
+
 
             mustAttack = false;
         }

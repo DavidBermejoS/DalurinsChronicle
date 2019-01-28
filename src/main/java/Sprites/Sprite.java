@@ -25,6 +25,7 @@ public class Sprite {
     int posY;
     int width;
     int height;
+    int damage;
     double vX;
     double vY;
     double vTotal;
@@ -33,6 +34,7 @@ public class Sprite {
     int colliderTaxY;
 
     boolean collide;
+    private double refreshDamageTime;
 
     Color color;
     BufferedImage buffer;
@@ -53,7 +55,7 @@ public class Sprite {
     public Sprite() {
         countAnimatorPhase = 0;
         //todo METIDO FONDO DE COLOR AZUL PARA VER LAS SUPERFICIES DE LOS COLLIDERS DE LOS PERSONAJES
-        this.color = new Color(0, 0, 255, 255);
+//        this.color = new Color(0, 0, 255, 255);
     }
 
 
@@ -70,9 +72,23 @@ public class Sprite {
             g.setColor(new Color(255, 255, 255, 0));
             g.fillRect(0, 0, width, height);
             g.dispose();
-
         }
+//        if(damage!=0){
+//            paintDamage(g);
+//        }
 
+
+    }
+
+    private void paintDamage(Graphics g) {
+//        double actualDamageTime = System.nanoTime();
+//        System.out.println(actualDamageTime);
+////        if(actualDamageTime - this.refreshDamageTime == 10000){
+////            this.damage = 0;
+////        }
+//        g.setFont(new Font("MonoSpaced",Font.BOLD,24));
+//        g.setColor(Color.RED);
+//        g.drawString(String.valueOf(damage),20,20);
     }
 
 
@@ -87,45 +103,58 @@ public class Sprite {
 
 
     /**
-     * Metodo encargado de crear un collider cuadrado y determinar si un sprite
+     * Metodo encargado de crear un collider circular y determinar si un sprite
      * colisiona con otro
-     *
-     * @param s2 : sprite a comparar
      * @return check : true si colisionan, false si no.
      */
+    public boolean circleCollider(Sprite s2) {
+        //valor entero para representar la distancia
+        double d;
+        int radioS1=this.getWidth()/2;
+        int radioS2=s2.getWidth()/2;
 
-    public boolean squareCollider(Sprite s2) {
-        boolean collidesX = false, collidesY = false;
+        //valor entero para representar la suma de los radios
+        int plusRadios = radioS1 + radioS2;
+        boolean collides;
 
-        //calculo de la colision en el eje horizontal
-        if (this.getPosX() < s2.getPosX()) {
-            int rightBorder = this.getPosX() + this.getWidth();
-            if (rightBorder >= s2.getPosX()) {
-                collidesX = true;
-            }
+        //vector de 2 dimensiones con el valor x e y del centro del sprite original.
+        int[] center1 = {this.getPosX() - radioS1, this.getPosY() - radioS1};
+        //vector de 2 dimensiones con el valor x e y del centro del sprite s2.
+        int[] center2 = {s2.getPosX() - radioS2, s2.getPosY() - radioS2};
+
+        if (checkCenterCloseness(center1, center2) == 0) {
+            d = Math.sqrt(Math.pow(center2[0]-center1[0], 2) + Math.pow(center2[1]-center1[1], 2));
         } else {
-            int rightBorder = s2.getPosX() + s2.getWidth();
-            if (rightBorder >= this.getPosX()) {
-                collidesX = true;
-            }
+            d = Math.sqrt(Math.pow(center1[0]-center2[0], 2) + Math.pow(center1[1]-center2[1], 2));
         }
 
-        //calculo de la colision en el eje vertical
-        if (this.getPosY() < s2.getPosY()) {
-            int bottomBorder = this.getPosY() + this.getHeight();
-            if (bottomBorder >= s2.getPosY()) {
-                collidesY = true;
-            }
+        if (d <= plusRadios+10) {
+            collides = true;
         } else {
-            int bottomBorder = s2.getPosY() + s2.getHeight();
-            if (bottomBorder >= this.getPosY()) {
-                collidesY = true;
-            }
+            collides = false;
         }
-
-        return collidesX && collidesY;
+        return collides;
     }
 
+    /**
+     * Metodo encargado de comprobar cual de los puntos es más cercano al eje de coordenadas 0,0
+     *
+     * @param center1
+     * @param center2
+     * @return 0 si el centro 1 es el mas cercano, 1 en caso contrario.
+     */
+    private int checkCenterCloseness(int[] center1, int[] center2) {
+        double d1, d2;
+        int result;
+        d1 = Math.sqrt(Math.pow(center1[0], 2) + Math.pow(center1[1], 2));
+        d2 = Math.sqrt(Math.pow(center2[0], 2) + Math.pow(center2[1], 2));
+        if (d1 <= d2) {
+            result = 0;
+        } else {
+            result = 1;
+        }
+        return result;
+    }
 
     //GETTERS Y SETTERS
 
@@ -248,5 +277,16 @@ public class Sprite {
 
     public void setCollide(boolean collide) {
         this.collide = collide;
+    }
+
+    protected void setDamage(int damage) {
+    }
+
+    public double getRefreshDamageTime() {
+        return refreshDamageTime;
+    }
+
+    public void setRefreshDamageTime(double refreshDamageTime) {
+        this.refreshDamageTime = refreshDamageTime;
     }
 }

@@ -36,7 +36,7 @@ public class ResourcesCollector {
     public final static int ATTACK_ACTION = 1;
     public final static int BLOCK_ACTION = 2;
     public final static int DEATH_ACTION = 3;
-    public final static int WALK_ACTION = 4;
+    public final static int WALK_ACTION = 5;
 
 
     File dirTargetAction;
@@ -216,6 +216,30 @@ public class ResourcesCollector {
             return bufferedImages;
         }
         return bufferedImages;
+    }
+
+    /**
+     * Metodo para extraer todos los rostros del heroe
+     * @return
+     */
+    public BufferedImage[] getHeroFaces(){
+        BufferedImage bufferImageAux = null;
+        try {
+            bufferImageAux = ImageIO.read(new File("src/main/resources/hero/faces/hero.png"));
+            BufferedImage [] images = new BufferedImage[8];
+            int count = 0;
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 2; j++) {
+                    images[count] = new BufferedImage(96,96,BufferedImage.TYPE_INT_ARGB);
+                    images[count] = bufferImageAux.getSubimage(i*96,j*96,96,96);
+                    count++;
+                }
+            }
+            return images;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 
