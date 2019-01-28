@@ -25,6 +25,7 @@ public class Sprite {
     int posY;
     int width;
     int height;
+    int damage;
     double vX;
     double vY;
     double vTotal;
@@ -33,6 +34,7 @@ public class Sprite {
     int colliderTaxY;
 
     boolean collide;
+    private double refreshDamageTime;
 
     Color color;
     BufferedImage buffer;
@@ -70,9 +72,23 @@ public class Sprite {
             g.setColor(new Color(255, 255, 255, 0));
             g.fillRect(0, 0, width, height);
             g.dispose();
-
         }
+//        if(damage!=0){
+//            paintDamage(g);
+//        }
 
+
+    }
+
+    private void paintDamage(Graphics g) {
+//        double actualDamageTime = System.nanoTime();
+//        System.out.println(actualDamageTime);
+////        if(actualDamageTime - this.refreshDamageTime == 10000){
+////            this.damage = 0;
+////        }
+//        g.setFont(new Font("MonoSpaced",Font.BOLD,24));
+//        g.setColor(Color.RED);
+//        g.drawString(String.valueOf(damage),20,20);
     }
 
 
@@ -261,5 +277,16 @@ public class Sprite {
 
     public void setCollide(boolean collide) {
         this.collide = collide;
+    }
+
+    protected void setDamage(int damage) {
+    }
+
+    public double getRefreshDamageTime() {
+        return refreshDamageTime;
+    }
+
+    public void setRefreshDamageTime(double refreshDamageTime) {
+        this.refreshDamageTime = refreshDamageTime;
     }
 }

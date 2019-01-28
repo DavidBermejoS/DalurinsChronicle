@@ -20,6 +20,9 @@ ataque y de movimiento del heroe.
 - implementado sistema de combate mas eficiente
 12. v0.12.0 =
 - comienzo de implementación del sistema de combate del personaje
+- Depurado el sistema de combate y colisiones.
+- Arreglado el bug de aumento de collider en cambio de animación
+- Comienzo de implementación del menu
 
 
 

@@ -15,6 +15,10 @@ import java.util.Random;
  * @author David Bermejo Simon
  */
 public class Hero extends Sprite {
+
+    public final static int MAX_HP = 30;
+
+
     boolean isAlive;
     String user;
     int totalHp;
@@ -278,6 +282,8 @@ public class Hero extends Sprite {
         if(this.getAcc()>probabilityAttack){
             int damage = enemy.getTotalHp()-(this.getAtk()-enemy.getDef());
             enemy.setTotalHp(damage);
+            enemy.setRefreshDamageTime(System.nanoTime());
+            enemy.setDamage(damage);
             System.out.println("El enemigo tiene un total de :" +enemy.getTotalHp());
         }
         if(enemy.getTotalHp() <= 0 ){

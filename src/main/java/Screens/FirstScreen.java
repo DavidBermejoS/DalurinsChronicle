@@ -38,8 +38,6 @@ public class FirstScreen implements IScreen {
 
     private final static int MAX_NUM_ITEMS = 5;
 
-
-    HeroMenu menu;
     GamePane gamePane;
     Image backgroundImage;
     ArrayList<Sprite> sprites;
@@ -57,7 +55,6 @@ public class FirstScreen implements IScreen {
         this.gamePane = gamePane;
         startFrame();
         addElements();
-        this.menu = new HeroMenu();
 
     }
 
@@ -132,6 +129,7 @@ public class FirstScreen implements IScreen {
         hero.setTotalHp(HERO_HP);
         hero.setUser(gamePane.getUserName());
         sprites.add(hero);
+        gamePane.setHero(hero);
     }
 
     /**
@@ -201,9 +199,6 @@ public class FirstScreen implements IScreen {
      */
     @Override
     public void drawScreen(Graphics g) {
-        if (hero != null) {
-            menu.statsBar(g, hero, gamePane);
-        }
         drawBackGround(g);
         drawSprite(g);
     }

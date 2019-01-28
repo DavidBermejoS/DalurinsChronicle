@@ -24,6 +24,7 @@ public class Window {
     private BufferedImage cursorImg = new BufferedImage(32,32,BufferedImage.TYPE_INT_ARGB_PRE);
     JFrame frame;
      GamePane gamePane;
+    private HeroMenu heroMenu;
 
     /**
      * Constructor de la clase
@@ -46,9 +47,22 @@ public class Window {
      * Metodos encargados de anadir elementos al frame de la clase.
      */
     public void addComponents(){
-         this.frame.setLayout(new GridLayout());
+         this.frame.setLayout(new GridBagLayout());
+         GridBagConstraints settings;
+
          this.gamePane = new GamePane();
-         frame.add(gamePane);
+         settings = new GridBagConstraints();
+         settings.gridx = 0;
+         settings.gridy = 1;
+         settings.weighty = 3;
+         frame.add(gamePane,settings);
+
+        this.heroMenu = new HeroMenu(this.gamePane);
+        settings = new GridBagConstraints();
+        settings.gridx = 0;
+        settings.gridy = 1;
+        settings.weighty = 10;
+        frame.add(heroMenu,settings);
 
         Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(
                  cursorImg,
