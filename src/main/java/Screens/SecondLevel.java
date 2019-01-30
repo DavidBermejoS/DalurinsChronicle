@@ -52,8 +52,8 @@ public class SecondLevel implements IScreen {
 
 
     public SecondLevel(GamePane gamePane) {
-        this.controlManager = new ControlManager(this);
         this.gamePane = gamePane;
+        this.controlManager = new ControlManager(gamePane,this);
         startFrame();
         addElements();
 
@@ -320,33 +320,32 @@ public class SecondLevel implements IScreen {
     @Override
     public void checkCollisions(Sprite sprite) {
         checkWallCollisions(sprite);
-        checkSpritesCollisions();
+        checkEnemiesCollisions();
         checkItemsCollisions();
 
     }
 
+
+
     /**
      * Metodo encargado de realizar comprobaciones de como colisionan los sprites entre sid
      */
-    private void checkSpritesCollisions() {
+    private void checkEnemiesCollisions() {
         for (Sprite s : sprites) {
             if (s instanceof Enemy) {
                 Enemy enemyAux = (Enemy) s;
-                if (enemyAux.circleCollider(hero)) {
-//                    enemyAux.setvX(enemyAux.getvX()*-1);
-//                    enemyAux.setvY(enemyAux.getvY()*-1);
-                    if (new Random().nextInt(5000) < 50) {
-                        System.out.println("El enemigo Intenta atacar!!!");
-                        enemyAux.setMustAttack(true);
-                    }
+                if(enemyAux.isAlive()){
+                    if (enemyAux.circleCollider(hero)) {
+                        if (new Random().nextInt(5000) < 50) {
+                            enemyAux.setMustAttack(true);
+                        }
+                        if(enemyAux.squareCollider(hero)){
+                            this.hero.setvX(this.hero.getvX()*-1);
+                            this.hero.setvY(this.hero.getvY()*-1);
+                            enemyAux.setvX(this.hero.getvX()*-1);
+                            enemyAux.setvY(this.hero.getvY()*-1);
+                        }
 
-                }
-            }
-            if (s instanceof Hero) {
-                for (int i = 0; i < enemies.length; i++) {
-                    if (hero.circleCollider(enemies[i])) {
-//                        hero.setvX(hero.getvX()*-1);
-//                        hero.setvY(hero.getvY()*-1);
                     }
                 }
             }
@@ -376,7 +375,7 @@ public class SecondLevel implements IScreen {
             sprite.setCollide(false);
         }
 
-        if (sprite.getPosY() <= -150) {
+        if (sprite.getPosY() <= 0) {
             sprite.setCollide(true);
             if (sprite.getvY() == 0) {
                 sprite.setvY(2);
@@ -394,7 +393,7 @@ public class SecondLevel implements IScreen {
     }
 
     /**
-     * Metodo encargado de gestionar la colision contra los items
+     * Metodo encargado de gestionar las colisiones contra los items
      */
     private void checkItemsCollisions() {
         for(Sprite s : sprites){
@@ -407,7 +406,6 @@ public class SecondLevel implements IScreen {
             }
         }
     }
-
     /**
      * Metodo encargado de realizar comprobaciones de si se ha terminado el juego o no
      */
@@ -479,11 +477,12 @@ public class SecondLevel implements IScreen {
     @Override
     public boolean dispatchKeyEvent(KeyEvent e) {
         synchronized (GamePane.class) {
-
-            controlManager.getKeyLogic(e);
-            controlManager.getAttackControl(e,hero);
-            if (!hero.isAttacking()) {
-                hero.moveCharacter(controlManager.getWhatKeyPressed());
+            if(hero!=null){
+                controlManager.getKeyLogic(e);
+                controlManager.getAttackControl(e,hero);
+                if (!hero.isAttacking()) {
+                    hero.moveCharacter(controlManager.getWhatKeyPressed());
+                }
             }
             return false;
         }

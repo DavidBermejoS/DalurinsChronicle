@@ -1,5 +1,5 @@
 # Medieval Adventure
-## v = 0.17.0
+## v = 0.18.0
 Juego Arcade Isométrico realizado como proyecto para el módulo de Desarrollo de interfaces en el grado Superior de DAM
 
 
@@ -45,6 +45,9 @@ ataque y de movimiento del heroe.
 - Arreglado bug producido por los dialogos informativos.
 - Arreglado bug de desaparición del item
 - Implementando cambios en lvl2 para exposicion
+18. v0.18.0 =
+- Arreglado bug en el controlador en el cambio de nivel
+- comienzo de arreglo de bug de colliders.
 
 
 

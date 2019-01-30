@@ -84,7 +84,7 @@ public class RpgDialog {
         createDialog(messageNum, canvasMessage);
         while (!messageChecked) {
             canvasMessage.setVisible(true);
-            System.out.println("pillado aqui");
+            System.out.println("(esperando usuario)");
         }
         canvasMessage.setVisible(false);
     }
