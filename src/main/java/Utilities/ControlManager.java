@@ -3,6 +3,7 @@ package Utilities;
 import Screens.FirstLevel;
 import Screens.IScreen;
 import Sprites.Hero;
+import Window.GamePane;
 
 import java.awt.event.KeyEvent;
 
@@ -13,9 +14,11 @@ public class ControlManager {
     IScreen screen;
     boolean[] whatKeyPressed;
     Hero hero;
+    private GamePane gamePane;
 
 
-    public ControlManager(IScreen screen) {
+    public ControlManager(GamePane gamePane, IScreen screen) {
+        this.gamePane = gamePane;
         this.whatKeyPressed = new boolean[4];
         for (int i = 0; i < whatKeyPressed.length; i++) {
             whatKeyPressed[i] = false;
@@ -33,7 +36,7 @@ public class ControlManager {
      * @param e : evento del mouse.
      */
     public void getKeyLogic(KeyEvent e) {
-        this.hero = screen.getHero();
+        this.hero = gamePane.getHero();
         int keyCode;
         switch (e.getID()) {
             case KeyEvent.KEY_PRESSED:
@@ -79,8 +82,7 @@ public class ControlManager {
                 }
         }
     }
-
-
+    
     /**
      * Metodo encargado de gestionar el ataque del heroe al pulsar sobre la tecla J.
      *

@@ -91,6 +91,46 @@ public class Sprite {
     }
 
 
+
+    /**
+     * Metodo encargado de crear un collider cuadrado y determinar si un sprite
+     * colisiona con otro
+     * @param s2 : sprite a comparar
+     * @return check : true si colisionan, false si no.
+     */
+    public boolean squareCollider(Sprite s2){
+        boolean collidesX =false , collidesY = false;
+
+        //calculo de la colision en el eje horizontal
+        if(this.getPosX()<s2.getPosX()){
+            int rightBorder = this.getPosX()+this.getWidth();
+            if(rightBorder>=s2.getPosX()+10){
+                collidesX=true;
+            }
+        }else{
+            int rightBorder = s2.getPosX()+s2.getWidth();
+            if(rightBorder>= this.getPosX()+10){
+                collidesX=true;
+            }
+        }
+
+        //calculo de la colision en el eje vertical
+        if(this.getPosY()<s2.getPosY()){
+            int bottomBorder = this.getPosY()+this.getHeight();
+            if(bottomBorder>= s2.getPosY()-10){
+                collidesY=true;
+            }
+        }else{
+            int bottomBorder = s2.getPosY()+s2.getHeight();
+            if(bottomBorder>=this.getPosY()-10){
+                collidesY=true;
+            }
+        }
+
+        return collidesX && collidesY;
+    }
+
+
     /**
      * Metodo encargado de crear un collider circular y determinar si un sprite
      * colisiona con otro

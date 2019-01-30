@@ -35,7 +35,7 @@ public class FirstLevel implements IScreen {
     private final static int HERO_HP = 30;
     private final static int HERO_ATK = 10;
     private final static int HERO_DEF = 3;
-    private final static int HERO_ACC= 10;
+    private final static int HERO_ACC = 10;
 
 
     private final static int MAX_NUM_ITEMS = 5;
@@ -54,10 +54,10 @@ public class FirstLevel implements IScreen {
     JLabel canvasMessage;
 
 
-
-    public FirstLevel(GamePane gamePane,JLabel canvasMessage) {
+    public FirstLevel(GamePane gamePane, JLabel canvasMessage) {
         this.canvasMessage = canvasMessage;
         this.gamePane = gamePane;
+        this.controlManager = new ControlManager(gamePane, this);
         startFrame();
         addElements();
 
@@ -76,7 +76,6 @@ public class FirstLevel implements IScreen {
     public void startFrame() {
         this.canvasMessage = new JLabel();
         this.canvasMessage.setVisible(false);
-        this.controlManager = new ControlManager(this);
         this.endLevel = false;
         this.gameOver = false;
         this.sprites = new ArrayList<Sprite>();
@@ -171,7 +170,6 @@ public class FirstLevel implements IScreen {
      * Metodo encargado de generar e instanciar los enemigos
      */
     private void addItems() {
-
         for (int i = 0; i < items.length; i++) {
             Item item = new Item();
             //parametros de posicion
@@ -297,21 +295,21 @@ public class FirstLevel implements IScreen {
     @Override
     public void manageGameFunctions() {
         for (Sprite s : sprites) {
-            if(s instanceof Enemy){
-                if(((Enemy) s).isAlive()){
+            if (s instanceof Enemy) {
+                if (((Enemy) s).isAlive()) {
                     moveSprites(s);
                     checkCollisions(s);
                     calculateBattles();
-                }else{
+                } else {
                     ((Enemy) s).setDeathAnimation();
                 }
-            }else{
+            } else {
                 moveSprites(s);
                 checkCollisions(s);
                 calculateBattles();
-                    checkEndLevel();
-                }
+                checkEndLevel();
             }
+        }
 
     }
 
@@ -325,11 +323,11 @@ public class FirstLevel implements IScreen {
                 hero.setAlive(false);
                 break;
             }
-            if(hero.isAttacking() && hero.circleCollider(enemies[i]) && hero.isAttackAnimatorRunning()){
+            if (hero.isAttacking() && hero.circleCollider(enemies[i]) && hero.isAttackAnimatorRunning()) {
                 hero.makeDamage(enemies[i]);
-                if(enemies[i].getTotalHp()<= 0 ){
+                if (enemies[i].getTotalHp() <= 0) {
                     enemies[i].setAlive(false);
-                    gamePane.setScore(gamePane.getScore()+150);
+                    gamePane.setScore(gamePane.getScore() + 150);
                 }
             }
 
@@ -352,7 +350,6 @@ public class FirstLevel implements IScreen {
     }
 
 
-
     /**
      * Metodo encargado de realizar comprobaciones de como colisionan los sprites entre sid
      */
@@ -360,10 +357,16 @@ public class FirstLevel implements IScreen {
         for (Sprite s : sprites) {
             if (s instanceof Enemy) {
                 Enemy enemyAux = (Enemy) s;
-                if(enemyAux.isAlive()){
+                if (enemyAux.isAlive()) {
                     if (enemyAux.circleCollider(hero)) {
                         if (new Random().nextInt(5000) < 50) {
                             enemyAux.setMustAttack(true);
+                        }
+                        if (enemyAux.squareCollider(hero)) {
+                            this.hero.setvX(this.hero.getvX() * -1);
+                            this.hero.setvY(this.hero.getvY() * -1);
+                            enemyAux.setvX(this.hero.getvX() * -1);
+                            enemyAux.setvY(this.hero.getvY() * -1);
                         }
 
                     }
@@ -416,10 +419,10 @@ public class FirstLevel implements IScreen {
      * Metodo encargado de gestionar las colisiones contra los items
      */
     private void checkItemsCollisions() {
-        for(Sprite s : sprites){
-            if(s instanceof Item){
-                Item itemAux = (Item)s;
-                if(itemAux.circleCollider(hero)){
+        for (Sprite s : sprites) {
+            if (s instanceof Item) {
+                Item itemAux = (Item) s;
+                if (itemAux.circleCollider(hero)) {
                     itemAux.makeEffectHero(hero);
                 }
 
@@ -435,18 +438,18 @@ public class FirstLevel implements IScreen {
         RpgDialog rpgDialog = new RpgDialog();
         if (!hero.isAlive()) {
             hero.setDeathAnimation();
-            rpgDialog.generateDialog(gamePane,canvasMessage,9);
+            rpgDialog.generateDialog(gamePane, canvasMessage, 9);
             this.gamePane.setEndLevel(false);
             this.gamePane.setGameOver(true);
-        }else{
+        } else {
             int count = 0;
             for (int i = 0; i < enemies.length; i++) {
-                if(!enemies[i].isAlive()){
+                if (!enemies[i].isAlive()) {
                     count++;
                     enemies[i].setDeathAnimation();
                 }
-                if(count == enemies.length){
-                    rpgDialog.generateDialog(gamePane,canvasMessage,0);
+                if (count == enemies.length) {
+                    rpgDialog.generateDialog(gamePane, canvasMessage, 0);
                     this.gamePane.setEndLevel(true);
                     this.gamePane.setGameOver(false);
                     break;
@@ -503,7 +506,7 @@ public class FirstLevel implements IScreen {
     public boolean dispatchKeyEvent(KeyEvent e) {
         synchronized (GamePane.class) {
             controlManager.getKeyLogic(e);
-            controlManager.getAttackControl(e,hero);
+            controlManager.getAttackControl(e, hero);
             if (!hero.isAttacking()) {
                 hero.moveCharacter(controlManager.getWhatKeyPressed());
             }
@@ -515,7 +518,6 @@ public class FirstLevel implements IScreen {
     public Hero getHero() {
         return this.hero;
     }
-
 
 
 }
