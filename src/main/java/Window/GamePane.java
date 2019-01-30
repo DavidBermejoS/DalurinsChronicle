@@ -2,6 +2,7 @@ package Window;
 
 import Screens.*;
 import Sprites.Hero;
+import Utilities.RpgDialog;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,6 +36,9 @@ public class GamePane extends JPanel implements Runnable, KeyListener, MouseList
     private IScreen screen;
     private double score;
     private Hero hero;
+    public JLabel canvasMessage;
+
+
 
     /**
      * <h3>Constructor de la clase.</h3>
@@ -42,11 +46,11 @@ public class GamePane extends JPanel implements Runnable, KeyListener, MouseList
      * sus listeners. Ademas comienza a ejecutar el run.
      */
     public GamePane() {
-        this.actualLevel = 0;
+        this.actualLevel = -1;
         this.score = 0;
         this.endLevel = true;
         this.gameOver = false;
-        this.screen = new FirstLevel(this);
+        this.screen = new FirstLevel(this,canvasMessage);
         this.setFocusable(true);
         this.addKeyListener(this);
         this.addMouseListener(this);
@@ -84,7 +88,7 @@ public class GamePane extends JPanel implements Runnable, KeyListener, MouseList
                 checkLevel();
                 if (screen != null) {
                     repaint();
-                    if(!endLevel){
+                    if (!endLevel) {
                         this.screen.manageGameFunctions();
                     }
                 }
@@ -112,7 +116,7 @@ public class GamePane extends JPanel implements Runnable, KeyListener, MouseList
                     endLevel = false;
                     break;
                 case 1:
-                    this.screen = new FirstLevel(this);
+                    this.screen = new FirstLevel(this,canvasMessage);
                     endLevel = false;
                     break;
                 case 2:
@@ -125,14 +129,7 @@ public class GamePane extends JPanel implements Runnable, KeyListener, MouseList
                     endLevel = false;
                     break;
             }
-        } else if (gameOver && endLevel) {
-            this.gameOver = false;
-            this.endLevel = true;
-
         } else if (gameOver && !endLevel) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Te ha vencido tu enemigo, has muerto en combate");
             this.gameOver = false;
             this.screen = new GameOverScreen(this);
         }

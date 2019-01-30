@@ -2,9 +2,11 @@ package Screens;
 
 import Sprites.Hero;
 import Utilities.ControlManager;
+import Utilities.RpgDialog;
 import Window.GamePane;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -49,9 +51,12 @@ public class FirstLevel implements IScreen {
     Enemy[] enemies;
     Item[] items;
     ControlManager controlManager;
+    JLabel canvasMessage;
 
 
-    public FirstLevel(GamePane gamePane) {
+
+    public FirstLevel(GamePane gamePane,JLabel canvasMessage) {
+        this.canvasMessage = canvasMessage;
         this.gamePane = gamePane;
         startFrame();
         addElements();
@@ -69,6 +74,8 @@ public class FirstLevel implements IScreen {
      */
     @Override
     public void startFrame() {
+        this.canvasMessage = new JLabel();
+        this.canvasMessage.setVisible(false);
         this.controlManager = new ControlManager(this);
         this.endLevel = false;
         this.gameOver = false;
@@ -340,8 +347,11 @@ public class FirstLevel implements IScreen {
     public void checkCollisions(Sprite sprite) {
         checkWallCollisions(sprite);
         checkEnemiesCollisions();
+        checkItemsCollisions();
 
     }
+
+
 
     /**
      * Metodo encargado de realizar comprobaciones de como colisionan los sprites entre sid
@@ -403,25 +413,42 @@ public class FirstLevel implements IScreen {
     }
 
     /**
+     * Metodo encargado de gestionar las colisiones contra los items
+     */
+    private void checkItemsCollisions() {
+        for(Sprite s : sprites){
+            if(s instanceof Item){
+                Item itemAux = (Item)s;
+                if(itemAux.circleCollider(hero)){
+                    itemAux.makeEffectHero(hero);
+                }
+
+            }
+        }
+    }
+
+    /**
      * Metodo encargado de realizar comprobaciones de si se ha terminado el juego o no
      */
     @Override
     public void checkEndLevel() {
+        RpgDialog rpgDialog = new RpgDialog();
         if (!hero.isAlive()) {
             hero.setDeathAnimation();
+            rpgDialog.generateDialog(gamePane,canvasMessage,9);
             this.gamePane.setEndLevel(false);
             this.gamePane.setGameOver(true);
-
         }else{
             int count = 0;
             for (int i = 0; i < enemies.length; i++) {
                 if(!enemies[i].isAlive()){
                     count++;
+                    enemies[i].setDeathAnimation();
                 }
                 if(count == enemies.length){
-                    System.out.println("has vencido");
+                    rpgDialog.generateDialog(gamePane,canvasMessage,0);
                     this.gamePane.setEndLevel(true);
-                    this.gamePane.setGameOver(true);
+                    this.gamePane.setGameOver(false);
                     break;
                 }
             }

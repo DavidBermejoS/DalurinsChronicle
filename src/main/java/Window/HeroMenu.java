@@ -2,10 +2,13 @@ package Window;
 
 import Sprites.Hero;
 import Utilities.ResourcesCollector;
+import Utilities.RpgDialog;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -17,11 +20,11 @@ import java.io.IOException;
 public class HeroMenu extends JPanel {
 
     GamePane gamePane;
+    Font fontAttributes;
     BufferedImage[] imagesFaces;
-    BufferedImage faceImage;
+    BufferedImage background;
     JLabel canvasHeroImage;
     JProgressBar heroLife;
-    JLabel numPotions;
     JLabel labelAttack;
     JLabel labelDefense;
     JLabel labelMaxHP;
@@ -36,7 +39,9 @@ public class HeroMenu extends JPanel {
     public HeroMenu(GamePane gamePane) {
         this.gamePane = gamePane;
         this.hero = gamePane.getHero();
+        fontAttributes = new Font("Seagram",Font.BOLD,25);
         try {
+            this.background = ImageIO.read(new File("src/main/resources/backgrounds/heroMenu.png"));
             this.potionImage = ImageIO.read(new File("src/main/resources/potions/attack_potion.png"));
             this.imagesFaces = new BufferedImage[8];
             addComponents();
@@ -45,14 +50,29 @@ public class HeroMenu extends JPanel {
         }
     }
 
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        try {
+            this.background = ImageIO.read(new File("src/main/resources/backgrounds/heroMenu.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        g.drawImage(background.getScaledInstance(this.getWidth(),this.getHeight(),Image.SCALE_SMOOTH),0,0,null);
+
+    }
+
     /**
-     * MEtodo para anadir los componentes del menu superior
+     * Metodo para anadir los componentes del menu superior
      */
     public void addComponents() {
-        this.setBackground(Color.BLACK);
+
+
         this.setLayout(new GridBagLayout());
-        GridBagConstraints settings;
+        GridBagConstraints settings = new GridBagConstraints();
         ResourcesCollector rc = new ResourcesCollector();
+
 
 
         this.map = new JLabel();
@@ -86,6 +106,7 @@ public class HeroMenu extends JPanel {
         this.add(heroLife, settings);
 
         this.labelAttack = new JLabel("ATK : "+this.hero.getAtk());
+        this.labelAttack.setFont(fontAttributes);
         this.labelAttack.setForeground(Color.RED);
         settings = new GridBagConstraints();
         settings.gridx = 3;
@@ -97,6 +118,7 @@ public class HeroMenu extends JPanel {
 
         this.labelDefense= new JLabel("DEF : "+this.hero.getDef());
         this.labelDefense.setForeground(Color.RED);
+        this.labelDefense.setFont(fontAttributes);
         settings = new GridBagConstraints();
         settings.gridx = 4;
         settings.gridy=0;
@@ -107,6 +129,7 @@ public class HeroMenu extends JPanel {
 
         this.labelMaxHP= new JLabel("MAX HP : "+Hero.MAX_HP);
         this.labelMaxHP.setForeground(Color.RED);
+        this.labelMaxHP.setFont(fontAttributes);
         settings = new GridBagConstraints();
         settings.gridx = 5;
         settings.gridy=0;
@@ -114,6 +137,9 @@ public class HeroMenu extends JPanel {
         settings.ipady = 10;
         settings.insets = new Insets(0,20,0,0);
         this.add(labelMaxHP, settings);
+
+
+        this.repaint();
 
     }
 
@@ -143,8 +169,17 @@ public class HeroMenu extends JPanel {
     /**
      * Coloca un mapa en la barra del menu
      */
-    public void putMapOnMenu() {
-        this.map.setIcon(new ImageIcon("src/main/resources/maps/worldMap.png","map"));
-
+    public void putMapOnMenu(int i) {
+        switch (i){
+            case 0:
+                this.map.setBounds(0,0,this.getWidth(),this.getHeight());
+                this.map.setIcon(new ImageIcon("src/main/resources/maps/worldMap_1.png","map"));
+                break;
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+        }
     }
 }

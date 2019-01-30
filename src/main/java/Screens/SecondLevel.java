@@ -76,12 +76,7 @@ public class SecondLevel implements IScreen {
         }
         this.enemies = new Enemy[NUM_ENEMIES];
         this.items = new Item[new Random().nextInt(MAX_NUM_ITEMS)];
-        JOptionPane.showMessageDialog(
-                this.gamePane,
-                "Has vencido a tu enemigo, la aventura comienza ahora...\n Después de registrar el " +
-                        "cadaver del hombre que intentaba asesinarte, has encontrado un fragmento de mapa " +
-                        "que puede serte de mucha utilidad");
-        this.gamePane.heroMenu.putMapOnMenu();
+        this.gamePane.heroMenu.putMapOnMenu(0);
         manageGameFunctions();
     }
 
@@ -148,8 +143,8 @@ public class SecondLevel implements IScreen {
         for (int i = 0; i < items.length; i++) {
             Item item = new Item();
             //parametros de posicion
-            item.setPosX(800);
-            item.setPosY(600);
+            item.setPosX(gamePane.getWidth()/2);
+            item.setPosY(gamePane.getHeight()/2);
             //parametros de dimension
             item.setWidth(30);
             item.setHeight(30);
@@ -159,8 +154,8 @@ public class SecondLevel implements IScreen {
             //parametros de recursos gráficos y gestion de los mismos
             item.setBufferByRoute("src/main/resources/potions/attack_potion.png");
             item.refreshBuffer();
-            item.setName("potion");
-            item.setDescription("Poción mágica, si se toma sube el ataque");
+            item.setName("health_potion");
+            item.setDescription("Poción mágica, si se toma recuperas vida");
             items[i] = item;
             sprites.add(item);
         }
@@ -322,6 +317,7 @@ public class SecondLevel implements IScreen {
     public void checkCollisions(Sprite sprite) {
         checkWallCollisions(sprite);
         checkSpritesCollisions();
+        checkItemsCollisions();
 
     }
 
@@ -390,6 +386,21 @@ public class SecondLevel implements IScreen {
             sprite.setvY(sprite.getvY() * -1);
         } else {
             sprite.setCollide(false);
+        }
+    }
+
+    /**
+     * Metodo encargado de gestionar la colision contra los items
+     */
+    private void checkItemsCollisions() {
+        for(Sprite s : sprites){
+            if(s instanceof Item){
+                Item itemAux = (Item)s;
+                if(itemAux.circleCollider(hero)){
+                    itemAux.makeEffectHero(hero);
+                }
+
+            }
         }
     }
 

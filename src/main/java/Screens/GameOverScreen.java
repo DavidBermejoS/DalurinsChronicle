@@ -2,6 +2,7 @@ package Screens;
 
 import Sprites.Hero;
 import Sprites.Sprite;
+import Utilities.RpgDialog;
 import Window.GamePane;
 
 import javax.imageio.ImageIO;
@@ -23,6 +24,7 @@ public class GameOverScreen implements IScreen {
 
     public GameOverScreen( GamePane gamePane){
         this.gamePane = gamePane;
+
     }
 
     @Override
