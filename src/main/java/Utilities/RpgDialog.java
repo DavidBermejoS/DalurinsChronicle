@@ -33,13 +33,13 @@ public class RpgDialog {
      * @param messageNum:   numero de mensaje a imprimir
      * @param canvasMessage : JLabel sobre el que se pintará el mensaje
      */
-    public static void createDialog(int messageNum, JLabel canvasMessage) {
+    public static void createDialog(int messageNum, final JLabel canvasMessage) {
         if (!messageChecked) {
             switch (messageNum) {
                 case 0:
                     canvasMessage.setIcon(new ImageIcon("src/main/resources/messages/message0.png", ""));
                     canvasMessage.setVisible(true);
-                    messageChecked = false;
+                    setMessageChecked(false);
                     break;
                 case 1:
                 case 2:
@@ -49,15 +49,18 @@ public class RpgDialog {
                 case 9:
                     canvasMessage.setIcon(new ImageIcon("src/main/resources/messages/message1.png", ""));
                     canvasMessage.setVisible(true);
-                    messageChecked = false;
+                    setMessageChecked(false);
                     break;
             }
             final JLabel finalCanvasMessage = canvasMessage;
             canvasMessage.addMouseListener(new MouseAdapter() {
+                boolean messageChecked = RpgDialog.messageChecked;
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     super.mouseClicked(e);
                     messageChecked = true;
+                    finalCanvasMessage.setVisible(false);
+                    setMessageChecked(messageChecked);
                 }
             });
 
@@ -73,14 +76,15 @@ public class RpgDialog {
         RpgDialog.messageChecked = messageChecked;
     }
 
-    public void generateDialog(GamePane gamePane, JLabel canvasMessage, int messageNum) {
+    public static void generateDialog(GamePane gamePane, JLabel canvasMessage, int messageNum) {
         if(canvasMessage== null){
             canvasMessage = new JLabel();
         }
         gamePane.add(canvasMessage);
-        this.createDialog(messageNum, canvasMessage);
-        while (!isMessageChecked()) {
+        createDialog(messageNum, canvasMessage);
+        while (!messageChecked) {
             canvasMessage.setVisible(true);
+            System.out.println("pillado aqui");
         }
         canvasMessage.setVisible(false);
     }

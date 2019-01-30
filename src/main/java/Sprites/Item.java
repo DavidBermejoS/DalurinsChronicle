@@ -47,6 +47,7 @@ public class Item extends Sprite {
                 }
             }
             this.setImageSprite(null);
+            this.refreshBuffer();
             this.deactivate = true;
         }
     }

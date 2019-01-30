@@ -16,7 +16,7 @@ public class StartScreen implements IScreen {
 
 
 
-    private static final String BACKGROUND_START = "src/main/resources/backgrounds/victory.png";
+    private static final String BACKGROUND_START = "src/main/resources/backgrounds/start.png";
     Color fontsColor = new Color(255,255,255,50);
 
     //    //PARAMETROS DE CONTROL
@@ -135,11 +135,7 @@ public class StartScreen implements IScreen {
      * Metodo encargado de gestionar la animacion de la pantalla principal
      */
     private void drawAnimationScreen(Graphics g) {
-        g.setFont(new Font("MonoSpace", Font.BOLD, 32));
-        g.setColor(fontsColor);
-        g.drawString("Dalurins Chronicles. ", gamePane.getWidth() / 4,gamePane.getHeight() /4);
-        g.drawString("Haga Click para comenzar", gamePane.getWidth() / 4,gamePane.getHeight() /4+50);
-        g.dispose();
+        //no hace nada
     }
     @Override
     public void resizeScreen(Graphics g) {

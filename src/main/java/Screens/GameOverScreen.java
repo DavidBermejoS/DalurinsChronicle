@@ -137,11 +137,7 @@ public class GameOverScreen implements IScreen {
      * Metodo encargado de gestionar la animacion de la pantalla principal
      */
     private void drawAnimationScreen(Graphics g) {
-        g.setFont(new Font("MonoSpace", Font.BOLD, 32));
-        g.setColor(fontsColor);
-        g.drawString("GAME OVER ", gamePane.getWidth() / 4,gamePane.getHeight() /4);
-        g.drawString("HAZ CLICK PARA VOLVER AL INICIO", gamePane.getWidth() / 4,gamePane.getHeight() /4+50);
-        g.dispose();
+        //no hace nada
     }
     @Override
     public void resizeScreen(Graphics g) {

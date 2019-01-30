@@ -4,6 +4,7 @@ import Sprites.Enemy;
 import Sprites.Hero;
 import Sprites.Item;
 import Sprites.Sprite;
+import Utilities.ControlManager;
 import Window.GamePane;
 
 import javax.imageio.ImageIO;
@@ -26,8 +27,8 @@ import java.util.Random;
 //TODO IMPLEMENTAR LA CLASE ENTERA
 public class SecondLevel implements IScreen {
 
-    private static final String BACKGROUND_GAME = "src/main/resources/floors/town.png";
-    private static final int NUM_ENEMIES = 0;
+    private static final String BACKGROUND_GAME = "src/main/resources/floors/town_floor.png";
+    private static final int NUM_ENEMIES = 1;
 
     private final static int ENEMY_HP = 10;
     private final static int ENEMY_ATK = 5;
@@ -47,9 +48,11 @@ public class SecondLevel implements IScreen {
     Hero hero;
     Enemy[] enemies;
     Item[] items;
+    private ControlManager controlManager;
 
 
     public SecondLevel(GamePane gamePane) {
+        this.controlManager = new ControlManager(this);
         this.gamePane = gamePane;
         startFrame();
         addElements();
@@ -77,6 +80,7 @@ public class SecondLevel implements IScreen {
         this.enemies = new Enemy[NUM_ENEMIES];
         this.items = new Item[new Random().nextInt(MAX_NUM_ITEMS)];
         this.gamePane.heroMenu.putMapOnMenu(0);
+        this.hero = gamePane.getHero();
         manageGameFunctions();
     }
 
@@ -99,8 +103,8 @@ public class SecondLevel implements IScreen {
      */
     private void addHero() {
         this.hero = gamePane.getHero();
-        this.hero.setPosX(gamePane.getWidth()/2);
-        this.hero.setPosY(gamePane.getHeight()/2);
+        this.hero.setPosX(0);
+        this.hero.setPosY(gamePane.getHeight()-(hero.getHeight()*2));
         sprites.add(hero);
     }
 
@@ -110,7 +114,7 @@ public class SecondLevel implements IScreen {
     private void addEnemies() {
         for (int i = 0; i < enemies.length; i++) {
             Enemy enemy = new Enemy();
-            enemy.setPosX(200*i);
+            enemy.setPosX(300*(i+1));
             enemy.setPosY(400);
             //parametros de dimension
             enemy.setWidth(140);
@@ -146,8 +150,8 @@ public class SecondLevel implements IScreen {
             item.setPosX(gamePane.getWidth()/2);
             item.setPosY(gamePane.getHeight()/2);
             //parametros de dimension
-            item.setWidth(30);
-            item.setHeight(30);
+            item.setWidth(50);
+            item.setHeight(50);
             //parametros de velocidad
             item.setvX(0);
             item.setvY(0);
@@ -449,6 +453,7 @@ public class SecondLevel implements IScreen {
 
     }
 
+
     /**
      * Metodo encargado de gestionar los eventos de teclado,
      * es decir, que sucede en la pantalla cuando se pulsa
@@ -458,14 +463,8 @@ public class SecondLevel implements IScreen {
      */
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_J) {
-            if (!hero.isMoving()) {
-                hero.setAttacking(true);
-                hero.attackCharacter();
-            }
-        }
+        //no hace nada
     }
-
 
     /**
      * Metodo que gestiona el movimiento del personaje según la tecla del teclado pulsada.
@@ -480,9 +479,11 @@ public class SecondLevel implements IScreen {
     @Override
     public boolean dispatchKeyEvent(KeyEvent e) {
         synchronized (GamePane.class) {
-            getKeyLogic(e);
+
+            controlManager.getKeyLogic(e);
+            controlManager.getAttackControl(e,hero);
             if (!hero.isAttacking()) {
-                hero.moveCharacter(whatKeyPressed);
+                hero.moveCharacter(controlManager.getWhatKeyPressed());
             }
             return false;
         }
@@ -490,54 +491,7 @@ public class SecondLevel implements IScreen {
 
     @Override
     public Hero getHero() {
-        return this.hero;
-    }
-
-    private void getKeyLogic(KeyEvent e) {
-        int keyCode;
-        switch (e.getID()) {
-            case KeyEvent.KEY_PRESSED:
-                keyCode = e.getKeyCode();
-                switch (keyCode) {
-                    case KeyEvent.VK_W:
-                        whatKeyPressed[0] = true;
-                        break;
-                    case KeyEvent.VK_A:
-                        whatKeyPressed[1] = true;
-                        break;
-                    case KeyEvent.VK_S:
-                        whatKeyPressed[2] = true;
-                        break;
-                    case KeyEvent.VK_D:
-                        whatKeyPressed[3] = true;
-                        break;
-
-                }
-                break;
-            case KeyEvent.KEY_RELEASED:
-                keyCode = e.getKeyCode();
-                switch (keyCode) {
-                    case KeyEvent.VK_W:
-                        whatKeyPressed[0] = false;
-                        this.hero.setMoving(false);
-                        break;
-                    case KeyEvent.VK_A:
-                        whatKeyPressed[1] = false;
-                        this.hero.setMoving(false);
-                        break;
-                    case KeyEvent.VK_S:
-                        whatKeyPressed[2] = false;
-                        this.hero.setMoving(false);
-                        break;
-                    case KeyEvent.VK_D:
-                        whatKeyPressed[3] = false;
-                        this.hero.setMoving(false);
-                        break;
-                    case KeyEvent.VK_J:
-                        this.hero.setAttacking(false);
-                        break;
-                }
-        }
+        return null;
     }
 
 }

@@ -1,5 +1,5 @@
-# Dalurin's Chronicles
-## v = 0.16.0
+# Medieval Adventure
+## v = 0.17.0
 Juego Arcade Isométrico realizado como proyecto para el módulo de Desarrollo de interfaces en el grado Superior de DAM
 
 
@@ -41,6 +41,10 @@ ataque y de movimiento del heroe.
 - introducidos nuevos cambios en la barra del menu(background).
 - Introducidas nuevas imagenes para el minimapa e implementado sistema de cambio de minimapa.
 - Introducida Poción curativa (+15 hp).
+17. v0.17.0 =
+- Arreglado bug producido por los dialogos informativos.
+- Arreglado bug de desaparición del item
+- Implementando cambios en lvl2 para exposicion
 
 
 

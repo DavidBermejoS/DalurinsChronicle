@@ -14,7 +14,7 @@ import java.io.IOException;
 public class VictoryScreen implements IScreen {
 
 
-    private static final String BACKGROUND_VICTORY = "src/main/resources/backgrounds/victory.png";
+    private static final String BACKGROUND_VICTORY = "src/main/resources/backgrounds/start.png";
     Color fontsColor = new Color(255,255,255,50);
 
     //    //PARAMETROS DE CONTROL
