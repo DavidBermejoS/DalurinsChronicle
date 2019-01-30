@@ -159,7 +159,7 @@ public class HeroMenu extends JPanel {
                 this.canvasHeroImage.setIcon(new ImageIcon("src/main/resources/hero/faces/defeat.png", "defeatFace"));
             }
             if(this.gamePane.isEndLevel()){
-                this.canvasHeroImage.setIcon(new ImageIcon("src/main/resources/hero/faces/victory.png", "victoryFace"));
+                this.canvasHeroImage.setIcon(new ImageIcon("src/main/resources/hero/faces/start.png", "victoryFace"));
             }
             this.heroLife.setValue(gamePane.getHero().getTotalHp());
             this.heroLife.setString(String.valueOf(hero.getTotalHp()));

@@ -130,7 +130,6 @@ public class GamePane extends JPanel implements Runnable, KeyListener, MouseList
                     break;
             }
         } else if (gameOver && !endLevel) {
-            this.gameOver = false;
             this.screen = new GameOverScreen(this);
         }
     }

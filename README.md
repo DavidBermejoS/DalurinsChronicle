@@ -1,5 +1,5 @@
-# Dalurin's Chronicles
-## v = 0.16.0
+# Medieval Adventure
+## v = 0.17.0
 Juego Arcade Isométrico realizado como proyecto para el módulo de Desarrollo de interfaces en el grado Superior de DAM
 
 
