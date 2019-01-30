@@ -1,5 +1,5 @@
 # Dalurin's Chronicles
-## v = 0.15.0
+## v = 0.16.0
 Juego Arcade Isométrico realizado como proyecto para el módulo de Desarrollo de interfaces en el grado Superior de DAM
 
 
@@ -36,6 +36,11 @@ ataque y de movimiento del heroe.
 - Mejorado el sistema de combate del personaje.
 - Anadida la clase ControlManager para que aloje todas las funcionalidades del control de usuario
 - Implementado comienzo del segundo nivel
+16. v0.16.0 =
+- Implementado la clase RPGDialog que permite crear dialogos sustituyendo así los JDialog.
+- introducidos nuevos cambios en la barra del menu(background).
+- Introducidas nuevas imagenes para el minimapa e implementado sistema de cambio de minimapa.
+- Introducida Poción curativa (+15 hp).
 
 
 
