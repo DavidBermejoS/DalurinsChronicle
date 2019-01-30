@@ -1,5 +1,5 @@
 # Medieval Adventure
-## v = 0.18.0
+## v = 1.0.0
 Juego Arcade Isométrico realizado como proyecto para el módulo de Desarrollo de interfaces en el grado Superior de DAM
 
 
