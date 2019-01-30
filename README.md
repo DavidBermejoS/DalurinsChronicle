@@ -44,6 +44,7 @@ ataque y de movimiento del heroe.
 17. v0.17.0 =
 - Arreglado bug producido por los dialogos informativos.
 - Arreglado bug de desaparición del item
+- Implementando cambios en lvl2 para exposicion
 
 
 
