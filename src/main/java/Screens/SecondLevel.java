@@ -99,8 +99,8 @@ public class SecondLevel implements IScreen {
      */
     private void addHero() {
         this.hero = gamePane.getHero();
-        this.hero.setPosX(gamePane.getWidth()/2);
-        this.hero.setPosY(gamePane.getHeight()/2);
+        this.hero.setPosX(0);
+        this.hero.setPosY(gamePane.getHeight()-(hero.getHeight()*2));
         sprites.add(hero);
     }
 
@@ -146,8 +146,8 @@ public class SecondLevel implements IScreen {
             item.setPosX(gamePane.getWidth()/2);
             item.setPosY(gamePane.getHeight()/2);
             //parametros de dimension
-            item.setWidth(30);
-            item.setHeight(30);
+            item.setWidth(50);
+            item.setHeight(50);
             //parametros de velocidad
             item.setvX(0);
             item.setvY(0);

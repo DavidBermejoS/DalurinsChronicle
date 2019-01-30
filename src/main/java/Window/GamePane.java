@@ -46,7 +46,7 @@ public class GamePane extends JPanel implements Runnable, KeyListener, MouseList
      * sus listeners. Ademas comienza a ejecutar el run.
      */
     public GamePane() {
-        this.actualLevel = -1;
+        this.actualLevel = 0;
         this.score = 0;
         this.endLevel = true;
         this.gameOver = false;
